@@ -44,7 +44,7 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", 
   initalAlphas<-rep(0.1,length(workflowNames))
   names(initalAlphas)<-workflowNames
   allPlotNames<-NULL
-  wf2<-c(5,1,2,0)
+  wf2<-c(5,1,2,0) #this will break if I use anything but 4 wfs !
   wfNamedVector<-c('bdt' = "GC/BDT", 'osm' = "GC/OSM", 'wudapt' = "WUDAPT", 'iau' = "IAU")
   
   for (wf in workflowNames) {
@@ -60,18 +60,28 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", 
           size = totalArea), stroke = 1.5) +
     scale_alpha_manual(values = wfAlphas)+
     scale_fill_manual(
+      name = "LCZ type",
       values= colorMap, breaks = names(colorMap),
       labels = etiquettes, na.value = "ghostwhite") +
     scale_color_manual(
       values = colorMap, breaks = names(colorMap),
       labels = etiquettes, na.value = "ghostwhite") +
-    scale_shape_manual(values = wf2, name = "workflow",
+    scale_shape_manual(values = wf2, name = "Workflows",
                        labels = wfNamedVector,
                        breaks = c("wudapt","iau", "osm", "bdt")) +
-    labs( x = "number of Spatial units", y = "Avereage mean of log areas of ASU") +
+     scale_size_manual(name = "Total area for \n a workflow and a LCZ type") +
+    labs( x = "Number of Aggregated Spatial units", y = "Mean of log areas of ASU") +
      guides(alpha = "none") + 
      labs(subtitle = wfNamedVector[wf]) +
-     theme(legend.position = "right") }
+     theme(legend.position = "right",
+           axis.text = element_text(size = rel(1.0)),
+           axis.title= element_text(size=rel(1.2),face="bold"),
+           legend.text = element_text(size=rel(1),face="bold"),
+           legend.title = element_text(size=rel(1.2),face="bold"),
+           plot.title = element_text(size = rel(1.5), face = "bold")
+   )
+
+   }
    )
  }
   
