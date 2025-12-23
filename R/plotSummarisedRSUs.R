@@ -25,77 +25,58 @@
 #')
 #' summarisedRSUs<-summariseRSUs(allLocAllWfs, aggregatingColumns = c("wf", "lcz_primary"))
 #' plotSummarisedRSUs(summarisedSfIn = summarisedRSUs)
-plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", "osm", "bdt"),
-                             plotNow = TRUE, graphPath = ""){
-  
-  colorMap<-c("#8b0101","#cc0200","#fc0001","#be4c03","#ff6602","#ff9856",
-              "#fbed08","#bcbcba","#ffcca7","#57555a","#006700","#05aa05",
-              "#648423","#bbdb7a","#010101","#fdf6ae","#6d67fd", "ghostwhite")
-  names(colorMap)<-as.character(c(1:10,101:107, "Unclassified"))
-  etiquettes<-c("LCZ 1: Compact high-rise","LCZ 2: Compact mid-rise","LCZ 3: Compact low-rise",
-                "LCZ 4: Open high-rise","LCZ 5: Open mid-rise","LCZ 6: Open low-rise",
-                "LCZ 7: Lightweight low-rise","LCZ 8: Large low-rise",
-                "LCZ 9: Sparsely built","LCZ 10: Heavy industry",
-                "LCZ A: Dense trees", "LCZ B: Scattered trees",
-                "LCZ C: Bush,scrub","LCZ D: Low plants",
-                "LCZ E: Bare rock or paved","LCZ F: Bare soil or sand","LCZ G: Water", "Unclassified")
-  
-  graphPath<-checkDirSlash(graphPath)
-  initalAlphas<-rep(0.1,length(workflowNames))
-  names(initalAlphas)<-workflowNames
-  allPlotNames<-NULL
-  wf2<-c(5,1,2,0) #this will break if I use anything but 4 wfs !
-  wfNamedVector<-c('bdt' = "GC/BDT", 'osm' = "GC/OSM", 'wudapt' = "WUDAPT", 'iau' = "IAU")
-  
+plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", "osm", "bdt"), plotNow = TRUE, graphPath = "") {
+  colorMap <- c("#8b0101", "#cc0200", "#fc0001", "#be4c03", "#ff6602", "#ff9856", "#fbed08", "#bcbcba", "#ffcca7", "#57555a", "#006700", "#05aa05", "#648423", "#bbdb7a", "#010101", "#fdf6ae", "#6d67fd", "ghostwhite")
+  names(colorMap) <- as.character(c(1 : 10, 101 : 107, "Unclassified"))
+  etiquettes <- c("LCZ 1: Compact high-rise", "LCZ 2: Compact mid-rise", "LCZ 3: Compact low-rise", "LCZ 4: Open high-rise", "LCZ 5: Open mid-rise", "LCZ 6: Open low-rise", "LCZ 7: Lightweight low-rise", "LCZ 8: Large low-rise", "LCZ 9: Sparsely built", "LCZ 10: Heavy industry", "LCZ A: Dense trees", "LCZ B: Scattered trees", "LCZ C: Bush,scrub", "LCZ D: Low plants", "LCZ E: Bare rock or paved", "LCZ F: Bare soil or sand", "LCZ G: Water", "Unclassified")
+  graphPath <- checkDirSlash(graphPath)
+  initalAlphas <- rep(0.1, length(workflowNames))
+  names(initalAlphas) <- workflowNames
+  allPlotNames <- NULL
+  wf2 <- c(5, 1, 2, 0)
+  wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT", iau = "IAU")
   for (wf in workflowNames) {
-    wfAlphas<-initalAlphas
-    wfAlphas[wf]<-1
-    plotName<-paste0("plot_",wf)
-    allPlotNames<-c(allPlotNames,plotName)
-   assign( plotName, 
-   {ggplot(data = summarisedSfIn) +
-    geom_point(
-      aes(x=number, y = meanLogArea,
-          shape = wf, color = lcz_primary, fill = lcz_primary, alpha = wf,
-          size = totalArea), stroke = 1.5) +
-    scale_alpha_manual(values = wfAlphas)+
-    scale_fill_manual(
-      name = "LCZ type",
-      values= colorMap, breaks = names(colorMap),
-      labels = etiquettes, na.value = "ghostwhite") +
-    scale_color_manual(
-      values = colorMap, breaks = names(colorMap),
-      labels = etiquettes, na.value = "ghostwhite") +
-    scale_shape_manual(values = wf2, name = "Workflows",
-                       labels = wfNamedVector,
-                       breaks = c("wudapt","iau", "osm", "bdt")) +
-     scale_size_manual(name = "Total area for \n a workflow and a LCZ type") +
-    labs( x = "Number of Aggregated Spatial units", y = "Mean of log areas of ASU") +
-     guides(alpha = "none") + 
-     labs(subtitle = wfNamedVector[wf]) +
-     theme(legend.position = "right",
-           axis.text = element_text(size = rel(1.0)),
-           axis.title= element_text(size=rel(1.2),face="bold"),
-           legend.text = element_text(size=rel(1),face="bold"),
-           legend.title = element_text(size=rel(1.2),face="bold"),
-           plot.title = element_text(size = rel(1.5), face = "bold")
-   )
-
-   }
-   )
- }
-  
- allPlots<-do.call(list, mget(allPlotNames))
- outPlot <- allPlots[[1]] + allPlots[[2]] + allPlots[[3]] + allPlots[[4]] + plot_layout(ncol = 2, guides = "collect") +
-    plot_annotation(
-      title = "Overview of aggregating behavior", 
-      subtitle = "Average log area x Average number of spatial units per LCZ types and workflow",
-    caption = "Along the y axis : coarser map, along the x axis, patchworky map ")
-  if (plotNow) {print(outPlot)}
-  if (nchar(graphPath)>1){ggsave(graphPath, outPlot)}
+    wfAlphas <- initalAlphas
+    wfAlphas[wf] <- 1
+    plotName <- paste0("plot_", wf)
+    allPlotNames <- c(allPlotNames, plotName)
+    assign(plotName, {
+      ggplot(data = summarisedSfIn) +
+        geom_point(aes(x = number, y = meanLogArea, shape = wf, color = lcz_primary, fill = lcz_primary, alpha = wf, size = totalArea), stroke = 1.5) +
+        scale_alpha_manual(values = wfAlphas) +
+        scale_fill_manual(values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
+        scale_color_manual(name = "LCZ type", values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
+        scale_shape_manual(values = wf2, name = "Workflows", labels = wfNamedVector, breaks = c("wudapt", "iau", "osm", "bdt")) +
+        guides(fill = "none", colour = guide_legend(order = 1),
+               shape = guide_legend(order = 2),
+               size = guide_legend(order = 3)) +
+        scale_size_continuous(name = "Total area for \n a workflow and a LCZ type") +
+        labs(x = "Number of Aggregated Spatial units", y = "Mean of log areas of ASU") +
+        guides(alpha = "none") +
+        labs(subtitle = wfNamedVector[wf]) +
+        theme(legend.position = "right",
+              axis.text = element_text(size = rel(1)),
+              axis.title = element_text(size = rel(1.2), face = "bold"),
+              legend.text = element_text(size = rel(1), face = "bold"),
+              legend.title = element_text(size = rel(1.2), face = "bold"),
+              plot.subtitle = element_text(size = rel(1.2), face = "bold"))
+    })
+  }
+  allPlots <- do.call(list, mget(allPlotNames))
+  outPlot <- allPlots[[1]] + allPlots[[2]] + allPlots[[3]] + allPlots[[4]] +
+    plot_layout(ncol = 2, guides = "collect") +
+    plot_annotation(title = "Overview of aggregating behavior",
+                    subtitle = "Average log area x Average number of spatial units per LCZ types and workflow",
+                    caption = "Along the y axis : coarser map, along the x axis, patchworky map ",
+                    theme =theme(plot.title = element_text(size = rel(1.7), face = "bold"),
+                                 plot.subtitle = element_text(size = rel(1.3), face = "bold") ) )
+  if (plotNow) {
+    print(outPlot)
+  }
+  if (nchar(graphPath) > 1) {
+    ggsave(graphPath, outPlot)
+  }
   return(outPlot)
- 
 }
-
 
 # plotSummarisedRSUs(aggregatedSF = allLocAllWfs)

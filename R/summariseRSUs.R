@@ -35,7 +35,9 @@ summariseRSUs<-function(sfIn, aggregatingColumns = "lcz_primary", trimValue = 0 
         sdArea = round(sd(area / 10000), digits = 2),
         totalArea=round(sum(area/10000), digits = 2),
         meanLogArea = round(mean(log(area / 10000), trim = trimValue), digits = 2),
-        sdLogArea = round(sd(log(area / 10000)), digits = 2)
+        sdLogArea = round(sd(log(area / 10000)), digits = 2),
+        medianArea = round(median(area / 10000, trim = trimValue), digits = 2),
+        medianLogArea = round(median(log(area / 10000), trim = trimValue), digits = 2)
       )
     ), by = aggregatingColumns]
   
