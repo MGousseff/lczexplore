@@ -30,7 +30,12 @@
 #' matConfRedonBDTOSM <- matConfLCZ(sf1=redonBDT, column1 = 'LCZ_PRIMARY',
 #' sf2 = redonOSM, column2 = 'LCZ_PRIMARY', plotNow = TRUE)
 matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLevelsDefault,
-                       plotNow = FALSE, wf1 = "Reference", wf2 = "Alternative", sfInt = NULL, drop = FALSE, ...) {
+                       plotNow = FALSE, wf1 = "Reference", wf2 = "Alternative",
+                       sfInt = NULL, drop = FALSE, ...) {
+  # avoid notes about visible binding
+  .<-sumArea<-percArea<-marginLevels<-NULL
+
+
 if (is.null(sfInt)){
   # coerce the crs of sf2 to the crs of sf1
   allLevels<-unique(
@@ -104,7 +109,9 @@ if (is.null(sfInt)){
 col1<-eval(substitute(column1), envir = parent.frame())
 col2<-eval(substitute(column2), envir = parent.frame())
 
-areaLCZ1<-sfInt[,.(sumArea = sum(area, na.rm = TRUE)), keyby=col1, env = list(col1 = substitute(col1))][
+areaLCZ1<-sfInt[,
+  .(sumArea = sum(area, na.rm = TRUE)),
+  keyby=col1, env = list(col1 = substitute(col1))][
   , .(col1, percArea1 = 100*sumArea / sum(sumArea)), env = list(col1 = substitute(col1))]
 
   # marginal for second LCZ

@@ -4,7 +4,7 @@
 #' @param workflowNames sets the names of workflows
 #' @param inLocation is the name of the location at which all LCZ are created
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

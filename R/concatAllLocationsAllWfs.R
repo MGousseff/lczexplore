@@ -10,7 +10,7 @@
 #' the geometry with refLCZ level
 #' @param column a parameter to feed addMissingRSUs function
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf data.table dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf data.table dplyr forcats units tidyr RColorBrewer utils grDevices rlang
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

@@ -12,7 +12,7 @@
 #' @param plotSave If TRUE, the plot will be saved in the directory pointed by dirPath 
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom caret dummyVars
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer units utils grDevices rlang
+#' @import sf dplyr forcats units tidyr RColorBrewer units utils grDevices rlang
 #' @return Cramer's V between pairs of levels, in a matrix (cramerMatrix) or long form (cramerLong), 
 #' and a dataframe with the nbOutAssociation most significant association
 #' @export
@@ -53,16 +53,19 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
   }
 
   surfaces<-concatSf %>%
-    fmutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
-    fmutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
-    fmutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
+    mutate(wf = factor(.data$wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
+    mutate(lcz_primary = factor(.data$lcz_primary, levels = names(colorMap))) %>%
+    mutate(lcz_primary = tidyr::replace_na(.data$lcz_primary, "Unclassified")) %>%
     dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))
 
   inLocation<-unique(surfaces$location)
   outPlot<-ggplot(surfaces) +
     geom_col(aes(fill=lcz_primary, y=area, x=wf, color = after_scale(fill))) +
     # scale_fill_viridis(discrete = T) +
-    scale_fill_manual(values=colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
+    scale_fill_manual(
+      values=colorMap,
+      breaks = names(colorMap),
+      labels = etiquettes, na.value = "ghostwhite") +
     ggtitle(paste0("LCZ repartition by workflow for ", inLocation))
 
   
@@ -71,7 +74,8 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
     ggsave(plotName, outPlot)}
   
   if (is.character(plotSave)){
-    if(substring( plotSave, first = nchar(plotSave), last = nchar(plotSave)) !="/"){ plotSave<-paste0(plotSave, "/") }
+    if(substring( plotSave, first = nchar(plotSave), last = nchar(plotSave)) !="/"){
+      plotSave<-paste0(plotSave, "/") }
     plotName<-paste0(plotSave, inLocation, "_LCZbyWfBarplot.png")
     ggsave(plotName, outPlot)
   }

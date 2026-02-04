@@ -6,7 +6,7 @@
 #' from the intersection of the original sf geometries intersection. 
 #' It allows to account for numeric precision errors and to speed up computations at the cost of not considering the smallest geometries. 
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

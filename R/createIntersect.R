@@ -8,7 +8,7 @@
 #' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects 
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
 #' @return an sf file with values of LCZ from all the input 
 #' are assigned to geometries resulting from intersection of all input geometries
 #' @export

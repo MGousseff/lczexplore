@@ -11,7 +11,7 @@
 #' refLCZ for the added geometries
 #' @param column is the name of the LCZ column (to be explained)
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

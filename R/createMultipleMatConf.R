@@ -24,7 +24,8 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
              matConfLCZ(
                sf1 = sf1, column1 = "lcz_primary",
                sf2 = sf2, column2 = "lcz_primary",
-               typeLevels = unique(names(typeLevelsDefaultIn)), plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
+               typeLevels = unique(names(typeLevelsDefaultIn)),
+               plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )
     }
   }
@@ -36,9 +37,13 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
       compareNameToBind<-paste0(wfNamesIn[i], "_", wfNamesIn[j], "_to_bind")
       assign(compareNameToBind,
              get(compareName)$matConf %>%
-               mutate(wf_pair = paste0(wfNamesIn[i],"_", lcz_primary, "_", wfNamesIn[j],"_", lcz_primary.1)) %>%
-               dplyr::select(wf_pair, agreePercArea) %>%
-               mutate(percArea = rep(get(compareName)$areas$percArea1, each = length(get(compareName)$areas$percArea2)))
+               mutate(wf_pair = paste0(
+                 wfNamesIn[i],"_", lcz_primary, "_",
+                 wfNamesIn[j],"_", lcz_primary.1)) %>%
+               dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
+               mutate(percArea = rep(
+                 get(compareName)$areas$percArea1,
+                 each = length(get(compareName)$areas$percArea2)))
       )
     }
   }
@@ -60,7 +65,8 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
              matConfLCZ(
                sf1 = sf1, column1 = "lcz_primary",
                sf2 = sf2, column2 = "lcz_primary",
-               typeLevels = unique(names(typeLevelsDefaultIn)), plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
+               typeLevels = unique(names(typeLevelsDefaultIn)),
+               plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )
     }
   }

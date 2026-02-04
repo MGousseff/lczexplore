@@ -37,7 +37,7 @@
 #' The expected arguments are the name of each level of the variables contained 
 #' in column1 and column2, and also a vector called colors.
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import cowplot data.table dplyr forcats grDevices rlang RColorBrewer sf tidyr units  utils 
+#' @import  data.table dplyr forcats grDevices patchwork rlang RColorBrewer sf tidyr units  utils
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
@@ -46,27 +46,27 @@
 #' If saveG is not an empty string, graphics are saved under "saveG.png"
 #' @export
 #' @examples
-#' comparisonBDT_OSM<-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU",
-#' confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
-#' sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU",
-#' confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
-#' repr="standard", saveG="", exwrite=FALSE, location="Redon", plot=TRUE)
-#' # To get the summed area of each LCZ levels for both dataset : 
-#' comparisonBDT_OSM$areas
-#' # The plots of each dataset can be produced with the showLCZ function.
-#' # To get the value of the general percentage of agreement call :
-#' comparisonBDT_OSM$percAgg
-#' # The values of that confusion matrix is available in a wide form:
-#' comparisonBDT_OSM$matConfLarge
-#' # or in a long form :
-#' comparisonBDT_OSM$matConf
-#' 
-#' # Examples for non LCZ variables are available in the importQualVar function examples.
-#' 
+ comparisonBDT_OSM<-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU",
+ confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
+ sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU",
+ confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
+ repr="standard", saveG="", exwrite=FALSE, location="Redon", plotNow = TRUE)
+ # To get the summed area of each LCZ levels for both dataset : 
+ comparisonBDT_OSM$areas
+ # The plots of each dataset can be produced with the showLCZ function.
+ # To get the value of the general percentage of agreement call :
+ comparisonBDT_OSM$percAgg
+ # The values of that confusion matrix is available in a wide form:
+ comparisonBDT_OSM$matConfLarge
+ # or in a long form :
+ comparisonBDT_OSM$matConf
+ 
+ # Examples for non LCZ variables are available in the importQualVar function examples.
+ 
 compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = "bdtopo_2_2",
                        sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = "osm", ref = 1,
                        repr = "standard", saveG = "", exwrite = FALSE, outDir = getwd(),
-                       location = "Your Place", plot = TRUE, tryGroup = FALSE, ...) {
+                       location = "Your Place", plotNow = TRUE, tryGroup = FALSE, ...) {
 
 
   # store the column names in a way that can be injected in functions A SUPPRIMER ?
@@ -310,7 +310,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   matConfOut$data <- intersec_sfExpo
   matConfLong <- as.data.frame(matConfOut$matConf)
 
-  matConfLarge <- pivot_wider(matConfLong, names_from = column2, values_from = agreePercArea)
+  matConfLarge <- pivot_wider(matConfLong, names_from = column2, values_from = .data$agreePercArea)
   matConfLarge <- matConfLarge %>% as.data.frame()
   row.names(matConfLarge) <- matConfLarge[, 1] %>% as.character
   matConfLarge <- matConfLarge[, -1]
@@ -331,7 +331,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   ################################################
   #  GRAPHICS
   ################################################
-  if (plot == TRUE) {
+  if (plotNow == TRUE) {
     if (repr == 'standard') { titrou <- "LCZ" } else { titrou <- "Levels" }
 
     if (wf1 == "bdtopo_2_2") { adtitre1 <- " BDTOPO V2.2" } else
@@ -426,7 +426,8 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
       print(plot_grid(l1Plot, l2Plot, agreePlot, matConfPlot, align = 'hv'))
       dev.off()
     } else {
-      print(plot_grid(l1Plot, l2Plot, agreePlot, matConfPlot, align = 'hv'))
+      outPlot<-(l1Plot + l2Plot)/ (agreePlot+matConfPlot)
+      print(outPlot)
     }
   }else { message("Plot set to FALSE, no plots created") }
 
