@@ -1,7 +1,9 @@
 #' Intersect multiple sf files in which Local Climate Zones are set for polygon geometries 
 #' @param sfList a list which contains the classifications to compare, as sf objects
-#' @param columns a vector which contains, for each sf of sfList, the name of the column of the classification to compare
-#' @param refCrs a number which indicates which sf object from sfList will provide the CRS in which all the sf objects will be projected before comparison
+#' @param columns a vector which contains, for each sf of sfList,
+#' the name of the column of the classification to compare
+#' @param refCrs a number which indicates which sf object from sfList will provide
+#' the CRS in which all the sf objects will be projected before comparison
 #' By defautl it is set to an empty string and no ID is loaded.
 #' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects 
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
@@ -11,8 +13,11 @@
 #' are assigned to geometries resulting from intersection of all input geometries
 #' @export
 #' @examples
-#' sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville")
+#' sfList<-loadMultipleSfs(
+#' dirPath = paste0(
+#' system.file("extdata", package = "lczexplore"),
+#' "/multipleWfs/Goussainville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville")
 #' GoussainvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
 #'  sfWf = c("osm","bdt","iau","wudapt"))

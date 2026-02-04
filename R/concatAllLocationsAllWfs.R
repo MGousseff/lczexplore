@@ -30,10 +30,19 @@
 #'  residualLCZvalue = "Unclassified",
 #'  column = "lcz_primary"
 #')
-concatAllLocationsAllWfs<-function(dirList, locations, workflowNames = c("osm","bdt","iau","wudapt"),
+concatAllLocationsAllWfs<-function(dirList, locations = NA, workflowNames = c("osm","bdt","iau","wudapt"),
                                    missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
                                    residualLCZvalue = NA, column = "lcz_primary"){
   # allLocAllWfSf<-matrix(ncol = 5, nrow = 0)
+  if (is.null(locations) || (length(locations) == 1 && is.na(locations))) {
+    locations <- gsub(pattern = "(.*)(/)(.+)(/$|/{0})", replacement = "\\3", x = dirList)
+  } else {
+    # Remplacer uniquement les NA dans locations par les noms extraits de dirList
+    extracted_names <- gsub(pattern = "(.*)(/)(.+)(/$|/{0})", replacement = "\\3", x = dirList)
+    locations <- ifelse(is.na(locations), extracted_names, locations)
+  }
+
+
   tmp <- st_sfc()
   class(tmp)[1] <- "sfc_POLYGON" 
   allLocAllWfSf<- data.frame(
@@ -48,7 +57,7 @@ for( i in 1:length(dirList)){
     aLocation<-locations[i]
     print(aLocation)
     sfList<-loadMultipleSfs(dirPath = dirPath,
-                           workflowNames = workflowNames , location = aLocation )
+                            workflowNames = workflowNames , inLocation = aLocation )
     if(substr(dirPath, nchar(dirPath), nchar(dirPath))!="/"){dirPath<-paste0(dirPath, "/")}
     zoneSfPath<-paste0(dirPath,"zone.fgb")
     zoneSf<-read_sf(zoneSfPath)

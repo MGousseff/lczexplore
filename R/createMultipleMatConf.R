@@ -24,7 +24,7 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
              matConfLCZ(
                sf1 = sf1, column1 = "lcz_primary",
                sf2 = sf2, column2 = "lcz_primary",
-               typeLevels = unique(names(typeLevelsDefaultIn)), plot = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
+               typeLevels = unique(names(typeLevelsDefaultIn)), plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )
     }
   }
@@ -60,7 +60,7 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
              matConfLCZ(
                sf1 = sf1, column1 = "lcz_primary",
                sf2 = sf2, column2 = "lcz_primary",
-               typeLevels = unique(names(typeLevelsDefaultIn)), plot = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
+               typeLevels = unique(names(typeLevelsDefaultIn)), plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )
     }
   }

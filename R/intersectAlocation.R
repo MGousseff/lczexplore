@@ -26,7 +26,7 @@ intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","iau","wudap
   zoneSfPath<-paste0(dirPath, "zone.fgb")
   zoneSf<-read_sf(zoneSfPath)
 
-  sfList<-loadMultipleSfs(dirPath = dirPath, workflowNames = c("osm","bdt","iau","wudapt"), location = location )
+  sfList<-loadMultipleSfs(dirPath = dirPath, workflowNames = c("osm","bdt","iau","wudapt"), inLocation = location )
   sfList<-addMissingRSUs(sfList = sfList,
                          missingGeomsWf="iau", zoneSf =zoneSf, refWf = refWf, refLCZ = refLCZ,
                          residualLCZvalue = residualLCZvalue,

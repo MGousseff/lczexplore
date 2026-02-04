@@ -23,7 +23,7 @@
 #')
 #' ASUallLocAllWfs <- aggregateRSUsByLCZ(
 #' allLocAllWfs,
-#' LCZcolumn = "lcz_primary", wfColumn = "wf", location = "location", aggregateBufferSize = 0.5)
+#' LCZcolumn = "lcz_primary", wfColumn = "wf", locationColumn = "location", aggregateBufferSize = 0.5)
 aggregateRSUsByLCZ<-function(sf, aggregateBufferSize = 0, LCZcolumn, wfColumn, locationColumn="location"){
   groupCols<-as.list(environment())[c("wfColumn", "locationColumn", "LCZcolumn")]
   presentColArgs<-!c(missing(wfColumn), missing(locationColumn), missing(LCZcolumn))

@@ -24,7 +24,8 @@
 #' summarisedRSUs<-summariseRSUs(allLocAllWfs, aggregatingColumns = "wf")
 summariseRSUs<-function(sfIn, aggregatingColumns = "lcz_primary", trimValue = 0 ){
   if (!"sf"%in%class(sfIn)){sfIn<-st_as_sf(sfIn)}
-  
+  if(!("area"%in%names(sfIn))){sfIn$area<-drop_units(st_area(sfIn))}
+
   DTin<-sfIn
   data.table::setDT(DTin)
   sfOut<-DTin[,

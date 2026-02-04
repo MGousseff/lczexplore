@@ -27,8 +27,8 @@
 #' @export
 #'
 #' @examples
-#' matConfRedonBDTOSM<-matConfLCZ(sf1=redonBDT,column1='LCZ_PRIMARY',
-#' sf2=redonOSM,column2='LCZ_PRIMARY',plot=TRUE)
+#' matConfRedonBDTOSM <- matConfLCZ(sf1=redonBDT, column1 = 'LCZ_PRIMARY',
+#' sf2 = redonOSM, column2 = 'LCZ_PRIMARY', plotNow = TRUE)
 matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLevelsDefault,
                        plotNow = FALSE, wf1 = "Reference", wf2 = "Alternative", sfInt = NULL, drop = FALSE, ...) {
 if (is.null(sfInt)){
