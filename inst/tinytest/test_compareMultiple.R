@@ -1,10 +1,10 @@
 # This tests the function createIntersect
-library(tinytest)
-library(dplyr)
-library(tidyr)
-library(sf)
-library(ggplot2)
-library(forcats)
+# library(tinytest)
+# library(dplyr)
+# library(tidyr)
+# library(sf)
+# library(ggplot2)
+# library(forcats)
 
 sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
                         workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )

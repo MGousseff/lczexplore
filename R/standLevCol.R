@@ -4,7 +4,8 @@
 #' @param colors is the vector of colors one intends to use to visualize the LCZ of the dataset
 #' @param useStandCol allows to say if standard colors should replace user specified colors
 #' when standard levels are detected.
-#' @import dplyr sf
+#' @import sf
+#' @importFrom magrittr "%>%"
 #' @importFrom grDevices palette.colors
 #'
 #' @return output is a list containing levelColors, a named vector, which names are the levels

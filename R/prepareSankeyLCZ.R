@@ -1,11 +1,13 @@
 
 #' Prepares the data to produce a sankey graph between two LCZ workflows 
-#' @param intersectedDf is an sf object or a data frame which contains lcz values for at least two workflows on the same geometries, 
+#' @param intersectedDf is an sf object or a data frame which contains lcz values for
+#' at least two workflows on the same geometries,
 #' and the area of the geometries
 #' @param wf1 is the column name where the LCZ value of the first workflow are stored
 #' @param wf2 wf1 is the column name where the LCZ value of the first workflow are stored
 #' @return an object to feed plotSankeyLCZ
-#' @import sf ggplot2 dplyr ggsankeyfier
+#' @importFrom dplyr case_when
+#' @import sf ggplot2 ggsankeyfier
 #' @export
 #'
 #' @examples

@@ -7,7 +7,8 @@
 prepareSankeyLCZ(intersectedDf, wf1, wf2)
 }
 \arguments{
-\item{intersectedDf}{is an sf object or a data frame which contains lcz values for at least two workflows on the same geometries,
+\item{intersectedDf}{is an sf object or a data frame which contains lcz values for
+at least two workflows on the same geometries,
 and the area of the geometries}
 
 \item{wf1}{is the column name where the LCZ value of the first workflow are stored}

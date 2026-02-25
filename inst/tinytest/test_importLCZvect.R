@@ -1,7 +1,7 @@
 #This tests the function importLCZvect
 # library(tinytest)
 #
-library(sf)
+# library(sf)
 # test<-st_read(
 #   "/home/gousseff/Documents/2_CodesSources/R/lczexplore/lczexplore/inst/extdata/bdtopo_2_2/Redon/rsu_lcz.geojson")
 # colonnes<-c("LCZ_PRIMARY","ID_RSU","LCZ_UNIQUENESS_VALU")
@@ -114,7 +114,7 @@ expect_equal("LCZ_SECONDARY"%in%names(test),TRUE)
 test<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon"),
                             column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T)
 if (file.exists("test.fgb")) file.remove("test.fgb")
-write_sf(test, "test.fgb")
+sf::write_sf(test, "test.fgb")
 expect_silent(test<-importLCZvect(dirPath=getwd(),file="test.fgb",
                     column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T))
 rm(test)

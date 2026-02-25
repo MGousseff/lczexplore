@@ -5,20 +5,18 @@
 #' with a column wf for the workflow names, a column lcz_primary for the LCZ types.
 #' @param wfNamesIn the name of trhe columùn containing the workflows names
 #' @param typeLevelsDefaultIn is a named vector of strings containing the LCZ levels. By default inherited from lczexplore
-#'
+#' @importFrom dplyr mutate select filter
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
 #' @export
-#'
-#' @examples
-createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeLevelsDefault){
+createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault){
   if(nrow(allWfsIn)>100){message("This function computes all the pairwise confusion matrices and can take some time")}
   for (i in 1 : (length(wfNamesIn)-1)) {
     for (j in (i+1) : length(wfNamesIn)){
       # for (i in 1 : 2) {
       #   for (j in i + 1 : 3){
-      sf1<-importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[i]), column = "lcz_primary")
-      sf2<-importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[j]), column = "lcz_primary")
+      sf1<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[i]), column = "lcz_primary")
+      sf2<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[j]), column = "lcz_primary")
       compareName<-paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
@@ -37,7 +35,7 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
       compareNameToBind<-paste0(wfNamesIn[i], "_", wfNamesIn[j], "_to_bind")
       assign(compareNameToBind,
              get(compareName)$matConf %>%
-               mutate(wf_pair = paste0(
+               dplyr::mutate(wf_pair = paste0(
                  wfNamesIn[i],"_", lcz_primary, "_",
                  wfNamesIn[j],"_", lcz_primary.1)) %>%
                dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
@@ -77,8 +75,8 @@ createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = typeL
       compareName<-paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareNameToBind,
              get(compareName)$matConf %>%
-               mutate(wf_pair = paste0(wfNamesIn[i],"_", lcz_primary,"_", wfNamesIn[j],"_",lcz_primary.1)) %>%
-               dplyr::select(wf_pair, agreePercArea) %>%
+               dplyr::mutate(wf_pair = paste0(wfNamesIn[i],"_", lcz_primary,"_", wfNamesIn[j],"_",lcz_primary.1)) %>%
+               dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
                mutate(percArea = rep(get(compareName)$areas$percArea1, each = length(get(compareName)$areas$percArea2)))
       )
     }

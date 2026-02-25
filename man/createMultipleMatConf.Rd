@@ -8,7 +8,7 @@ usable to plot chord diagrams}
 createMultipleMatConf(
   allWfsIn,
   wfNamesIn,
-  typeLevelsDefaultIn = typeLevelsDefault
+  typeLevelsDefaultIn = .lczenv$typeLevelsDefault
 )
 }
 \arguments{

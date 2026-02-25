@@ -13,7 +13,8 @@
 #' @param typeLevels the levels of the imported qualitative variable
 #' @param drop : the default is TRUE, which means all the column are dropped excepted those specified in previous parameters
 #' @param verbose allows to hide some messages when set to false.
-#' @import dplyr forcats rlang sf
+#' @import forcats rlang sf
+#' @importFrom magrittr "%>%"
 #' @importFrom forcats fct_recode
 #' @return returns an sf object containing at least the geoms and the qualitative variable,
 #' and if specified, columns for the IDs of the geoms and the confidence value of 

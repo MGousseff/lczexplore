@@ -1,6 +1,6 @@
-library(dplyr)
-library(sf)
-library(ggplot2)
+# library(dplyr)
+# library(sf)
+# library(ggplot2)
 
 expect_silent(
   sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),

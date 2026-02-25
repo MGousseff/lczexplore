@@ -45,5 +45,5 @@ workflowNames = c("osm","bdt","iau","wudapt"),
 )
 ASUallLocAllWfs <- aggregateRSUsByLCZ(
 allLocAllWfs,
-LCZcolumn = "lcz_primary", wfColumn = "wf", location = "location", aggregateBufferSize = 0.5)
+LCZcolumn = "lcz_primary", wfColumn = "wf", locationColumn = "location", aggregateBufferSize = 0.5)
 }

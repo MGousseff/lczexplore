@@ -12,7 +12,9 @@
 #' @param plotSave If TRUE, the plot will be saved in the directory pointed by dirPath 
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom caret dummyVars
-#' @import sf dplyr forcats units tidyr RColorBrewer units utils grDevices rlang
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom tidyr  replace_na
+#' @import sf forcats units RColorBrewer units utils grDevices rlang
 #' @return Cramer's V between pairs of levels, in a matrix (cramerMatrix) or long form (cramerLong), 
 #' and a dataframe with the nbOutAssociation most significant association
 #' @export
@@ -53,9 +55,9 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
   }
 
   surfaces<-concatSf %>%
-    mutate(wf = factor(.data$wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
-    mutate(lcz_primary = factor(.data$lcz_primary, levels = names(colorMap))) %>%
-    mutate(lcz_primary = tidyr::replace_na(.data$lcz_primary, "Unclassified")) %>%
+    dplyr::mutate(wf = factor(.data$wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
+    dplyr::mutate(lcz_primary = factor(.data$lcz_primary, levels = names(colorMap))) %>%
+    dplyr::mutate(lcz_primary = tidyr::replace_na(.data$lcz_primary, "Unclassified")) %>%
     dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))
 
   inLocation<-unique(surfaces$location)

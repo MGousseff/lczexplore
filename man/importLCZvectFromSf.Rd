@@ -2,7 +2,7 @@
 % Please edit documentation in R/importLCZvect.R
 \name{importLCZvectFromSf}
 \alias{importLCZvectFromSf}
-\title{Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)}
+\title{Imports Local Climate Zone classifications from an existing sf object}
 \usage{
 importLCZvectFromSf(sfIn, column, geomID = "", confid = "")
 }
@@ -24,7 +24,7 @@ returns an sf object containing at least the geoms and the LCZ values,
 and if specified, columns for the IDs of the geoms and the confidence value of the LCZ levels.
 }
 \description{
-Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)
+Imports Local Climate Zone classifications from an existing sf object
 }
 \examples{
 redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),

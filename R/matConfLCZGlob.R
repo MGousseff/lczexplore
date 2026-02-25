@@ -17,8 +17,11 @@
 #' @param confid1 is the name of the column measuring the confidence given to the LCZ level in column1
 #' @param confid2 is the name of the column measuring the confidence given to the LCZ level in column2
 #' @param ... other parameters that may be passed from a function calling matConfLCZGlob
-#' @import tidyr units ggplot2 dplyr forcats units tidyr RColorBrewer
+#' @import units ggplot2 forcats units RColorBrewer
 #' @importFrom stats quantile
+#' @importFrom dplyr mutate group_by_at summarize ungroup filter across where
+#' @importFrom tidyr pivot_wider pivot_longer crossing
+#'
 #' @return matConfOut is a list containing : matconf, the confusion matrix in its longer form ; matConfPlot,
 #' a ggplot2 plot of said matrix ; areas, the summed area per levels for both LCZ classification ;
 #' and pourcAcc, the general agreement between classifications expressed in percent of areas
@@ -79,16 +82,16 @@ matConfLCZGlob<-function(filePath="", inputDf, wf1, wf2, geomID1="", column1, co
 
   # Marginal areas for first LCZ
 
-  areaLCZ1<-intersec_sf %>% group_by_at(.vars=column1) %>%
-    summarize(area=sum(area,na.rm=F))%>%
+  areaLCZ1<-intersec_sf %>% dplyr::group_by_at(.vars=column1) %>%
+    dplyr::summarize(area=sum(area,na.rm=F))%>%
     drop_units %>%
     ungroup()
   areaLCZ1$area<-round(areaLCZ1$area/sum(areaLCZ1$area,na.rm=F)*100,digits = 2)
   areaLCZ1<-areaLCZ1 %>% as.data.frame()
 
   # marginal for second LCZ
-  areaLCZ2<-intersec_sf %>% group_by_at(.vars=column2) %>%
-    summarize(area=sum(area,na.rm=F))%>%
+  areaLCZ2<-intersec_sf %>% dplyr::group_by_at(.vars=column2) %>%
+    dplyr::summarize(area=sum(area,na.rm=F))%>%
     drop_units %>%
     ungroup()
   areaLCZ2$area<-round(areaLCZ2$area/sum(areaLCZ2$area,na.rm=F)*100,digits = 2)
@@ -124,13 +127,13 @@ matConfLCZGlob<-function(filePath="", inputDf, wf1, wf2, geomID1="", column1, co
   # fixed with group_by_at
 
 
-  matConf<-intersec_sf %>% group_by_at(.vars=c(column1,column2)) %>%
-    summarize(area=sum(area))%>% drop_units %>% ungroup %>% ungroup
+  matConf<-intersec_sf %>% dplyr::group_by_at(.vars=c(column1,column2)) %>%
+    dplyr::summarize(area=sum(area))%>% drop_units %>% ungroup %>% ungroup
 
   # print("matConf")
   # print(head(matConf))
 
-  matConfLarge<-pivot_wider(data=matConf,names_from=column2,values_from=area)
+  matConfLarge<-tidyr::pivot_wider(data=matConf,names_from=column2,values_from=area)
   readable<-matConfLarge[,-1]/rowSums(matConfLarge[,-1],na.rm=T)*100
   matConfLarge<-cbind(matConfLarge[,1],round(x=readable,digits=2))
 
@@ -144,17 +147,17 @@ matConfLCZGlob<-function(filePath="", inputDf, wf1, wf2, geomID1="", column1, co
 
   # Longer format to feet the geom_tile aes in ggplot2
 
-  matConfLong<-pivot_longer(matConfLarge,cols=-1,names_to = column2)
+  matConfLong<-tidyr::pivot_longer(matConfLarge,cols=-1,names_to = column2)
   # print("matConfLong avant reorder factor")
   names(matConfLong)<-c(column1,column2,"agree")
 
   # Reordering of factors (as they were sorted in the order of showing in the file)
 
-  matConfLong<-matConfLong %>% mutate(across(where(is.character),as_factor))
+  matConfLong<-matConfLong %>% dplyr::mutate(across(where(is.character),as_factor))
   matConfLong<-matConfLong %>%
-    mutate(!!column1:=ordered(subset(matConfLong,select=column1,drop=T),levels=typeLevels))
+    dplyr::mutate(!!column1:=ordered(subset(matConfLong,select=column1,drop=T),levels=typeLevels))
   matConfLong<-matConfLong %>%
-    mutate(!!column2:=ordered(subset(matConfLong,select=column2,drop=T),levels=typeLevels))
+    dplyr::mutate(!!column2:=ordered(subset(matConfLong,select=column2,drop=T),levels=typeLevels))
 
 
   ##############################################################################################################
@@ -164,7 +167,7 @@ matConfLCZGlob<-function(filePath="", inputDf, wf1, wf2, geomID1="", column1, co
   complement<-cbind(crossing(typeLevels,typeLevels),
                     data.frame(
                       indice=apply(
-                        crossing(typeLevels,typeLevels),1,paste,collapse="."),
+                        tidyr::crossing(typeLevels,typeLevels),1,paste,collapse="."),
                       area=0
                     )
   )
@@ -179,9 +182,9 @@ matConfLCZGlob<-function(filePath="", inputDf, wf1, wf2, geomID1="", column1, co
 
   matConfLong<-completed[,c(column1,column2,"agree")]
   matConfLong<-matConfLong %>%
-    mutate(!!column1:=addNA(subset(matConfLong,select=column1,drop=T),ifany = T),
+    dplyr::mutate(!!column1:=addNA(subset(matConfLong,select=column1,drop=T),ifany = T),
            !!column2:=addNA(subset(matConfLong,select=column2,drop=T),ifany = T),) %>%
-    mutate(!!column1:=factor(subset(matConfLong,select=column1,drop=T),levels=typeLevels),
+    dplyr::mutate(!!column1:=factor(subset(matConfLong,select=column1,drop=T),levels=typeLevels),
            !!column2:=factor(subset(matConfLong,select=column2,drop=T),levels=typeLevels))
 
 

@@ -1,5 +1,5 @@
-library(ggplot2)
-library(sf)
+# library(ggplot2)
+# library(sf)
 
 wd<-getwd()
 rootDir<-"/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/newDataTree"

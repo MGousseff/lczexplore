@@ -2,7 +2,9 @@
 #' From the output of compare multiple, cmputes which workflows agree the most regarding the area of agreement
 #' @param sfMultiCompLong the sfLong output of compareMultipleLCZ function
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @importFrom dplyr group_by summarise arrange mutate
+#' @importFrom magrittr "%>%" desc
+#' @import sf units
 #' @return the pairwise agreement between workflows, sorted by decreasing agreeing areas
 #' @export
 #' @examples
@@ -19,12 +21,12 @@
 #'  trimPerc = 0.5)
 #' GoussainvilleWorkflowAgreement<-workflowAgreeAreas(GoussainvilleMultipleComparison$sfIntLong)
 workflowAgreeAreas<-function(sfMultiCompLong){
-    agreeAreas<- sfMultiCompLong%>% subset(agree) %>% group_by(.data$whichWfs) %>%
+    agreeAreas<- sfMultiCompLong%>% subset(agree) %>% dplyr::group_by(.data$whichWfs) %>%
     dplyr::summarise(area=sum(area))
-  disagreeAreas<-sfMultiCompLong%>% subset(!agree) %>% group_by(.data$whichWfs) %>%
+  disagreeAreas<-sfMultiCompLong%>% subset(!agree) %>% dplyr::group_by(.data$whichWfs) %>%
     dplyr::summarise(area=sum(area))
   output<-merge(agreeAreas, disagreeAreas, by = "whichWfs",
-suffixes = c("Agree", "Disagree")) %>% arrange(desc(.data$areaAgree)) %>%
-mutate(percAgree = .data$areaAgree/(.data$areaAgree + .data$areaDisagree)*100)
+suffixes = c("Agree", "Disagree")) %>% dplyr::arrange(dplyr::desc(.data$areaAgree)) %>%
+    dplyr::mutate(percAgree = .data$areaAgree/(.data$areaAgree + .data$areaDisagree)*100)
   return(output)
 }

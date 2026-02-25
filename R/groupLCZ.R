@@ -5,8 +5,7 @@
 #' @param column is the name of the column containing the LCZ to be grouped
 #' @param outCol is the name of the colum in which the grouped LCZ will be put
 #' @param ... the names of the groups followed by the levels the regrouped for instance urban=c("1","2","3","4","5","6","7","8","9")
-#' @import forcats dplyr rlang grDevices
-
+#' @import forcats rlang
 #' @return a file containing the original geom and lcz, and a new grouped column
 #' @export
 #'

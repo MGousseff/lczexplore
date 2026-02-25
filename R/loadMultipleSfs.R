@@ -1,10 +1,15 @@
 #' In a given directory (or a list of directories) the function looks for LCZ datafiles
-#' and load them in a list
+#' and load them in a list. In each directory, files must have names built as follow :
+#' <wf>_lcz.<fileExtension>, where wf are the values specified in workflowNames parameter and
+#' fileExtension is a fil extension known by sf drivers, like fgb, geojson...
 #' @param dirPath is the place where the files are
 #' @param workflowNames sets the names of workflows
 #' @param inLocation is the name of the location at which all LCZ are created
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @param fileExtension is the extensions of the files to load (.fgb is the recommended format)
+#' @param column is the name of the column containing the LCZ types, must be the same in all files.
+#' @importFrom forcats fct_recode
+#' @importFrom dplyr mutate
+#' @import sf units RColorBrewer utils grDevices rlang
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
@@ -41,8 +46,8 @@ loadMultipleSfs<-function(
     names(inSf)<-tolower(names(inSf))
     inSf<-select(inSf,lcz_primary) %>% mutate(
       lcz_primary=factor(lcz_primary, levels = typeLevels))
-    inSf<-mutate(inSf, wf = i, location = inLocation, .before = geometry)
-    inSf[[column]]<-fct_recode(inSf[[column]], !!!typeLevels)
+    inSf<-dplyr::mutate(inSf, wf = i, location = inLocation, .before = geometry)
+    inSf[[column]]<-forcats::fct_recode(inSf[[column]], !!!typeLevels)
     sfList[[i]]<-inSf
   }
   return(sfList)

@@ -9,8 +9,8 @@
 #' @param residualLCZvalue the value the completed geometries where the reference workflow does not classify 
 #' the geometry with refLCZ level
 #' @param column a parameter to feed addMissingRSUs function
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf data.table dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf utils  rlang
+#' @importFrom magrittr "%>%"
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
@@ -69,11 +69,9 @@ for( i in 1:length(dirList)){
                                        location = aLocation, refCrs = 1)
   if(i==1 && st_crs(allLocAllWfSf)!=st_crs(concatSf)){
     allLocAllWfSf<-st_transform(allLocAllWfSf, crs = st_crs(concatSf))
-  }
+    }
   allLocAllWfSf<-rbind(allLocAllWfSf, concatSf)
-
   }
-  
-  return(allLocAllWfSf)
+return(allLocAllWfSf)
 }
 

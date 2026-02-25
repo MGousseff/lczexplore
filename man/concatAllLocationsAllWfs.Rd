@@ -6,7 +6,7 @@
 \usage{
 concatAllLocationsAllWfs(
   dirList,
-  locations,
+  locations = NA,
   workflowNames = c("osm", "bdt", "iau", "wudapt"),
   missingGeomsWf = "iau",
   refWf = NULL,

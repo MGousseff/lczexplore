@@ -1,3 +1,10 @@
+#' compute agreements between several LCZ maps
+#' @param intersec_sf is a special sf or data.frame object
+#' whose lines correspond to intersected spatial units, the same for all workflows,
+#' and whose first columns contain LCZ values for the studied workflows,
+#' followed by a column containing the area of the spatial units
+#' @param nbWfs is the number of studied workflows (and therefore LCZ columns)
+
 computeAgreements<-function(intersec_sf, nbWfs) {
   intersec_sfnogeom<-st_drop_geometry(intersec_sf)
   for (i in 1:(nbWfs - 1)) {

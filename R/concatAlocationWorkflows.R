@@ -3,8 +3,7 @@
 #' @param sfList the list of LCZ sf objects
 #' @param location the name of the location at which all LCZ are created
 #' @param refCrs a number telling which sf of the sfList will be the reference in termes of Coordinate Reference System
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @importFrom sf st_transform st_crs st_drop_geometry
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

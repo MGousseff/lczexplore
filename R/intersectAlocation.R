@@ -9,9 +9,10 @@
 #' @param residualLCZvalue is passed to addMissingRSU function
 #' @param column the column name of the LCZ classification
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf units rlang
+#' @importFrom magrittr "%>%"
 #' @return an sf file with values of LCZ from all the input 
-#' are assigned to geometries resulting from intersection of all input geometries
+#' assigned to geometries resulting from intersection of all input geometries
 #' @details This function is not generic, it expects the data files to be named wf_rsu_lcz; wf varying among 
 #' the values of workflownames, and the LCZ columns are expected to be lcz_primary (but lower and upper cases are accepted)
 #' @export

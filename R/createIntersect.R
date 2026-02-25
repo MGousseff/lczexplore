@@ -7,8 +7,9 @@
 #' By defautl it is set to an empty string and no ID is loaded.
 #' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects 
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @importFrom dplyr mutate
+#' @import sf utils rlang
+#' @importFrom magrittr "%>%"
 #' @return an sf file with values of LCZ from all the input 
 #' are assigned to geometries resulting from intersection of all input geometries
 #' @export
@@ -32,7 +33,7 @@ createIntersect<-function(sfList, columns, refCrs=NULL, sfWf=NULL, minZeroArea=0
   if (!is.null(sfWf) & length(sfWf) == length(sfList)){
     names(sfInt)[1:(ncol(sfInt)-1)]<-sfWf
   } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ",1:length(sfList)) }
-  sfInt<-mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
+  sfInt<-dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                                          .before=geometry)
   sfInt<-sfInt[sfInt$area>minZeroArea,]
   return(sfInt) 

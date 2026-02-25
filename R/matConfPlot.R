@@ -13,7 +13,9 @@
 #' @param wf2 is the name of the second workflow (for labels)
 #' @param marginAreas are the percentage of areas for LCZ types for both workflows (an output of matConfLCZ)
 #' @return returns a plot of a matrice of confusion
-#' @import sf ggnewscale ggplot2 dplyr forcats units tidyr RColorBrewer rlang
+#' importFrom forcats fct_recode
+#' @import sf ggnewscale ggplot2 units RColorBrewer rlang
+#' @importFrom magrittr "%>%"
 #' @export
 #'
 #' @examples
@@ -35,7 +37,7 @@ matConfPlot <- function(matConfLong,
   ) == 1
   print(condition)
   if (condition) {
-    matConfLong[[column1]] <- fct_recode(matConfLong[[column1]],
+    matConfLong[[column1]] <- forcats::fct_recode(matConfLong[[column1]],
                                          "Compact high" = "1",
                                          "Compact mid" = "2",
                                          "Compact low" = "3",
@@ -54,7 +56,7 @@ matConfPlot <- function(matConfLong,
                                          "Bare soil sand" = "106",
                                          "Water" = "107",
                                          "Unclassified" = "Unclassified") %>% as.ordered
-    matConfLong[[column2]] <- fct_recode(matConfLong[[column2]],
+    matConfLong[[column2]] <- forcats::fct_recode(matConfLong[[column2]],
                                          "Compact high" = "1",
                                          "Compact mid" = "2",
                                          "Compact low" = "3",
@@ -73,7 +75,7 @@ matConfPlot <- function(matConfLong,
                                          "Bare soil sand" = "106",
                                          "Water" = "107",
                                          "Unclassified" = "Unclassified") %>% as.ordered
-    marginAreas$marginLevels <- fct_recode(marginAreas$marginLevels, "Compact high" = "1",
+    marginAreas$marginLevels <- forcats::fct_recode(marginAreas$marginLevels, "Compact high" = "1",
                                            "Compact mid" = "2",
                                            "Compact low" = "3",
                                            "Open High" = "4",
@@ -135,15 +137,15 @@ matConfPlot <- function(matConfLong,
       aes(x = .data[[column1]], y = .data[[column2]]),
       color = alpha("orangered", 0.5), lwd = 1.2, linetype = 1, fill = NA) +
     ggnewscale::new_scale_fill() +
-    geom_tile(marginAreas, mapping = aes(x = marginLevels, y = coordRef, fill = percArea1), height = 0.8, width = 0.8) +
+    geom_tile(marginAreas, mapping = aes(x = .data$marginLevels, y = coordRef, fill = percArea1), height = 0.8, width = 0.8) +
     theme(panel.background = element_rect(fill = "ghostwhite")) +
     geom_text(data = marginAreas[round(marginAreas$percArea1, 0) != 0,],
-              aes(x = marginLevels, y = coordRef, label = round(percArea1, digits = 0)),
+              aes(x = .data$marginLevels, y = coordRef, label = round(percArea1, digits = 0)),
               color = "gray37") +
     theme(axis.text.x = element_text(angle = 70, hjust = 1)) +
-    geom_tile(marginAreas, mapping = aes(x = coordRef, y = marginLevels, fill = percArea2), height = 0.8, width = 0.8) +
+    geom_tile(marginAreas, mapping = aes(x = coordRef, y = .data$marginLevels, fill = percArea2), height = 0.8, width = 0.8) +
     geom_text(data = marginAreas[round(marginAreas$percArea2, 0) != 0,],
-              aes(x = coordRef, y = marginLevels, label = round(percArea2, digits = 0)),
+              aes(x = coordRef, y = .data$marginLevels, label = round(percArea2, digits = 0)),
               color = "gray37") +
     scale_fill_gradient2(low = "white", mid = "cyan", high = "blue",
                          midpoint = 50, limit = c(0, 100), space = "Lab",

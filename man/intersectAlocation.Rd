@@ -37,7 +37,7 @@ intersectAlocation(
 }
 \value{
 an sf file with values of LCZ from all the input
-are assigned to geometries resulting from intersection of all input geometries
+assigned to geometries resulting from intersection of all input geometries
 }
 \description{
 Intersects several sf files for a given location identified by a given directory path and name

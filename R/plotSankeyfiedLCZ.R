@@ -3,7 +3,7 @@
 #' @param colorMap is a vector of colors whose names cover the valus of the nodes in sankeyfied
 #' @param plotNow is set to TRUE by default, if set to FAULT the graph is not plotted. 
 #' @return returns a sanky plot of LCZ workflows on the same areas
-#' @import sf ggplot2 dplyr ggsankeyfier
+#' @import sf ggplot2 ggsankeyfier
 #' @export
 #'
 #' @examples

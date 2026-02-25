@@ -19,11 +19,11 @@ expect_warning(redonWudapt<-importLCZraster(
 expect_silent(showLCZ(redonWudapt, column = "LCZ_PRIMARY", repr = "standard"))
 
 # Test out of Europe Bbox (supposed to fail)
-library(sf)
+# library(sf)
 #bBoxCoord<-c(-117.312698,32.805168,-117.227554,32.864593)
-lowCorner<-st_point(c(-117.312698,32.805168))
-upCorner<-st_point(c(-117.227554,32.864593))
-outBbox<-st_sfc(lowCorner,upCorner,crs=4326)
+lowCorner<-sf::st_point(c(-117.312698,32.805168))
+upCorner<-sf::st_point(c(-117.227554,32.864593))
+outBbox<-sf::st_sfc(lowCorner,upCorner,crs=4326)
 #importLCZraster("/home/gousseff/Documents/2_CodesSources/Wudapt/WudaptEurope/",bBox=outBbox)
 
 # test bounding box not intersecting with rastet

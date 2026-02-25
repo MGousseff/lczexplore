@@ -7,7 +7,7 @@
 #' of the rsu_lcz.geojson found in the dirPath directory.
 #' If output is bBox a bounding box (seef sf package) of the area contained in the rsu_lcz file in the dirPath directory is returned.
 #' This is useful to select geoms analysed in other sf objects.
-#' @import sf dplyr
+#' @import sf
 #' @export
 #'
 #' @examples 

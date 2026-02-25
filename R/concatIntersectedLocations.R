@@ -3,7 +3,7 @@
 #' @param workflowNames sets the names of workflows and define the name of the files which will be loaded and intersected
 #' @param locations : for each diretory from dirList, a location name must be fed to the function
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf rlang
 #' @return returns an sf object with all intersections
 #' @export
 #' @examples
@@ -26,6 +26,5 @@ concatIntersectedLocations<-function(dirList, locations, workflowNames = c("osm"
   }
   concatIntersectedDf$location<-factor(concatIntersectedDf$location, levels = .lczenv$typeLevelsDefault)
   concatIntersectedSf<-concatIntersectedDf %>% st_as_sf()
-  
   return(concatIntersectedSf)
 }

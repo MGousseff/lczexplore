@@ -1,9 +1,9 @@
 #This tests the function importQualVar
 # library(tinytest)
 #
-library(sf)
-library(dplyr)
-library(lczexplore)
+# library(sf)
+# library(dplyr)
+# library(lczexplore)
 # test<-st_read(
 #   "/home/gousseff/Documents/2_CodesSources/R/lczexplore/lczexplore/inst/extdata/bdtopo_2_2/Redon/rsu_lcz.geojson")
 # colonnes<-c("LCZ_PRIMARY","ID_RSU","LCZ_UNIQUENESS_VALU")

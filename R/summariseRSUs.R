@@ -4,7 +4,8 @@
 #' @param trimValue a trim parameter to feed the mean function in order to avoid letting artifially small or big
 #' geometries to influence the average area results
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang
+#' @import sf units  rlang
+#' @importFrom magrittr "%>%"
 #' @return the number of geometries (Reference Spatial units or RSUs) 
 #' and their mean area per level of LCZ, and the same after agregatting geometries 
 #' with same level of LCZ which touch each other

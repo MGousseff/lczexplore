@@ -5,7 +5,7 @@
 \title{Take sf files with an lcz_primary column, and concatenates them in a single sf object,
 adding a column for location and workflow names}
 \usage{
-concatAlocationWorkflows(sfList, location = "location", refCrs = 1)
+concatAlocationWorkflows(sfList, location = NA, refCrs = 1)
 }
 \arguments{
 \item{sfList}{the list of LCZ sf objects}
@@ -29,10 +29,10 @@ adding a column for location and workflow names
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville"  )
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
 zoneSf <- sf::read_sf(
 paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville/zone.fgb")
 )
 GoussainvilleAllWfs <-  concatAlocationWorkflows(
-sfList = sfList,  location = "Goussainville") 
+sfList = sfList, location = "Goussainville")
 }

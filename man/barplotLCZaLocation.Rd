@@ -8,7 +8,7 @@ NOTE: to represent the map of LCZ for a given fil, use \code{showLCZ} function i
 \usage{
 barplotLCZaLocation(
   dirPath,
-  location,
+  inLocation,
   workflowNames = c("osm", "bdt", "iau", "wudapt"),
   refWf = NULL,
   refLCZ = NA,
@@ -20,7 +20,7 @@ barplotLCZaLocation(
 \arguments{
 \item{dirPath}{is the path where the datasets are stored}
 
-\item{location}{is the name of the locations for the plot is produced}
+\item{inLocation}{is the name of the locations for the plot is produced}
 
 \item{workflowNames}{is a vector of prefixes. The LCZ files must be named workflow_rsu.fgb
 where workflow is on of the values in workflowNames vector}
@@ -48,5 +48,5 @@ NOTE: to represent the map of LCZ for a given fil, use \code{showLCZ} function i
 barplotLCZaLocation(
 dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
 refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
-location = "Goussainville", plotNow = TRUE)
+inLocation = "Goussainville", plotNow = TRUE)
 }

@@ -1,5 +1,5 @@
 #' Calls functions of the package to produce an analysis of two set of LCZ
-#' produced exclusively by GeoClimate
+#' produced exclusively by GeoClimate. DO NOT USE
 #' @details Typically one will compare the LCZ produced by GeoClimate using the OpenStreetMap
 #' data as input to 
 #' the LCZ produced by GeoClimate using the french BDTopo v2.2 as input.

@@ -5,7 +5,8 @@
 #' @param graphPath : a valid directory path where th plot will be saved 
 #' (for now an empty string to avoid saving in the working directory)
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr forcats units tidyr RColorBrewer utils grDevices rlang patchwork
+#' @import sf units utils grDevices rlang patchwork
+#' @importFrom magrittr "%>%"
 #' @return the number of geometries (Reference Spatial units or RSUs) 
 #' and their mean area per level of LCZ, and the same after agregatting geometries 
 #' with same level of LCZ which touch each other
@@ -25,16 +26,21 @@
 #')
 #' summarisedRSUs<-summariseRSUs(allLocAllWfs, aggregatingColumns = c("wf", "lcz_primary"))
 #' plotSummarisedRSUs(summarisedSfIn = summarisedRSUs)
-plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", "osm", "bdt"), plotNow = TRUE, graphPath = "") {
-  colorMap <- c("#8b0101", "#cc0200", "#fc0001", "#be4c03", "#ff6602", "#ff9856", "#fbed08", "#bcbcba", "#ffcca7", "#57555a", "#006700", "#05aa05", "#648423", "#bbdb7a", "#010101", "#fdf6ae", "#6d67fd", "ghostwhite")
-  names(colorMap) <- as.character(c(1 : 10, 101 : 107, "Unclassified"))
-  etiquettes <- c("LCZ 1: Compact high-rise", "LCZ 2: Compact mid-rise", "LCZ 3: Compact low-rise", "LCZ 4: Open high-rise", "LCZ 5: Open mid-rise", "LCZ 6: Open low-rise", "LCZ 7: Lightweight low-rise", "LCZ 8: Large low-rise", "LCZ 9: Sparsely built", "LCZ 10: Heavy industry", "LCZ A: Dense trees", "LCZ B: Scattered trees", "LCZ C: Bush,scrub", "LCZ D: Low plants", "LCZ E: Bare rock or paved", "LCZ F: Bare soil or sand", "LCZ G: Water", "Unclassified")
+plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", "osm", "bdt"),
+                             plotNow = TRUE, graphPath = "") {
+
+  colorMap <- .lczenv$colorMapDefault
+  etiquettes <- .lczenv$etiquettesDefault
   graphPath <- checkDirSlash(graphPath)
   initalAlphas <- rep(0.1, length(workflowNames))
   names(initalAlphas) <- workflowNames
   allPlotNames <- NULL
   wf2 <- c(5, 1, 2, 0)
-  wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT", iau = "IAU")
+  if (prod(workflowNames == c("wudapt", "iau", "osm", "bdt"))==0){
+    wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT", iau = "IAU")
+  } else {wfNamedVector<-workflowNames}
+
+
   for (wf in workflowNames) {
     wfAlphas <- initalAlphas
     wfAlphas[wf] <- 1
@@ -42,7 +48,9 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", 
     allPlotNames <- c(allPlotNames, plotName)
     assign(plotName, {
       ggplot(data = summarisedSfIn) +
-        geom_point(aes(x = number, y = meanLogArea, shape = wf, color = lcz_primary, fill = lcz_primary, alpha = wf, size = totalArea), stroke = 1.5) +
+        geom_point(aes(x = .data$number, y = .data$meanLogArea,
+                       shape = .data$wf, color = .data$lcz_primary,
+                       fill = .data$lcz_primary, alpha = .data$wf, size = .data$totalArea), stroke = 1.5) +
         scale_alpha_manual(values = wfAlphas) +
         scale_fill_manual(values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
         scale_color_manual(name = "LCZ type", values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +

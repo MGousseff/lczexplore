@@ -5,7 +5,9 @@
 #' @param aggregateBufferSize is the size of a buffer you can add to the geometries before agregation. 
 #' Useful when you suspect numeric precision to create false disjunction of geometries.
 #' @param locationColumn is the name of the column where the location is stored
-#' @import sf dplyr 
+#' @import sf
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr group_by summarise mutate ungroup all_of across
 #' @return an sf object containing the agregated geometries, their LCZ types and the wf and location columns 
 #' if present in the initial sf
 #' @export

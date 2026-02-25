@@ -23,7 +23,7 @@
 #' @param repr "standard" means that standard values of LCZ are expected,
 #'  "alter" means other values are expected, like grouped values of LCZ or other qualitative variable.
 #'  In the latter case, the ... arguments can contain the expected levels and a color vector.
-#' @param plot : when FALSE none of the graphics are plotted or saved
+#' @param plotNow : when FALSE none of the graphics are plotted or saved
 #' @param saveG : when an empty character string, "", the plots are not saved. Else, the saveG string is used to produce the name of the saved png file.
 #' @param location : the name of the study area, as chosen as the name of the directory on the GeoClimate team cloud.
 #' If the area you wish to analyse is not uploaded yet, please contact the GeoClimate Team.
@@ -37,7 +37,9 @@
 #' The expected arguments are the name of each level of the variables contained 
 #' in column1 and column2, and also a vector called colors.
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import  data.table dplyr forcats grDevices patchwork rlang RColorBrewer sf tidyr units  utils
+#' @importFrom dplyr mutate all_of
+#' @importFrom tidyr pivot_wider
+#' @import  data.table forcats grDevices patchwork rlang RColorBrewer sf units  utils
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
@@ -46,23 +48,21 @@
 #' If saveG is not an empty string, graphics are saved under "saveG.png"
 #' @export
 #' @examples
- comparisonBDT_OSM<-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU",
- confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
- sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU",
- confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
- repr="standard", saveG="", exwrite=FALSE, location="Redon", plotNow = TRUE)
- # To get the summed area of each LCZ levels for both dataset : 
- comparisonBDT_OSM$areas
- # The plots of each dataset can be produced with the showLCZ function.
- # To get the value of the general percentage of agreement call :
- comparisonBDT_OSM$percAgg
- # The values of that confusion matrix is available in a wide form:
- comparisonBDT_OSM$matConfLarge
- # or in a long form :
- comparisonBDT_OSM$matConf
- 
- # Examples for non LCZ variables are available in the importQualVar function examples.
- 
+ #'comparisonBDT_OSM<-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU",
+ #' confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
+ #' sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU",
+ #' confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
+ #' repr="standard", saveG="", exwrite=FALSE, location="Redon", plotNow = TRUE)
+ #' # To get the summed area of each LCZ levels for both dataset :
+ #' comparisonBDT_OSM$areas
+ #' # The plots of each dataset can be produced with the showLCZ function.
+ #' # To get the value of the general percentage of agreement call :
+ #' comparisonBDT_OSM$percAgg
+ #' # The values of that confusion matrix is available in a wide form:
+ #' comparisonBDT_OSM$matConfLarge
+ #' # or in a long form :
+ #' comparisonBDT_OSM$matConf
+ #'  # Examples for non LCZ variables are available in the importQualVar function examples.
 compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = "bdtopo_2_2",
                        sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = "osm", ref = 1,
                        repr = "standard", saveG = "", exwrite = FALSE, outDir = getwd(),
@@ -198,7 +198,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
       If this doesn't work, compareLCZ function may fail.")
       sfNew1 <- groupLCZ(sf1, column = column1, ...)
       #sf1[column1]<-sfNew1["grouped"]
-      sf1 <- sfNew1 %>% mutate(!!column1 := subset(sfNew1, select = "grouped", drop = TRUE))
+      sf1 <- sfNew1 %>% dplyr::mutate(!!column1 := subset(sfNew1, select = "grouped", drop = TRUE))
       # print(summary(sf1))
       levCol1 <- levCol(sf1, column1, ...)
 
@@ -210,7 +210,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
       If this doesn't work, compareLCZ function may fail.")
       sfNew2 <- groupLCZ(sf2, column = column2, ...)
       #sf2[column2]<-sfNew2["grouped"]
-      sf2 <- sfNew2 %>% mutate(!!column2 := subset(sfNew2, select = "grouped", drop = TRUE))
+      sf2 <- sfNew2 %>% dplyr::mutate(!!column2 := subset(sfNew2, select = "grouped", drop = TRUE))
       # print(summary(sf2))
       levCol2 <- levCol(sf2, column2, ...)
       rm(sfNew2)
@@ -235,8 +235,8 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     # this illustrates how silly it was to store levels and colors in the same vector as names and values.
     # Classification must be encoded as factors
 
-    sf1 <- sf1 %>% mutate(!!column1 := factor(subset(sf1, select = column1, drop = T), levels = LCZlevels))
-    sf2 <- sf2 %>% mutate(!!column2 := factor(subset(sf2, select = column2, drop = T), levels = LCZlevels))
+    sf1 <- sf1 %>% dplyr::mutate(!!column1 := factor(subset(sf1, select = column1, drop = T), levels = LCZlevels))
+    sf2 <- sf2 %>% dplyr::mutate(!!column2 := factor(subset(sf2, select = column2, drop = T), levels = LCZlevels))
   }
 
 
@@ -246,7 +246,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   #intersection of geometries
   intersec_sf <- st_intersection(x = sf1[, nom1], y = sf2[, nom2]) %>%
     st_buffer(0) %>%
-    mutate(area = drop_units(st_area(geometry)))
+    dplyr::mutate(area = drop_units(st_area(geometry)))
   nbNoSurf <- nrow(subset(intersec_sf, area == 0))
   if (nbNoSurf > 0) {
     message(paste0(
@@ -268,12 +268,12 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
 
   # Export of lcz and area for each geom for further analysis
 
-  #intersec_sf<-intersec_sf %>% mutate(area=st_area(geometry)) %>% drop_units
+  #intersec_sf<-intersec_sf %>% dplyr::mutate(area=st_area(geometry)) %>% drop_units
   # Drop intersected geometries with area equal to zero
   intersec_sf <- subset(intersec_sf, area != 0)
 
   intersec_sfExpo <- intersec_sf %>%
-    mutate(location = location, area = as.numeric(area)) %>%
+    dplyr::mutate(location = location, area = as.numeric(area)) %>%
     st_set_geometry(NULL) %>%
     as.data.frame()
 
@@ -306,11 +306,11 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   ###################################################
 
   matConfOut <- matConfLCZ(sf1 = sf1, column1 = column1, sf2 = sf2, column2 = column2,
-                           repr = repr, typeLevels = LCZlevels, plot = FALSE)
+                           repr = repr, typeLevels = LCZlevels, plotNow = FALSE)
   matConfOut$data <- intersec_sfExpo
   matConfLong <- as.data.frame(matConfOut$matConf)
 
-  matConfLarge <- pivot_wider(matConfLong, names_from = column2, values_from = .data$agreePercArea)
+  matConfLarge <- tidyr::pivot_wider(matConfLong, names_from = column2, values_from = .data$agreePercArea)
   matConfLarge <- matConfLarge %>% as.data.frame()
   row.names(matConfLarge) <- matConfLarge[, 1] %>% as.character
   matConfLarge <- matConfLarge[, -1]
@@ -423,13 +423,15 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     if (saveG != "") {
       plotName <- paste0(saveG, ".png")
       png(filename = plotName, width = 1200, height = 900)
-      print(plot_grid(l1Plot, l2Plot, agreePlot, matConfPlot, align = 'hv'))
+      outPlot<-(l1Plot + l2Plot)/ (agreePlot+matConfPlot)
+      print(outPlot)
       dev.off()
     } else {
       outPlot<-(l1Plot + l2Plot)/ (agreePlot+matConfPlot)
       print(outPlot)
-    }
-  }else { message("Plot set to FALSE, no plots created") }
+  }
+  }
+    else { message("Plot set to FALSE, no plots created") }
 
   matConfOut <- matConfOut
 }
