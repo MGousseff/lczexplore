@@ -10,7 +10,7 @@
 #' @param residualLCZvalue the LCZ type to add when the reference workflow has a different value than 
 #' refLCZ for the added geometries
 #' @param column is the name of the LCZ column (to be explained)
-#' @import sf units rlang
+#' @import sf units
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

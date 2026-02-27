@@ -1,5 +1,7 @@
 ^renv$
 ^renv\.lock$
+^result
+^.idea
 ^lczexplore\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$

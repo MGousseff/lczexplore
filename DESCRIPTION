@@ -10,24 +10,25 @@ License: LGPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
-Imports: RColorBrewer,
+Imports:  caret,
+          circlize,
           data.table,
           dplyr,
           forcats,
           ggnewscale,
           ggplot2,
+          grDevices,
           ggspatial,
           ggsankeyfier,
           magrittr,
+          methods,
+          patchwork,
+          RColorBrewer,
           sf,
+          shades,
           terra,
           tidyr,
-          units,
-          rlang,
-          grDevices,
-          caret,
-          methods,
-          patchwork
+          units
 Suggests: 
     tinytest,
     knitr,
@@ -36,7 +37,6 @@ Suggests:
     png,
     markdown
 Config/testthat/edition: 3
-VignetteBuilder: knitr
 LazyData: true
 Depends: 
     R (>= 2.10)

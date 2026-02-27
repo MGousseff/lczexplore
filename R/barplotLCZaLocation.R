@@ -14,7 +14,7 @@
 #' @importFrom caret dummyVars
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom tidyr  replace_na
-#' @import sf forcats units RColorBrewer units utils grDevices rlang
+#' @import sf forcats units RColorBrewer units utils grDevices
 #' @return Cramer's V between pairs of levels, in a matrix (cramerMatrix) or long form (cramerLong), 
 #' and a dataframe with the nbOutAssociation most significant association
 #' @export
@@ -22,10 +22,10 @@
 #' barplotLCZaLocation(
 #' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
 #' refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
-#' inLocation = "Goussainville", plotNow = TRUE)
+#' inLocation = "Goussainville", plotSave = "/tmp", plotNow = TRUE)
 barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "iau", "wudapt"),
                               refWf = NULL, refLCZ = NA, residualLCZvalue=NA,
-                              plotNow = FALSE, plotSave = TRUE){
+                              plotNow = FALSE, plotSave = "\tmp"){
   colorMap<-rev(c("#8b0101","#cc0200","#fc0001","#be4c03","#ff6602","#ff9856",
                   "#fbed08","#bcbcba","#ffcca7","#57555a","#006700","#05aa05",
                   "#648423","#bbdb7a","#010101","#fdf6ae","#6d67fd", "ghostwhite"))
@@ -55,14 +55,17 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
   }
 
   surfaces<-concatSf %>%
-    dplyr::mutate(wf = factor(.data$wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
-    dplyr::mutate(lcz_primary = factor(.data$lcz_primary, levels = names(colorMap))) %>%
-    dplyr::mutate(lcz_primary = tidyr::replace_na(.data$lcz_primary, "Unclassified")) %>%
+    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
+    dplyr::mutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
+    dplyr::mutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
     dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))
 
   inLocation<-unique(surfaces$location)
+
+  #utils::globalVariables(c("fill")) # Trick to avoid R CMD check to raise a note a bout no binding for glob var fill
+
   outPlot<-ggplot(surfaces) +
-    geom_col(aes(fill=lcz_primary, y=area, x=wf, color = after_scale(fill))) +
+    geom_col(aes(fill=.data$lcz_primary, y=.data$area, x=.data$wf, color = after_scale(fill))) +
     # scale_fill_viridis(discrete = T) +
     scale_fill_manual(
       values=colorMap,

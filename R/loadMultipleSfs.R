@@ -9,7 +9,7 @@
 #' @param column is the name of the column containing the LCZ types, must be the same in all files.
 #' @importFrom forcats fct_recode
 #' @importFrom dplyr mutate
-#' @import sf units RColorBrewer utils grDevices rlang
+#' @import sf units RColorBrewer utils grDevices
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

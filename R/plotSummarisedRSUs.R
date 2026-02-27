@@ -5,7 +5,7 @@
 #' @param graphPath : a valid directory path where th plot will be saved 
 #' (for now an empty string to avoid saving in the working directory)
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf units utils grDevices rlang patchwork
+#' @import sf units utils grDevices  patchwork
 #' @importFrom magrittr "%>%"
 #' @return the number of geometries (Reference Spatial units or RSUs) 
 #' and their mean area per level of LCZ, and the same after agregatting geometries 

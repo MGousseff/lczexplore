@@ -13,7 +13,7 @@
 #' levels actually present in column
 #' @param drop : the default is TRUE, which means all the column are 
 #' dropped excepted those specified in previous parameters
-#' @import  rlang sf
+#' @import   sf
 #' @importFrom tidyr drop_na
 #' @importFrom terra rast
 #' @return returns an sf object containing at least the geoms and the LCZ values, 
@@ -66,7 +66,7 @@ importLCZvectFromFile <- function(
 #' If an empty string, no column is loaded.
 #' @param confid is the name of the column containing a confidence indicator to filter geoms,
 #' for instance the uniqueness of the LCZ level of each geom
-#' @import rlang sf
+#' @import  sf
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr all_of
 #' @return returns an sf object containing at least the geoms and the LCZ values, 
@@ -110,7 +110,7 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 #' levels actually present in column
 #' @param drop : the default is TRUE, which means all the column are 
 #' dropped excepted those specified in previous parameters
-#' @import forcats rlang sf
+#' @import forcats  sf
 #' @importFrom dplyr mutate all_of
 #' @importFrom forcats fct_na_value_to_level
 #' @return returns an sf object containing at least the geoms and the LCZ values, 

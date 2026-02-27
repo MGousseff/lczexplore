@@ -1,3 +1,9 @@
+
+.onLoad <- function(libname, pkgname) {
+  utils::globalVariables(c("fill", "wf", "lcz_primary", "area"))
+}
+..cols <- node <- connector <- edge_id <- lcz_primary.1 <- NULL
+
 .lczenv<-new.env()
 
 .lczenv$typeLevelsDefault <-c(as.character(c(1:10,101:107)), "Unclassified")

@@ -16,7 +16,7 @@
 #' When comparing othe variable, like grouped LCZ, the grouped levels have to be specified.
 #' @param ... a set of unspecified arguments, for instance when the produceAnalysis function calls other functions
 #' @importFrom dplyr mutate
-#' @import sf units  rlang data.table
+#' @import sf units data.table
 #' @importFrom magrittr "%>%"
 #' @return returns an object called matConfOut which contains
 #' matConfLong, a confusion matrix in a longer form, which can be written in a file by the compareLCZ function

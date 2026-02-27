@@ -39,7 +39,7 @@
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom dplyr mutate all_of
 #' @importFrom tidyr pivot_wider
-#' @import  data.table forcats grDevices patchwork rlang RColorBrewer sf units  utils
+#' @import  data.table forcats grDevices patchwork RColorBrewer sf units  utils
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.

@@ -9,7 +9,7 @@
 #' @param residualLCZvalue is passed to addMissingRSU function
 #' @param column the column name of the LCZ classification
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf units rlang
+#' @import sf units
 #' @importFrom magrittr "%>%"
 #' @return an sf file with values of LCZ from all the input 
 #' assigned to geometries resulting from intersection of all input geometries

@@ -8,7 +8,7 @@
 #' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects 
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
 #' @importFrom dplyr mutate
-#' @import sf utils rlang
+#' @import sf utils
 #' @importFrom magrittr "%>%"
 #' @return an sf file with values of LCZ from all the input 
 #' are assigned to geometries resulting from intersection of all input geometries

@@ -14,7 +14,7 @@
 #' @param marginAreas are the percentage of areas for LCZ types for both workflows (an output of matConfLCZ)
 #' @return returns a plot of a matrice of confusion
 #' importFrom forcats fct_recode
-#' @import sf ggnewscale ggplot2 units RColorBrewer rlang
+#' @import sf ggnewscale ggplot2 units RColorBrewer
 #' @importFrom magrittr "%>%"
 #' @export
 #'

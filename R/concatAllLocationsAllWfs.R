@@ -9,7 +9,7 @@
 #' @param residualLCZvalue the value the completed geometries where the reference workflow does not classify 
 #' the geometry with refLCZ level
 #' @param column a parameter to feed addMissingRSUs function
-#' @import sf utils  rlang
+#' @import sf utils
 #' @importFrom magrittr "%>%"
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 

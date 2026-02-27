@@ -2,8 +2,8 @@
 #' From the output of compare multiple, cmputes which workflows agree the most regarding the area of agreement
 #' @param sfMultiCompLong the sfLong output of compareMultipleLCZ function
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @importFrom dplyr group_by summarise arrange mutate
-#' @importFrom magrittr "%>%" desc
+#' @importFrom dplyr group_by summarise arrange mutate desc
+#' @importFrom magrittr "%>%"
 #' @import sf units
 #' @return the pairwise agreement between workflows, sorted by decreasing agreeing areas
 #' @export

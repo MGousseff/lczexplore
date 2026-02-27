@@ -7,7 +7,7 @@
 #' It allows to account for numeric precision errors and to speed up computations at the cost of not considering the smallest geometries. 
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom tidyr pivot_longer
-#' @import sf forcats units RColorBrewer utils grDevices rlang
+#' @import sf forcats units RColorBrewer utils grDevices
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
