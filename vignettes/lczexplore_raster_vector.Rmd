@@ -52,7 +52,7 @@ Any bounding box of the bounding box class of the package `sf` can be used to cr
 
 ```{r}
 redonBbox<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-"/bdtopo_2_2/Redon"), file="rsu_lcz.geojson",column="LCZ_PRIMARY",output="bBox")
+"/lczfiles/Redon"), file="rsu_lcz.geojson",column="LCZ_PRIMARY",output="bBox")
 
 
 # Example with osmdata function getbb, not run, to avoid installation of the package

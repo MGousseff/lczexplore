@@ -10,7 +10,7 @@
 #' dirList<-list.dirs(paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 #' allLocIntersected<-concatIntersectedLocations(
-#' dirList = dirList, locations = c("Blaru", "Goussainville"))
+#' dirList = dirList, locations = c("Blaru", "Arville"))
 concatIntersectedLocations<-function(dirList, locations, workflowNames = c("osm","bdt","iau","wudapt")){
   concatIntersectedDf<-data.frame(
     matrix(ncol=length(workflowNames)+3, nrow=0)

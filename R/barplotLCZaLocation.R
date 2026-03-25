@@ -20,9 +20,9 @@
 #' @export
 #' @examples
 #' barplotLCZaLocation(
-#' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+#' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 #' refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
-#' inLocation = "Goussainville", plotSave = "/tmp", plotNow = TRUE)
+#' inLocation = "Arville", plotSave = "/tmp", plotNow = TRUE)
 barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "iau", "wudapt"),
                               refWf = NULL, refLCZ = NA, residualLCZvalue=NA,
                               plotNow = FALSE, plotSave = "\tmp"){

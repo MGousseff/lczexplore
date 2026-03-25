@@ -10,16 +10,16 @@
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),
-#' "/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville")
-#' GoussainvilleIntersect <- createIntersect(
+#' "/multipleWfs/Arville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+#' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
 #'  sfWf = c("osm","bdt","iau","wudapt"))
-#' GoussainvilleMultipleComparison<-compareMultipleLCZ(
-#'  sfInt = GoussainvilleIntersect,
+#' ArvilleMultipleComparison<-compareMultipleLCZ(
+#'  sfInt = ArvilleIntersect,
 #'  LCZcolumns = c("osm","bdt","iau","wudapt"),
 #'  trimPerc = 0.5)
-#' GoussainvilleWorkflowAgreement<-workflowAgreeAreas(GoussainvilleMultipleComparison$sfIntLong)
+#' ArvilleWorkflowAgreement<-workflowAgreeAreas(ArvilleMultipleComparison$sfIntLong)
 workflowAgreeAreas<-function(sfMultiCompLong){
     agreeAreas<- sfMultiCompLong%>% subset(agree) %>% dplyr::group_by(.data$whichWfs) %>%
     dplyr::summarise(area=sum(area))

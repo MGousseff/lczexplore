@@ -21,7 +21,7 @@
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvectFromFile(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.geojson", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 importLCZvectFromFile <- function(
   dirPath, file = "rsu_lcz.geojson", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
@@ -74,7 +74,7 @@ importLCZvectFromFile <- function(
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.geojson", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' redonBDTex2<-importLCZvectFromSf(sfIn = redonBDTex , column="LCZ_PRIMARY",
 #'                                  geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
@@ -118,7 +118,7 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.geojson", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' showLCZ(redonBDTex)
 importLCZvect <- function(dirPath, file = "rsu_lcz.geojson", output = "sfFile", column = "LCZ_PRIMARY",

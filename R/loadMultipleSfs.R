@@ -19,8 +19,8 @@
 #' @export
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 loadMultipleSfs<-function(
   dirPath, workflowNames = c("osm","bdt","iau","wudapt"),
   inLocation=NA,

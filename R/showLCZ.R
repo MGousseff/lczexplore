@@ -53,7 +53,7 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
   if (repr == 'standard') {
     outPlot<-showStandardLCZ(sf = sf, title = title, wf = wf, column = column,
                                repr = "standard", drop = drop, 
-                               naAsUnclassified = TRUE, plotNow = plotNow, addBorders = addBorders, labelType = labelType)
+                               naAsUnclassified = TRUE, plotNow = plotNow, addBorders = addBorders, labelType = labelType,...)
   }
   #
 
@@ -65,7 +65,7 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
                           drop = drop, plotNow = plotNow, addBorders = addBorders,
                           useStandCol = useStandCol , tryGroup = tryGroup,
                           naAsUnclassified = naAsUnclassified, noPercAlter = noPercAlter, 
-                          labelType = labelType, ...)
+                          labelType = labelType, repr = "alter", ...)
   }
 
 
@@ -100,8 +100,20 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 #' in your dataset and colors associated to these levels when not in the standard representation. You can pas your levels through a vector and you colors through another vector called colors.
 #' For more details about this, read the "lcz_explore_alter" vignette.
 #' @import sf ggplot2 ggspatial
+#' @examples
+#' # On grouped data, use the alter value for the repr argument.
+#' redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",
+#' urban=c("1","2","3","4","5","6","7","8","9"),
+#' industry="10", vegetation=c("101","102","103","104"),
+#' impervious="105",pervious="106",water="107")
+#' # For repr="alter", you can specify colors and levels this way :
+#' showLCZ(redonBDTgrouped,column="grouped",repr="alter",
+#' LCZlevels=c("urban","industry","vegetation","impervious","pervious","water"),
+#' colors=c("red","black","green","grey","burlywood","blue"),wf="BD TOPO")
+#'
 showAlterLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
-                            drop = FALSE, useStandCol = FALSE, tryGroup = TRUE,
+                            drop = FALSE, useStandCol = FALSE, tryGroup = TRUE, plotNow = TRUE,
+                         labelType = "long", repr = "alter",
                             naAsUnclassified = TRUE, noPercAlter = FALSE, addBorders = FALSE,
                            ...) {
   
@@ -225,16 +237,6 @@ return(palter)
 #' @examples
 #' # On original LCZ levels, use the standard value for the repr argument.
 #' showLCZ(redonBDT, column="LCZ_PRIMARY", repr="standard")
-#' # On grouped data, use the alter value for the repr argument.
-#' redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",
-#' urban=c("1","2","3","4","5","6","7","8","9"),
-#' industry="10", vegetation=c("101","102","103","104"),
-#' impervious="105",pervious="106",water="107")
-#' # For repr="alter", you can specify colors and levels this way :
-#' showLCZ(redonBDTgrouped,column="grouped",repr="alter",
-#' LCZlevels=c("urban","industry","vegetation","impervious","pervious","water"),
-#' colors=c("red","black","green","grey","burlywood","blue"),wf="BD TOPO")
-#'
 showStandardLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
                             repr = "standard", drop = FALSE,
                             naAsUnclassified = TRUE, addBorders = FALSE, labelType = "long",  ...) {

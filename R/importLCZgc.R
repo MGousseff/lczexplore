@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples 
-#' importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon/"))
-importLCZgc<-function(dirPath,output="sfFile"){
+#' importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"))
+importLCZgc<-function(dirPath,output="sfFile", file = "rsu_lcz.fgb"){
   # output can be sfFile, bBox or Contour
 
   # dependancies should be dealt with @import
@@ -25,7 +25,7 @@ importLCZgc<-function(dirPath,output="sfFile"){
   #                        "9"="9","10"="10","101"="101","102"="102","103"="103","104"="104",
   #                        "105"="105","106"="106","107"="107","101"="11","102"="12","103"="13","104"="14",
   #                        "105"="15", "106"="16","107"="17")
-  fileName<-paste0(dirPath,"rsu_lcz.geojson")
+  fileName<-paste0(dirPath,file)
   sfFile<-st_read(dsn=fileName)
   #sfFile<-sfFile %>% mutate(LCZ_PRIMARY<-factor(subset(sfFile,select=LCZ_PRIMARY,drop=T),levels=typeLevels))
 

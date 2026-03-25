@@ -163,7 +163,7 @@ namely the urban territory by random forest (UTRF) classification produced by th
 
 ```{R, fig.dim = c(8, 6), echo = TRUE}
 utrfRedonBDT<-importQualVar(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"), "/bdtopo_2_2/Redon"),
+  system.file("extdata", package = "lczexplore"), "/lczfiles/Redon"),
                             file="rsu_utrf_area.geojson", column="TYPO_MAJ")
 summary(utrfRedonBDT)
 summary(utrfRedonBDT$TYPO_MAJ)

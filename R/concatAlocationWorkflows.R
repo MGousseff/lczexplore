@@ -13,13 +13,13 @@
 #' @export
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 #' zoneSf <- sf::read_sf(
-#' paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville/zone.fgb")
+#' paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville/zone.fgb")
 #' )
-#' GoussainvilleAllWfs <-  concatAlocationWorkflows(
-#' sfList = sfList, location = "Goussainville")
+#' ArvilleAllWfs <-  concatAlocationWorkflows(
+#' sfList = sfList, location = "Arville")
 concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
 
   if (is.na(location) | is.null(location)){

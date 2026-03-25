@@ -23,5 +23,5 @@ Imports the rsu_lcz geojson file produced by GeoClimate.
 Use the more generic importLCZvect function
 }
 \examples{
-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon/"))
+importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"))
 }

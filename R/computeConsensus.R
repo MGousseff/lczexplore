@@ -11,7 +11,7 @@
 #' dirList <- list.dirs(paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 #' allLocIntersected<-concatIntersectedLocations(
-#' dirList = dirList, locations = c("Blaru", "Goussainville"))
+#' dirList = dirList, locations = c("Blaru", "Arville"))
 #' consensus <- computeConsensus(inDf = allLocIntersected,
 #' wfNames = c("bdt","osm", "wudapt", "iau"))
 computeConsensus<-function(inDf, wfNames){

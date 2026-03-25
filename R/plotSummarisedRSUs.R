@@ -16,7 +16,7 @@
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 #' allLocAllWfs<-concatAllLocationsAllWfs(
 #'  dirList = dirList, 
-#'     locations = c("Blaru", "Goussainville"), 
+#'     locations = c("Blaru", "Arville"),
 #'     workflowNames = c("osm","bdt","iau","wudapt"),
 #'  missingGeomsWf = "iau",
 #'  refWf = NULL,

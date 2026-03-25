@@ -6,7 +6,7 @@
 # Test functionnal import
 
 redonBbox<-importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
+  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
   , output="bBox")
 
 expect_warning(redonWudapt<-importLCZraster(

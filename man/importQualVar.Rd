@@ -50,12 +50,12 @@ from a geographical dataset (tested : geojson, shp, more to come)
 }
 \examples{
 utrfRedonBDT<-importQualVar(dirPath=paste0(
-system.file("extdata", package = "lczexplore"), "/bdtopo_2_2/Redon"),
-file="rsu_utrf_area.geojson", column="TYPO_MAJ")
+system.file("extdata", package = "lczexplore"), "/lczfiles/Redon"),
+file="rsu_utrf_area.fgb", column="TYPO_MAJ")
 showLCZ(sf=utrfRedonBDT, column="TYPO_MAJ",repr="alter")
 utrfRedonOSM<-importQualVar(dirPath=
 paste0(system.file("extdata", package = "lczexplore"),"/osm/2022/Redon"),
-file="rsu_utrf_area.geojson", column="TYPO_MAJ",geomID="ID_RSU",confid="UNIQUENESS_VALUE")
+file="rsu_utrf_area.fgb", column="TYPO_MAJ",geomID="ID_RSU",confid="UNIQUENESS_VALUE")
 # One can now compare these 2 classifications and store the result in an object...
 utrfComparison<-compareLCZ(
  sf1=utrfRedonBDT, column1="TYPO_MAJ", wf1=" UTRF BDT",
