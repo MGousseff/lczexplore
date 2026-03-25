@@ -5,7 +5,7 @@
 \title{Imports the rsu_lcz geojson file produced by GeoClimate.
 Use the more generic importLCZvect function}
 \usage{
-importLCZgc(dirPath, output = "sfFile")
+importLCZgc(dirPath, output = "sfFile", file = "bdt_lcz.fgb")
 }
 \arguments{
 \item{dirPath}{: the path where the rsu_lcz.geojson file is.}
@@ -23,5 +23,5 @@ Imports the rsu_lcz geojson file produced by GeoClimate.
 Use the more generic importLCZvect function
 }
 \examples{
-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"))
+bdtTest<-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"))
 }

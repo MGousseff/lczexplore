@@ -49,7 +49,7 @@ In a given list of directories the function looks for LCZ datafiles, return a da
 dirList<-list.dirs(paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 allLocAllWfs<-concatAllLocationsAllWfs(
- dirList = dirList, locations = c("Blaru", "Goussainville"), 
+ dirList = dirList, locations = c("Blaru", "Arville"),
 workflowNames = c("osm","bdt","iau","wudapt"),
  missingGeomsWf = "iau",
  refWf = NULL,

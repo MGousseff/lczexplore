@@ -99,6 +99,10 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 #' @param ... these dynamic dots allow you to pass arguments to specify levels expected
 #' in your dataset and colors associated to these levels when not in the standard representation. You can pas your levels through a vector and you colors through another vector called colors.
 #' For more details about this, read the "lcz_explore_alter" vignette.
+#' @param plotNow is inherited from showLCZ, needs to be specified so it is not considered as part of ... arguments
+#' which contain grouping and color arguments
+#' @param labelType is inherited from showLCZ, same as previous argument
+#' @param repr  is inherited from showLCZ, same as previous argument
 #' @import sf ggplot2 ggspatial
 #' @examples
 #' # On grouped data, use the alter value for the repr argument.

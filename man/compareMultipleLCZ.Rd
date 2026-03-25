@@ -30,13 +30,13 @@ Compares several sets of geographical classifications, especially Local Climate 
 }
 \examples{
 sfList<-loadMultipleSfs(dirPath = 
-paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville")
-GoussainvilleIntersect <- createIntersect(
+paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+ArvilleIntersect <- createIntersect(
  sfList = sfList, columns = rep("lcz_primary", 4),  
  sfWf = c("osm","bdt","iau","wudapt"))
-GoussainvilleMultipleComparison<-compareMultipleLCZ(
- sfInt = GoussainvilleIntersect,
+ArvilleMultipleComparison<-compareMultipleLCZ(
+ sfInt = ArvilleIntersect,
  LCZcolumns = c("osm","bdt","iau","wudapt"),
  trimPerc = 0.5)
 }

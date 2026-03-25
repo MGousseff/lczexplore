@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples 
-#' importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"))
-importLCZgc<-function(dirPath,output="sfFile", file = "rsu_lcz.fgb"){
+#' bdtTest<-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"))
+importLCZgc<-function(dirPath,output="sfFile", file = "bdt_lcz.fgb"){
   # output can be sfFile, bBox or Contour
 
   # dependancies should be dealt with @import

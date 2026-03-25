@@ -28,11 +28,11 @@ adding a column for location and workflow names
 }
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
+system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 zoneSf <- sf::read_sf(
-paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville/zone.fgb")
+paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville/zone.fgb")
 )
-GoussainvilleAllWfs <-  concatAlocationWorkflows(
-sfList = sfList, location = "Goussainville")
+ArvilleAllWfs <-  concatAlocationWorkflows(
+sfList = sfList, location = "Arville")
 }

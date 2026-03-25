@@ -37,9 +37,9 @@ Intersect multiple sf files in which Local Climate Zones are set for polygon geo
 sfList<-loadMultipleSfs(
 dirPath = paste0(
 system.file("extdata", package = "lczexplore"),
-"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville")
-GoussainvilleIntersect <- createIntersect(
+"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+ArvilleIntersect <- createIntersect(
  sfList = sfList, columns = rep("lcz_primary", 4),  
  sfWf = c("osm","bdt","iau","wudapt"))
 }
