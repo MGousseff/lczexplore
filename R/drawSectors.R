@@ -2,12 +2,15 @@
 #'
 #' @param sector_id ar the ideitnfiers of sectors as returned by the makeSectorsAndGroups function
 #' @param sectorsIn are the values of a sectors as returned by the makeSectorsAndGroups function
-#' @param colorMap is a named vector whose names must contain the values of sectorsIn and
+#' @param colorMapIn is a named vector whose names must contain the values of sectorsIn and
 #' whose values are the desired colors
+#' @param facing defines the way labels of sectors are plotted, the default is "clockwise",
+#' see drawChorDiagram function for details
 #' @param textMatch is
 #' @return a list containing vectors and groups for a chord diagram
 #' @importFrom shades complement
 #' @importFrom circlize highlight.sector
+#'
 #' @export
 drawSectors<-function(sector_id, sectorsIn = sectors,
                       colorMapIn = colorMap, textMatch,

@@ -1,6 +1,7 @@
 #' To make LCZ types appear in the proper order, it can be useful ton convert them into strings with added zeros
 #' @param LCZlevels a vector containing LCZlevels from 1 to 10 and 101 to 107
 #' @importFrom dplyr case_when
+#' @export
 LCZlevelToOrderedString<-function(LCZlevels){
   
   isWfLCZ<-prod(grepl(x = LCZlevels,

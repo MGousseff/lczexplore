@@ -32,9 +32,9 @@
 #' industry="10", vegetation=c("101","102","103","104"),
 #' impervious="105",pervious="106",water="107")
 #' # For repr="alter", you can specify colors and levels this way :
-#' showLCZ(redonBDTgrouped,column="grouped",repr="alter",
-#' LCZlevels=c("urban","industry","vegetation","impervious","pervious","water"),
-#' colors=c("red","black","green","grey","burlywood","blue"),wf="BD TOPO")
+#' showLCZ(sf = redonBDTgrouped, column = "grouped", repr = "alter",
+#' LCZlevels = c("urban","industry","vegetation","impervious","pervious","water"),
+#' colors = c("red","black","green","grey","burlywood","blue"), wf="BD TOPO")
 #' 
 showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
                     repr = "standard", drop = FALSE, useStandCol = FALSE, tryGroup = TRUE,
@@ -45,6 +45,7 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
   datasetName <- deparse(substitute(sf))
+
   if (wf != "") { nomLegende <- paste0("LCZ from ", wf, " workflow") } else { nomLegende <- "Levels" }
 
   # For standard levels of LCZ after import with importLCZ* functions

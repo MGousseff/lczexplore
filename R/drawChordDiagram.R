@@ -14,11 +14,13 @@
 #' @param inFacing defines the orientation of labels in the sectors (LCZ types), default is "closkwise",
 #' possible values are "inside", "outside", "reverse.clockwise", "clockwise",
 #' "downward", "bending", "bending.inside" and "bending.outside"
-#' ... allows the user to do on-the-fly grouping. These must be passed as groupName = groupValues
+#' @param ... allows the user to do on-the-fly grouping. These must be passed as groupName = groupValues
 #' where groupName is the name of a resulting group and groupValues a vector of the initial values
 #' it will regroup.
 #' @return a vector of booleans indicting if the elements of x define a color in R (TRUE) or don't (FALSE)
 #' @importFrom circlize circos.clear circos.track circos.text chordDiagram
+#' @importFrom collapse unlist2d fselect
+#' @importFrom graphics par
 #' @export
 drawChordDiagram<- function(multiMatConfLongIn, colorMapIn = colorMap, labelMatch = NULL, inFacing = "clockwise", ...) {
 if (is.null(labelMatch)){
@@ -44,7 +46,7 @@ if (is.null(labelMatch)){
 
 # Case when grouping is specified
   if (length(args)>0){
-    multiMatConfLongIn<-groupLCZsuffix(matConfLongIn = multiMatConfLongIn, ...)
+    multiMatConfLongIn<-groupLCZsuffix(multiMatConfLongIn = multiMatConfLongIn, ...)
     colorMapIn<-unlist(args[names(args)=="groupColors"]$groupColors)
   }
 
@@ -55,7 +57,7 @@ sectors<-makeSectorsAndGroups(multiMatConfLongIn)$sectors
 df.groups<-makeSectorsAndGroups(multiMatConfLongIn)$df.groups
 sector_ids<-strsplit(sectors, "_") %>% unlist2d() %>% fselect("V2") %>% as.vector  %>% unlist %>% unique
 
-names(colorMapIn)<-LCZlevelToOrderedString(names(colorMapIn))
+names(colorMapIn)<-lczexplore::LCZlevelToOrderedString(names(colorMapIn))
 
   # something to adapt when we will hightlight bigger flux
 # if(!is.null(drawpBigger)){

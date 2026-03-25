@@ -18,7 +18,8 @@
 #' testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
 #'  , wf1 = "wudapt", wf2 = "osm")
 prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
-  intersectedDf<-intersectedDf[,c(wf1, wf2, "area")]
+  if("data.table" %in% class(intersectedDf)){setDF(intersectedDf)}
+   intersectedDf<-intersectedDf[, c(wf1, wf2, "area")]
   internRecode<-function(LCZvect){
     case_when(
       nchar(as.character(LCZvect))==1 ~ paste0("00",LCZvect),
@@ -36,5 +37,6 @@ prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
     levels = c("001", "002","003", "004", "005", "006", "007", "008", "009", "010",
                "101", "102", "103", "104", "105", "106", "107", "Unclassified")
   )
+  sankeyfied<-sankeyfied[order(sankeyfied$node),]
   return(sankeyfied)
 }

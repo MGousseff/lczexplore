@@ -9,12 +9,12 @@
 #' it will regroup.
 #' @return a list containing vectors and groups for a chord diagram
 #' @export
-groupLCZsuffix<-function(matConfLongIn, ...) {
+groupLCZsuffix<-function(multiMatConfLongIn, ...) {
   #require(forcats)
-  origPref <- sub("(.*)(_)(.*)", "\\1\\2", matConfLongIn$orig)
-  destPref <- sub("(.*)(_)(.*)", "\\1\\2", matConfLongIn$dest)
-  origSuff<-gsub("(.*)(_)(.*)", "\\3", matConfLongIn$orig)
-  destSuff<-gsub("(.*)(_)(.*)", "\\3", matConfLongIn$dest)
+  origPref <- sub("(.*)(_)(.*)", "\\1\\2", multiMatConfLongIn$orig)
+  destPref <- sub("(.*)(_)(.*)", "\\1\\2", multiMatConfLongIn$dest)
+  origSuff<-gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$orig)
+  destSuff<-gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$dest)
   
   # ensure all the LCZ levels are present in the imported column
   uniqueSuff<-unique(c(origSuff, destSuff)) %>% as.character # Attention unique outputs a list of length 1
@@ -37,7 +37,7 @@ groupLCZsuffix<-function(matConfLongIn, ...) {
                )
              })
 
-matConfLongIn$orig<-paste0(origPref, origSuffOut)
+multiMatConfLongIn$orig<-paste0(origPref, origSuffOut)
 
   args<-append(list(destSuff),args)
   # temp<-do.call(fct_collapse,args)
@@ -52,7 +52,7 @@ matConfLongIn$orig<-paste0(origPref, origSuffOut)
              })
 
 
-  matConfLongIn$dest<-paste0(destPref, destSuffOut)
+  multiMatConfLongIn$dest<-paste0(destPref, destSuffOut)
 
-  return(matConfLongIn)
+  return(multiMatConfLongIn)
 }
