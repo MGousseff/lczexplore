@@ -6,7 +6,7 @@
 \usage{
 importLCZvectFromFile(
   dirPath,
-  file = "rsu_lcz.geojson",
+  file = "bdt_lcz.fgb",
   column,
   geomID = "",
   confid = "",

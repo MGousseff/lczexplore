@@ -2,7 +2,7 @@
 % Please edit documentation in R/importLCZgc.R
 \name{importLCZgc}
 \alias{importLCZgc}
-\title{Imports the rsu_lcz geojson file produced by GeoClimate.
+\title{Imports the \if{html}{\out{<wf>}}_lcz fgb file produced by GeoClimate.
 Use the more generic importLCZvect function}
 \usage{
 importLCZgc(dirPath, output = "sfFile", file = "bdt_lcz.fgb")
@@ -19,7 +19,7 @@ If output is bBox a bounding box (seef sf package) of the area contained in the 
 This is useful to select geoms analysed in other sf objects.
 }
 \description{
-Imports the rsu_lcz geojson file produced by GeoClimate.
+Imports the \if{html}{\out{<wf>}}_lcz fgb file produced by GeoClimate.
 Use the more generic importLCZvect function
 }
 \examples{
