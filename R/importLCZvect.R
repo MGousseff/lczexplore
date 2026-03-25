@@ -24,7 +24,7 @@
 #' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 importLCZvectFromFile <- function(
-  dirPath, file = "rsu_lcz.geojson", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
+  dirPath, file = "bdt_lcz.fgb", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
   if (!file.exists(dirPath)) { stop(message = "The directory set in dirPath doesn't seem to exist") }
 
   fileName <- paste0(dirPath, "/", file)

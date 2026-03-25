@@ -1,4 +1,4 @@
-#' Imports the rsu_lcz geojson file produced by GeoClimate. 
+#' Imports the <wf>_lcz fgb file produced by GeoClimate.
 #' Use the more generic importLCZvect function
 #'
 #' @param dirPath : the path where the rsu_lcz.geojson file is.
