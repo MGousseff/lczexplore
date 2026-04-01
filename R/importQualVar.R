@@ -37,33 +37,47 @@
 #' print(utrfComparison$matConfPlot)
 #' 
 #' 
-importQualVar<-function(dirPath, file="rsu_utrf_area.geojson", output="sfFile", column="TYPO_MAJ",
+importQualVar<-function(dirPath, file="rsu_utrf_area.fgb", output="sfFile", column="TYPO_MAJ",
                        geomID="ID_RSU", confid="UNIQUENESS_VALUE",
                        typeLevels="",
                        drop=T, verbose=TRUE){
   if (!file.exists(dirPath)){stop(message="The directory set in dirPath doesn't seem to exist")}
 
-  fileName<-paste0(dirPath,"/",file)
+
+  filePath<-paste0(dirPath,"/",file)
   # select only the needed column, that is the unempty strings among column, geomID and confid
   colonnes<-c(geomID,column,confid)
   colonnes<-colonnes[sapply(colonnes,nchar)!=0]
 
-  # Check if all the desired columns are present in the source file and only loads the file if the columns exist
-  nom<-gsub(pattern="(.+?)(\\.[^.]*$|$)",x=file,replacement="\\1")
-  query<-paste0("select * from ",nom," limit 0")
-  sourceCol<-st_read(dsn=fileName,query=query) %>% names
-  inCol<-colonnes%in%sourceCol
-  badCol<-colonnes[!inCol]
-  colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+  extension <- gsub(pattern = "(.+?)(\\.[^.]*$|$)", x = file, replacement = "\\2")
+
+  if (extension != ".fgb"){
+      # Check if all the desired columns are present in the source file and only loads the file if the columns exist
+      nom<-gsub(pattern="(.+?)(\\.[^.]*$|$)",x=file,replacement="\\1")
+      query<-paste0("select * from ",nom," limit 0")
+      sourceCol<-st_read(dsn=filePath,query=query) %>% names
+      inCol<-colonnes%in%sourceCol
+      badCol<-colonnes[!inCol]
+      colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+                are you sure you meant ",
+                paste(badCol)," ?")
+      if (prod(inCol)==0){ stop(colErr) } else { sfFile<-st_read(dsn=filePath)[,colonnes] }
+      } else
+      {
+        sfFile<-st_read(dsn=filePath)
+        sourceCol<-names(sfFile)
+        inCol<-colonnes%in%sourceCol
+        badCol<-colonnes[!inCol]
+        colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
             are you sure you meant ",
             paste(badCol)," ?")
-  if (prod(inCol)==0){ stop(colErr) } else { sfFile<-st_read(dsn=fileName)[,colonnes] }
+    if (prod(inCol)==0){ stop(colErr)
+  }
+  }
 
   if (column!=""){
     if(drop==T){sfFile<-subset(sfFile,select=colonnes)}
-  
 
-    
     
   # if typeLevels is empty
   if (length(typeLevels)<=1){

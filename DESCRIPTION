@@ -30,14 +30,13 @@ Imports:  caret,
           terra,
           tidyr,
           units
-Suggests: 
-    tinytest,
+Suggests:
     knitr,
+    markdown,
     rmarkdown,
-    testthat (>= 3.0.0),
-    png,
-    markdown
-Config/testthat/edition: 3
+    tinytest,
+    png
+VignetteBuilder: knitr
 LazyData: true
 Depends: 
     R (>= 2.10)

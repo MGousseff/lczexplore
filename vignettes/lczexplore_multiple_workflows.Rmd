@@ -6,9 +6,10 @@ output: rmarkdown::html_vignette
 resource_files:
   - vignettes/Redon.png
 vignette: >
- %\VignetteIndexEntry{lczexplore_en}
- %\VignetteEngine{knitr::knitr}
- %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{lczexplore_en}
+    %\VignetteEngine{knitr::knitr}
+    %\VignetteEncoding{UTF-8}
+    \usepackage[UTF-8]{inputenc}
 ---
 
 ```{r, include = FALSE}

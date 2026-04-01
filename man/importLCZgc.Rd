@@ -3,14 +3,18 @@
 \name{importLCZgc}
 \alias{importLCZgc}
 \title{Imports the \if{html}{\out{<wf>}}_lcz fgb file produced by GeoClimate.
+Not recommended.
 Use the more generic importLCZvect function}
 \usage{
-importLCZgc(dirPath, output = "sfFile", file = "bdt_lcz.fgb")
+importLCZgc(dirPath, output = "sfFile", file = "rsu_lcz.fgb")
 }
 \arguments{
 \item{dirPath}{: the path where the rsu_lcz.geojson file is.}
 
 \item{output}{: if sfFile the rsu_lcz.geojson is imported as an sf file, if bBox, a bounding box of the area is returned}
+
+\item{file}{: name of the file to load. Default is rsu_lcz.fgb, as it is the output of GeoClimate when the
+the rsu indicators are specified (as opposed to grid indicators).}
 }
 \value{
 : if output is set to sfFile, the function returns an sf objects containing all the colums
@@ -20,8 +24,10 @@ This is useful to select geoms analysed in other sf objects.
 }
 \description{
 Imports the \if{html}{\out{<wf>}}_lcz fgb file produced by GeoClimate.
+Not recommended.
 Use the more generic importLCZvect function
 }
 \examples{
-bdtTest<-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"))
+bdtTest<-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"),
+file = "bdt_lcz.fgb")
 }

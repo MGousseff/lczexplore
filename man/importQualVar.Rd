@@ -7,7 +7,7 @@ from a geographical dataset (tested : geojson, shp, more to come)}
 \usage{
 importQualVar(
   dirPath,
-  file = "rsu_utrf_area.geojson",
+  file = "rsu_utrf_area.fgb",
   output = "sfFile",
   column = "TYPO_MAJ",
   geomID = "ID_RSU",
