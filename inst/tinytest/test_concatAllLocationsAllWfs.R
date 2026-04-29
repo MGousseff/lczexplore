@@ -32,7 +32,7 @@ setwd(wd)
 # 
 # st_transform(allLocAllWfSf, crs = 32631)
 
-allLocAllWfs<-concatAllLocationsAllWfs(
+allLocAllWfs<-loadConcatAllLocationsAllWfs(
   dirList = allLCZDirNames, locations = allLocationsNames , workflowNames = c("osm","bdt","iau","wudapt"))
 
 # sf::write_sf(allLocAllWfs, paste0(rootDir, "/allLocAllWfs.fgb"))

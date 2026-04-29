@@ -1,4 +1,4 @@
-#' Take sf files with an lcz_primary column, and concatenates them in a single sf object, 
+#' Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 #' adding a column for location and workflow names 
 #' @param sfList the list of LCZ sf objects
 #' @param location the name of the location at which all LCZ are created

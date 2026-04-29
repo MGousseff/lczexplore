@@ -37,7 +37,9 @@
 #' print(utrfComparison$matConfPlot)
 #' 
 #' 
-importQualVar<-function(dirPath, file="rsu_utrf_area.fgb", output="sfFile", column="TYPO_MAJ",
+importQualVar<-function(dirPath = paste0(system.file("extdata", package = "lczexplore"),
+                                         "/utrfFiles"),
+                        file="bdt_utrf_area.fgb", output="sfFile", column="TYPO_MAJ",
                        geomID="ID_RSU", confid="UNIQUENESS_VALUE",
                        typeLevels="",
                        drop=T, verbose=TRUE){

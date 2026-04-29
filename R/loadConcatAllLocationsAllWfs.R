@@ -30,9 +30,9 @@
 #'  residualLCZvalue = "Unclassified",
 #'  column = "lcz_primary"
 #')
-concatAllLocationsAllWfs<-function(dirList, locations = NA, workflowNames = c("osm","bdt","iau","wudapt"),
-                                   missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
-                                   residualLCZvalue = NA, column = "lcz_primary"){
+loadConcatAllLocationsAllWfs<-function(dirList, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+                                       missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
+                                       residualLCZvalue = NA, column = "lcz_primary"){
   # allLocAllWfSf<-matrix(ncol = 5, nrow = 0)
   if (is.null(locations) || (length(locations) == 1 && is.na(locations))) {
     locations <- gsub(pattern = "(.*)(/)(.+)(/$|/{0})", replacement = "\\3", x = dirList)
@@ -51,7 +51,7 @@ concatAllLocationsAllWfs<-function(dirList, locations = NA, workflowNames = c("o
   st_as_sf(geometry = st_sfc(),  # Initialize with an empty geometry column
            crs = 4326)
 
-for( i in 1:length(dirList)){
+for( i in seq_along(dirList)){
     dirPath<-dirList[i]
     if (substring(text = dirPath, first = nchar(dirPath))!="/"){dirPath<-paste0(dirPath, "/")} 
     aLocation<-locations[i]

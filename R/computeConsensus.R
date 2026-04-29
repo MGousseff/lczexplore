@@ -22,8 +22,8 @@ computeConsensus<-function(inDf, wfNames){
 )[V1!=V2]
   
   
-  d2<-d1[,.(LCZ_value = inDf[,get(V1)], LCZ_alter = inDf[,get(V2)], area = inDf[,area]),.(V1, V2)][
-    ,.(LCZ_value, LCZ_alter, area, agree = LCZ_value == LCZ_alter), ][
-    ,.(LCZ_value, LCZ_alter, area, agree, agreeArea = agree * area, disagreeArea = (!agree)*area ),]
-  consensus<-d2[,.(percAgree = sum(agreeArea)/(sum(agreeArea)+sum(disagreeArea))),keyby = .(LCZ_value)][order(percAgree),,]
+  d2<-d1[,list(LCZ_value = inDf[,get(V1)], LCZ_alter = inDf[,get(V2)], area = inDf[,area]),list(V1, V2)][
+    ,list(LCZ_value, LCZ_alter, area, agree = LCZ_value == LCZ_alter), ][
+    ,list(LCZ_value, LCZ_alter, area, agree, agreeArea = agree * area, disagreeArea = (!agree)*area ),]
+  consensus<-d2[,list(percAgree = sum(agreeArea)/(sum(agreeArea)+sum(disagreeArea))),keyby = list(LCZ_value)][order(percAgree),,]
 }

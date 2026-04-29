@@ -16,8 +16,8 @@
 #' sankeyfied = testSankey, plotNow=TRUE)
 plotSankeyfiedLCZ<-function(sankeyfied, plotNow=TRUE, colorMap = NULL){
   if(is.null(colorMap)) {
-    # colorMap<-.lczenv$colorMapDefault
-    colorMap<-lczexplore:::.lczenv$colorMapDefault
+     colorMap<-.lczenv$colorMapDefault
+    # colorMap<-lczexplore:::.lczenv$colorMapDefault
 
     names(colorMap)<-case_when(
     nchar(names(colorMap))==1 ~ paste0("00",names(colorMap)),

@@ -18,7 +18,7 @@
 #' where groupName is the name of a resulting group and groupValues a vector of the initial values
 #' it will regroup.
 #' @return a vector of booleans indicting if the elements of x define a color in R (TRUE) or don't (FALSE)
-#' @importFrom circlize circos.clear circos.track circos.text chordDiagram
+#' @importFrom circlize circos.clear circos.track circos.text chordDiagram get.cell.meta.data
 #' @importFrom collapse unlist2d fselect
 #' @importFrom graphics par
 #' @export
