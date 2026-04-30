@@ -23,11 +23,17 @@
 concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
 
   if (is.na(location) | is.null(location)){
-    location<- st_drop_geometry(sfList[[1]]["location"][1])
+    location<- tryCatch(
+    {st_drop_geometry(sfList[[1]][[1]][1,"location"]) %>% as.character},
+    error=function(e){
+      message("No location column or location column that contains not character")
+    })
   }
 
   refCrs<-st_crs(sfList[[refCrs]]$geometry)
   sfList<-lapply(sfList, st_transform, crs = refCrs)
-concatSf<-do.call(rbind, sfList)
-# return(concatSf)
+  #lapply(sfList, function(x){print(st_crs(x))})
+  concatSf<-do.call(rbind, sfList)
+  concatSf$location<-location
+  return(concatSf)
 }

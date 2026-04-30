@@ -1,5 +1,6 @@
 #' In a given list of directories the function looks for LCZ datafiles, return a datasets LCZ values for each geom and workflow
-#' @param dirList the list of directories for which the different LCZ files will be intersected
+#' @param dirPath is the path to the root directory where are the
+#' subdirectories containing  different location LCZ files
 #' @param workflowNames sets the names of workflows and define the name of the files which will be loaded and intersected
 #' @param locations for each diretory from dirList, a location name must be fed to the function
 #' @param missingGeomsWf the name of the workflow where some areas were not classified
@@ -21,7 +22,7 @@
 #' @examples
 #' dirList<-list.dirs(paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-#' allLocAllWfs<-concatAllLocationsAllWfs(
+#' allLocAllWfs<-loadConcatAllLocationsAllWfs(
 #'  dirList = dirList, locations = c("Blaru", "Arville"),
 #' workflowNames = c("osm","bdt","iau","wudapt"),
 #'  missingGeomsWf = "iau",
@@ -30,10 +31,11 @@
 #'  residualLCZvalue = "Unclassified",
 #'  column = "lcz_primary"
 #')
-loadConcatAllLocationsAllWfs<-function(dirList, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+loadConcatAllLocationsAllWfs<-function(dirPath, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
                                        missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
                                        residualLCZvalue = NA, column = "lcz_primary"){
   # allLocAllWfSf<-matrix(ncol = 5, nrow = 0)
+  dirList<-list.dirs(dirPath, recursive = FALSE)
   if (is.null(locations) || (length(locations) == 1 && is.na(locations))) {
     locations <- gsub(pattern = "(.*)(/)(.+)(/$|/{0})", replacement = "\\3", x = dirList)
   } else {

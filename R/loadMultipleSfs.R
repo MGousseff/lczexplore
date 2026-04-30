@@ -31,7 +31,7 @@ loadMultipleSfs<-function(
                 "101"="101","102"="102","103"="103","104"="104", "105"="105","106"="106","107"="107",
                 "101"="11","102"="12","103"="13","104"="14", "105"="15", "106"="16","107"="17",
                 "101"="A","102"="B","103"="C","104"="D","105"="E","106"="F","107"="G")
-  if(is.null(inLocation) | is.na(inLocation)){
+  if(is.null(inLocation) | prod(!is.na(inLocation))==0){
     print("location")
     print(inLocation)
     inLocation <- gsub(pattern = "(.*)(/)(.+)(/$)", replacement ="\\3", x = dirPath)

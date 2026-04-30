@@ -5,7 +5,7 @@
 #' fileExtension is a fil extension known by sf drivers, like fgb, geojson...
 #' @param dirPath is the place where the files are
 #' @param workflowNames sets the names of workflows
-#' @param inLocation is the name of the location at which all LCZ are created
+#' @param inLocations is the name of the location at which all LCZ are created
 #' @param fileExtension is the extensions of the files to load (.fgb is the recommended format)
 #' @param column is the name of the column containing the LCZ types, must be the same in all files.
 #' @importFrom forcats fct_recode
@@ -19,7 +19,7 @@
 #' If saveG is not an empty string, graphics are saved under "saveG.png"
 #' @export
 #' @examples
-#' sfList<-loadMultipleSfs(dirPath = paste0(
+#' sfList<-loadMultipleLocsSfs(dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
 #' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = c("Arville", "Blaru"))
 loadMultipleLocsSfs<-function(
@@ -30,7 +30,7 @@ loadMultipleLocsSfs<-function(
   dirList<-list.dirs(dirPath, recursive = FALSE)
   print(dirList)
   print(inLocations)
-  if (length(inLocations)<length(dirList) | prod(!is.na(inLocations))==FALSE){
+  if (length(inLocations)<length(dirList) | prod(!is.na(inLocations))==0){
     inLocations <- gsub(pattern = "(.*)(/)(.+)", replacement ="\\3", x = dirList)
     message(
       paste0("Some location names are missing, the following directory names will replace location names: "

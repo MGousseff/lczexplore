@@ -17,7 +17,7 @@ concatIntersectedLocations<-function(dirList, locations, workflowNames = c("osm"
   )
   names(concatIntersectedDf)<-c(workflowNames,"area", "location", "geometry")
 
-  for (i in 1:length(dirList)){
+  for (i in seq_along(dirList)){
     print(locations[i])
     concatIntersectedDf<-rbind(concatIntersectedDf,
                                intersectAlocation(

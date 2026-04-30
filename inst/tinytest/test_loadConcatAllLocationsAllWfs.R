@@ -32,7 +32,17 @@ setwd(wd)
 # 
 # st_transform(allLocAllWfSf, crs = 32631)
 
-allLocAllWfs<-loadConcatAllLocationsAllWfs(
-  dirList = allLCZDirNames, locations = allLocationsNames , workflowNames = c("osm","bdt","iau","wudapt"))
+ dirList<-list.dirs(paste0(
+ system.file("extdata", package = "lczexplore"),"/multipleWfs"), recursive = FALSE)
+ allLocAllWfs<-loadConcatAllLocationsAllWfs(
+  dirList = dirList, locations = c("Blaru", "Arville"),
+ workflowNames = c("osm","bdt","iau","wudapt"),
+  missingGeomsWf = "iau",
+  refWf = NULL,
+  refLCZ = "Unclassified",
+  residualLCZvalue = "Unclassified",
+  column = "lcz_primary"
+)
+
 
 # sf::write_sf(allLocAllWfs, paste0(rootDir, "/allLocAllWfs.fgb"))

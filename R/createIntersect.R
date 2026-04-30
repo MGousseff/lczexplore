@@ -23,16 +23,32 @@
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
 #'  sfWf = c("osm","bdt","iau","wudapt"))
 createIntersect<-function(sfList, columns, refCrs=NULL, sfWf=NULL, minZeroArea=0.0001){
-  sfInt<-sfList[[1]] %>% select(columns[1])
-  if (is.null(refCrs)){refCrs<-st_crs(sfInt)}
-  for (i in 2:length(sfList)){
-    sfProv<-sfList[[i]] %>% select(columns[i])
-    if (st_crs(sfProv) != refCrs ) {sfProv<-st_transform(sfProv, crs=refCrs)}
-    sfInt<-st_intersection(sfInt,sfProv)
+
+  if (collapse::ldepth(sfList)>1){
+    intersectedList<-lapply(sfList, createIntersect,
+           columns = columns, refCrs = refCrs, sfWf = sfWf, minZeroArea = minZeroArea )
+
+    for (i in seq_along(intersectedList)) {
+      intersectedList[[i]]$location <- names(sfList)[i]
+      intersectedList[[i]]<-intersectedList[[i]][c(sfWf, "area", "location", "geometry")]
+    }
+    return(intersectedList)
   }
+
+  # sfInt<-sfList[[1]] %>% select(columns[1])
+
+  if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])}
+
+  sfIntCRSed <- lapply(seq_along(sfList), function(i) {
+    sf_obj <- sfList[[i]][, columns[i], drop = FALSE]
+    if (st_crs(sf_obj) != refCrs) st_transform(sf_obj, crs = refCrs) else sf_obj
+  })
+
+  sfInt <- Reduce(st_intersection, sfIntCRSed)
   if (!is.null(sfWf) & length(sfWf) == length(sfList)){
     names(sfInt)[1:(ncol(sfInt)-1)]<-sfWf
-  } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ",1:length(sfList)) }
+  } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ", seq_along(sfList)) }
+
   sfInt<-dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                                          .before=geometry)
   sfInt<-sfInt[sfInt$area>minZeroArea,]
