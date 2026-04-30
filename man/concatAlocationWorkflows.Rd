@@ -2,7 +2,7 @@
 % Please edit documentation in R/concatAlocationWorkflows.R
 \name{concatAlocationWorkflows}
 \alias{concatAlocationWorkflows}
-\title{Take sf files with an lcz_primary column, and concatenates them in a single sf object,
+\title{Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 adding a column for location and workflow names}
 \usage{
 concatAlocationWorkflows(sfList, location = NA, refCrs = 1)
@@ -23,7 +23,7 @@ pseudoK is a heuristic estimate of a Cohen's kappa coefficient of agreement betw
 If saveG is not an empty string, graphics are saved under "saveG.png"
 }
 \description{
-Take sf files with an lcz_primary column, and concatenates them in a single sf object,
+Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 adding a column for location and workflow names
 }
 \examples{

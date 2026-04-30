@@ -1,7 +1,18 @@
 # library(sf)
-sfList<-loadMultipleSfs(dirPath = "/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/newDataTree/Drancy/",
-                        workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Drancy"  )
 
-test<-concatAlocationWorkflows(sfList = sfList, location = "Drancy", refCrs = 1)
-# write_sf(test, "/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/newDataTree/testDrancy.fgb")
+ sfList<-loadMultipleSfs(dirPath = paste0(
+ system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+ workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+
+ zoneSf <- sf::read_sf(
+ paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville/zone.fgb")
+ )
+ ArvilleAllWfs <-  concatAlocationWorkflows(
+ sfList = sfList, location = "Arville")
+
+
+
+
+
+
 
