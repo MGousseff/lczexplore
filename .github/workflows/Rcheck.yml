@@ -29,6 +29,11 @@ jobs:
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
+      - name: Install TinyTeX
+        run: |
+          install.packages("tinytex")
+          tinytex::install_tinytex()
+          tinytex::tlmgr_install(c("inconsolata", "cm-super", "ec"))
       - name: Check
-        run: rcmdcheck::rcmdcheck(build_args =c("--no-build-vignettes", "--resave-data", "--no-manual"), args = c("--no-build-vignettes", "--no-vignettes", "--no-manual"), error_on = "error")
+        run: rcmdcheck::rcmdcheck(build_args =c("--no-build-vignettes", "--resave-data"), args = c("--no-build-vignettes", "--no-vignettes"), error_on = "error")
         shell: Rscript {0}
