@@ -1,7 +1,7 @@
 #' Compares several sets of geographical classifications, especially Local Climate Zones classifications
 #' @param sfInt an sf objects with intersected geometries and the LCZ columns for each workflow LCZ
 #' @param LCZcolumns a vector which contains, the name of the columns of the classification to compare
-#' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects
+#' @param workflowNames a vector of strings which contains the names of the workflows used to produce the sf objects
 #' @param trimPerc this parameters indicates which percentile to drop out of the smallest geometries resulting 
 #' from the intersection of the original sf geometries intersection. 
 #' It allows to account for numeric precision errors and to speed up computations at the cost of not considering the smallest geometries. 
@@ -21,12 +21,12 @@
 #' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
 #' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
-#'  sfWf = c("osm","bdt","iau","wudapt"))
+#'  workflowNames = c("osm","bdt","iau","wudapt"))
 #' ArvilleMultipleComparison<-compareMultipleLCZ(
 #'  sfInt = ArvilleIntersect,
 #'  LCZcolumns = c("osm","bdt","iau","wudapt"),
 #'  trimPerc = 0.5)
-compareMultipleLCZ<-function(sfInt, LCZcolumns, sfWf=NULL, trimPerc=0.05){
+compareMultipleLCZ<-function(sfInt, LCZcolumns, workflowNames=NULL, trimPerc=0.05){
   if (is.null(LCZcolumns)) { 
     LCZcolumns<-names(sfInt)[!names(sfInt)%in%c("area", "geometry")]
   }
@@ -36,14 +36,14 @@ compareMultipleLCZ<-function(sfInt, LCZcolumns, sfWf=NULL, trimPerc=0.05){
   
   sfIntnogeom<-st_drop_geometry(sfInt)
   
-  if (is.null(sfWf) | length(sfWf)!=length(LCZcolumns)){sfWf<-LCZcolumns}
+  if (is.null(workflowNames) | length(workflowNames)!=length(LCZcolumns)){workflowNames<-LCZcolumns}
   
   allLevels<- sfIntnogeom[,LCZcolumns] %>% lapply(levels) %>% unlist %>% unique()
   sfIntnogeom[, LCZcolumns] <-   sfIntnogeom[, LCZcolumns] %>%  lapply(function(x) factor(x, levels=allLevels))
   
   for (i in 1:(length(LCZcolumns) - 1)) {
     for(j in (i+1):length(LCZcolumns)){
-      compName<-paste0(sfWf[i],"_",sfWf[j])
+      compName<-paste0(workflowNames[i],"_",workflowNames[j])
       print(compName)
       sfIntnogeom[,compName]<-sfIntnogeom[ , LCZcolumns[i]] == sfIntnogeom[ , LCZcolumns[j]]
     }
@@ -54,7 +54,7 @@ compareMultipleLCZ<-function(sfInt, LCZcolumns, sfWf=NULL, trimPerc=0.05){
   sfIntnogeom$nbAgree<-apply(
      X = sfIntnogeom[,rangeCol],MARGIN=1,sum)
   sfIntnogeom$maxAgree<-apply(
-    X = sfIntnogeom[,1:length(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE ))
+    X = sfIntnogeom[, seq_along(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE ))
  print(head(sfIntnogeom))
   
   # long format

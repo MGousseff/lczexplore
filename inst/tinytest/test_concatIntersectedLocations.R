@@ -35,7 +35,7 @@ dirList<-list.dirs("/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/
 # sfList<-loadMultipleSfs(dirList[1])
 # 
 # intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 4),
-#                              sfWf = c("osm","bdt","iau","wudapt"))
+#                              workflowNames = c("osm","bdt","iau","wudapt"))
 # 
 # multicompare_test<-compareMultipleLCZ(allLocIntersected,
 #                                       LCZcolumns = c("osm","bdt","iau","wudapt"),

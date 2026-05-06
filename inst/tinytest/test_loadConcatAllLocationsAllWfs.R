@@ -34,7 +34,7 @@ setwd(wd)
 
  dirList<-list.dirs(paste0(
  system.file("extdata", package = "lczexplore"),"/multipleWfs"), recursive = FALSE)
- allLocAllWfs<-loadConcatAllLocationsAllWfs(
+ allLocAllWfs<-loadConcatAllLocsAllWfs(
   dirList = dirList, locations = c("Blaru", "Arville"),
  workflowNames = c("osm","bdt","iau","wudapt"),
   missingGeomsWf = "iau",

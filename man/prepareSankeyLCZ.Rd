@@ -22,10 +22,12 @@ an object to feed plotSankeyLCZ
 Prepares the data to produce a sankey graph between two LCZ workflows
 }
 \examples{
-dirList<-list.dirs(paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Blaru", "Arville"))
+dirPath<-paste0(
+system.file("extdata", package = "lczexplore"),"/multipleWfs")
+allLocConcatenated<-loadMultipleLocsSfs(
+  dirPath = dirPath, inLocations = c("Blaru", "Arville"))
+allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primary", 4),
+workflowNames = c("osm","bdt","iau","wudapt"))
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
  , wf1 = "wudapt", wf2 = "osm")
 }

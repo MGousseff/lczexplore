@@ -7,7 +7,7 @@
 #' @param workflowNames sets the names of workflows
 #' @param inLocations is the name of the location at which all LCZ are created
 #' @param fileExtension is the extensions of the files to load (.fgb is the recommended format)
-#' @param column is the name of the column containing the LCZ types, must be the same in all files.
+#' @param columns contains the names of the columns containing the LCZ types
 #' @importFrom forcats fct_recode
 #' @importFrom dplyr mutate
 #' @import sf units RColorBrewer utils grDevices
@@ -25,8 +25,8 @@
 loadMultipleLocsSfs<-function(
   dirPath = paste0(
     system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
-  workflowNames = c("osm","bdt","iau","wudapt"), inLocations = c("Arville", "Blaru")
-){
+  workflowNames = c("osm","bdt","iau","wudapt"), inLocations = c("Arville", "Blaru"),
+  fileExtension = ".fgb", columns = NULL){
   dirList<-list.dirs(dirPath, recursive = FALSE)
   print(dirList)
   print(inLocations)
@@ -37,18 +37,19 @@ loadMultipleLocsSfs<-function(
         , paste0(inLocations, collapse = ", ")))
 
   }
-
+  if(is.null(columns) | prod(is.na(columns))==0){
+    message("The names of the LCZ types columns were mis-specified, attempt to load with default 'lcz_primary' name")
+    columns<-rep("lcz_primary", length(dirList))
+  }
   allLocAllWfs<-vector("list", length = length(inLocations))
   names(allLocAllWfs)<-inLocations
   for(loc_i in seq_along(dirList)){
   allLocAllWfs[[inLocations[loc_i]]]<-
-  # sfTemp<-
     loadMultipleSfs(
     dirPath = dirList[loc_i],
     inLocation = inLocations[loc_i],
-    workflowNames = workflowNames
+    workflowNames = workflowNames, fileExtension = fileExtension, column = columns[loc_i]
   )
-
   }
   return(allLocAllWfs)
 }

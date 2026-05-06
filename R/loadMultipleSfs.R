@@ -43,7 +43,9 @@ loadMultipleSfs<-function(
   for (i in workflowNames){
     inName<-paste0(dirPath, i, "_lcz", fileExtension)
     inSf<-read_sf(inName)
+    inSf$lcz_primary<-inSf[[column]]
     names(inSf)<-tolower(names(inSf))
+
     inSf<-select(inSf,lcz_primary) %>% mutate(
       lcz_primary=factor(lcz_primary, levels = typeLevels))
     inSf<-dplyr::mutate(inSf, wf = i, location = inLocation, .before = geometry)

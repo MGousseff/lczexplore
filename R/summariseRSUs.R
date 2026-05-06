@@ -12,10 +12,10 @@
 #' with same level of LCZ which touch each other
 #' @export
 #' @examples
-#' dirList<-list.dirs(paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-#' allLocAllWfs<-loadConcatAllLocationsAllWfs(
-#'  dirList = dirList, locations = c("Blaru", "Arville"),
+#' dirPath<-paste0(
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs")
+#' allLocAllWfs<-loadConcatAllLocsAllWfs(
+#'  dirPath = dirPath, locations = c("Blaru", "Arville"),
 #' workflowNames = c("osm","bdt","iau","wudapt"),
 #'  missingGeomsWf = "iau",
 #'  refWf = NULL,

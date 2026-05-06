@@ -4,14 +4,14 @@
 \alias{compareMultipleLCZ}
 \title{Compares several sets of geographical classifications, especially Local Climate Zones classifications}
 \usage{
-compareMultipleLCZ(sfInt, LCZcolumns, sfWf = NULL, trimPerc = 0.05)
+compareMultipleLCZ(sfInt, LCZcolumns, workflowNames = NULL, trimPerc = 0.05)
 }
 \arguments{
 \item{sfInt}{an sf objects with intersected geometries and the LCZ columns for each workflow LCZ}
 
 \item{LCZcolumns}{a vector which contains, the name of the columns of the classification to compare}
 
-\item{sfWf}{a vector of strings which contains the names of the workflows used to produce the sf objects}
+\item{workflowNames}{a vector of strings which contains the names of the workflows used to produce the sf objects}
 
 \item{trimPerc}{this parameters indicates which percentile to drop out of the smallest geometries resulting
 from the intersection of the original sf geometries intersection.
@@ -34,7 +34,7 @@ paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
 ArvilleIntersect <- createIntersect(
  sfList = sfList, columns = rep("lcz_primary", 4),  
- sfWf = c("osm","bdt","iau","wudapt"))
+ workflowNames = c("osm","bdt","iau","wudapt"))
 ArvilleMultipleComparison<-compareMultipleLCZ(
  sfInt = ArvilleIntersect,
  LCZcolumns = c("osm","bdt","iau","wudapt"),

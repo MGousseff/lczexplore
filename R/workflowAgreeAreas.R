@@ -14,7 +14,7 @@
 #' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
 #' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
-#'  sfWf = c("osm","bdt","iau","wudapt"))
+#'  workflowNames = c("osm","bdt","iau","wudapt"))
 #' ArvilleMultipleComparison<-compareMultipleLCZ(
 #'  sfInt = ArvilleIntersect,
 #'  LCZcolumns = c("osm","bdt","iau","wudapt"),

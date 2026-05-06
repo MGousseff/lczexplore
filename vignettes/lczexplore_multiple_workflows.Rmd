@@ -107,7 +107,7 @@ It also offers some refinements (see next section).
 
 ### An advanced fonction
 When, for a location, some workflows have missing geometries, i.e. don't map some area and leave them as holes,
-one can put a zone.fgb file in the directory, and the function `loadConcatAllLocationsAllWfs` will allow to use it
+one can put a zone.fgb file in the directory, and the function `loadConcatAllLocsAllWfs` will allow to use it
 and create the missing geometries and assign them a given type.
 Feed the name of the workflow whose geometries are missing to the `missingGeomWf` argument, and
 the function will intersect it with the `zone.fgb` geometries.
@@ -118,9 +118,9 @@ In this case, one can choose another workflow as a reference (through `refWf`) a
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 
-allWfsAllLocs<-loadConcatAllLocationsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
-                                            missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
-                                            residualLCZvalue = NA, column = "lcz_primary")
+allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+                                       missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
+                                       residualLCZvalue = NA, column = "lcz_primary")
 ```
 
 
@@ -133,6 +133,6 @@ The `createIntersect` function allows to specify a minimal area threshold. Resul
 
 ```{r, Intersect}
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
-                                        columns = , refCrs=NULL, sfWf=NULL, minZeroArea=0.0001)
+                                        refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001)
 ```
 

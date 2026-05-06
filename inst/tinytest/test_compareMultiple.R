@@ -10,7 +10,7 @@ sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczex
                         workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
 
 intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 4),
-                             sfWf = c("osm","bdt","iau","wudapt"))
+                             workflowNames = c("osm", "bdt", "iau", "wudapt"))
 
 multicompare_test<-compareMultipleLCZ(intersected, 
                                       LCZcolumns = c("osm","bdt","iau","wudapt"),

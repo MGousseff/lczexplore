@@ -1,4 +1,4 @@
-#' loadConcatAllLocationsAllWfs is recommended instead as it loadsand concatenate input files
+#' loadConcatAllLocsAllWfs is recommended instead as it loadsand concatenate input files
 #' and can even fill missing geometries with "unclassified" type.
 #' But if maps are already loaded in a List, concatAllLocsWorkflows is
 #' the equivalent of concatenateAlocationWorkflows, but for several Locations

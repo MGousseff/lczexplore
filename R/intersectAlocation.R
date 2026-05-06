@@ -33,7 +33,7 @@ intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","iau","wudap
                          residualLCZvalue = residualLCZvalue,
                          column = "lcz_primary")
   intersecSf<-createIntersect(sfList=sfList, columns=rep("lcz_primary", length(workflowNames)),
-                              refCrs=NULL, sfWf=workflowNames, minZeroArea=0.0001)
+                              refCrs=NULL, workflowNames=workflowNames, minZeroArea=0.0001)
   if ("character"%in%class(location)) {intersecSf$location<-location}
 return(intersecSf)
 }

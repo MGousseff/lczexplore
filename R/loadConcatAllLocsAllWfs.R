@@ -20,10 +20,11 @@
 #' If saveG is not an empty string, graphics are saved under "saveG.png"
 #' @export
 #' @examples
-#' dirList<-list.dirs(paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-#' allLocAllWfs<-loadConcatAllLocationsAllWfs(
-#'  dirList = dirList, locations = c("Blaru", "Arville"),
+#' dirPath<-paste0(
+#' system.file("extdata", package = "lczexplore"),
+#' "/multipleWfs")
+#' allLocAllWfs<-loadConcatAllLocsAllWfs(
+#'  dirPath = dirPath, locations = c("Blaru", "Arville"),
 #' workflowNames = c("osm","bdt","iau","wudapt"),
 #'  missingGeomsWf = "iau",
 #'  refWf = NULL,
@@ -31,9 +32,9 @@
 #'  residualLCZvalue = "Unclassified",
 #'  column = "lcz_primary"
 #')
-loadConcatAllLocationsAllWfs<-function(dirPath, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
-                                       missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
-                                       residualLCZvalue = NA, column = "lcz_primary"){
+loadConcatAllLocsAllWfs<-function(dirPath, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+                                  missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
+                                  residualLCZvalue = NA, column = "lcz_primary"){
   # allLocAllWfSf<-matrix(ncol = 5, nrow = 0)
   dirList<-list.dirs(dirPath, recursive = FALSE)
   if (is.null(locations) || (length(locations) == 1 && is.na(locations))) {
