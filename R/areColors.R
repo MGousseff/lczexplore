@@ -14,6 +14,6 @@ areColors <- function(x) {
   x[numInd]<-"number not seen as color"
   sapply(x, function(X) {
     tryCatch(is.matrix(col2rgb(X)),
-             error = function(x) FALSE)
+             error = function(...) FALSE)
   })
 }

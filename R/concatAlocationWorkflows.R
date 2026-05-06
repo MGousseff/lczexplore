@@ -25,7 +25,7 @@ concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
   if (is.na(location) | is.null(location)){
     location<- tryCatch(
     {st_drop_geometry(sfList[[1]][[1]][1,"location"]) %>% as.character},
-    error=function(e){
+    error=function(...){
       message("No location column or location column that contains not character")
     })
   }

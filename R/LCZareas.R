@@ -16,7 +16,7 @@ LCZareas <- function(sf, column, LCZlevels) {
   sf <- tryCatch({
     dplyr::mutate(sf, area = st_area(geometry)) %>% drop_units
   },
-    error = function(e) {
+    error = function(...) {
       message("Some geometries don't seem valid, the function will try to make them valid, it may take a bit longer.")
       sf %>%
         st_make_valid %>%
