@@ -34,6 +34,7 @@ jobs:
           install.packages("tinytex")
           tinytex::install_tinytex()
           tinytex::tlmgr_install(c("inconsolata", "cm-super", "ec"))
+          shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(build_args =c("--no-build-vignettes", "--resave-data"), args = c("--no-build-vignettes", "--no-vignettes"), error_on = "error")
         shell: Rscript {0}
