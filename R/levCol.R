@@ -6,7 +6,8 @@
 #' @param useStandCol is set to TRUE if one wants recognized standard levels to be associated with standard colors. Default is FALSE
 #' @param ... other parameters specified, expected a vector of levels and a vector of colors
 #' whose name must begin with colors. Other cases are handled to enhance usability.
-#' @import dplyr sf
+#' @import sf
+#' @importFrom magrittr "%>%"
 #' @importFrom grDevices palette.colors
 #'
 #' @return output is a list containing levelsColors, a named vector, which names are the levels
@@ -107,7 +108,8 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
       names(typeLevels) <- uniqueData
     }
     else if (length(argCol) > length(uniqueData)) {
-      case <- "3.1 : No levels but a color vector which size is greater than the number of levels in the data, unused colors were dropped. "
+      case <- "3.1 : No levels but a color vector which size is greater than the number of levels in the data,
+      unused colors were dropped. "
       typeLevels <- argCol[1:length(uniqueData)]
       names(typeLevels) <- uniqueData
     }
@@ -123,7 +125,8 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
     ########### Case where the levels cover the levels of unique Data
     if (prod(uniqueData %in% argLev[[1]]) == 1) {
 
-      case <- "7: No color vector but a level vector whose names cover the levels in the data (even if some levels may not be present in the data)"
+      case <- "7: No color vector but a level vector whose names cover the levels in the data
+      (even if some levels may not be present in the data)"
       typeLevels <- palette.colors(n = length(argLev[[1]]), palette = "Polychrome 36")
       names(typeLevels) <- argLev[[1]]
     } else if (prod(uniqueData %in% argLev[[1]]) == 0) {

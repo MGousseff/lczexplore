@@ -6,9 +6,10 @@ output: rmarkdown::html_vignette
 resource_files:
   - vignettes/Redon.png
 vignette: >
- %\VignetteIndexEntry{lczexplore_en}
- %\VignetteEngine{knitr::knitr}
- %\VignetteEncoding{UTF-8}
+    %\VignetteIndexEntry{lczexplore_en}
+     %\VignetteEngine{knitr::knitr}
+     %\VignetteEncoding{UTF-8}
+     \usepackage[UTF-8]{inputenc}
 ---
 
 ```{r, include = FALSE}
@@ -48,7 +49,7 @@ On can also install from the tar.gz file and install it (see `?install.packages`
 
 
 Load the package: `library(lczexplore)`.
-```{r}
+```{r, load, eval = TRUE, echo = TRUE}
 library(ggplot2)
 library(lczexplore)
 ```
@@ -59,7 +60,7 @@ library(lczexplore)
 
 The function `importLCZvect` is the generic import function for the file containing geometries, 
 or Reference Spatial Units (RSU), and the associated Local Climate Zone Type (LCZ). 
-Imports of .geojson and .shp files were tested, but any format accepted by the function `st_read` 
+Imports of .fgb (prefered), .geojson and .shp files were tested, but any format accepted by the function `st_read`
 of the `sf` package should work.
 
 The `dirPath` and the `file` arguments set the path to the folder and the filename to be loaded. 
@@ -77,12 +78,10 @@ box of the geometries of the input file. It is useful, for instance, when you wa
 crop another file and study the same area.
 
 
-```{R}
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"/")
-dirPathOSM<-paste0(dirPath,"osm/2022/Redon")
-dirPathBDT<-paste0(dirPath,"bdtopo_2_2/Redon")
-redonOSM<-importLCZvect(dirPath=dirPathOSM,file="rsu_lcz.geojson",column = "LCZ_PRIMARY")
-redonBDT<-importLCZvect(dirPath=dirPathBDT,file="rsu_lcz.geojson",column = "LCZ_PRIMARY")
+```{r, load files, eval = TRUE, echo = TRUE}
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"/lczfiles/Redon")
+redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY")
+redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY")
 #
 ```
 ## Map the LCZ types with the function showLCZ
@@ -100,13 +99,13 @@ It is the recommended choice. But `standard` representation will also accept lev
 (for other conventions, see the `alter` representation).
 
 
-```{r, fig.dim = c(8, 6)}
+```{r, show, fig.dim = c(8, 6), eval = TRUE, echo = TRUE}
 showLCZ(sf=redonOSM,wf="OSM",column="LCZ_PRIMARY",repr="standard",LCZlevels="",colors="")
 ```
 One can note that by default, all the 17 possible types of an LCZ classification are present in the legend. This makes comparison easier when one compares dataset with different present levels. 
 To only represent the present levels, set `drop=TRUE`.
 
-```{r, fig.dim = c(8, 6), echo = FALSE}
+```{r, show with drop, fig.dim = c(8, 6), echo = FALSE, eval = TRUE}
 showLCZ(sf=redonOSM,wf="OSM",column="LCZ_PRIMARY",repr="standard",drop=TRUE)
 ```
 ### Alternative visualization
@@ -122,7 +121,7 @@ With `repr=alter`, one passes the vector of possible levels to the argument `LCZ
 If no vector of levels or no vector of colors is given, the levels will be deduced from the unique values present in the data, and the colors will be picked from the "Polychrome 36" palette of the `grDevices` package.
 
 For instance: one can first plot the column without knowing the LCZ levels present.
-```{r, fig.dim = c(8, 6)}
+```{r, show alter drop, fig.dim = c(8, 6),  eval = TRUE, echo = TRUE}
 # Choice of random colors from a palette
 testCol <- palette.colors(n=17, palette="Polychrome 36")
 showLCZ(sf=redonOSM,wf="OSM",column="LCZ_PRIMARY",repr="alter",colors=testCol, useStandCol = FALSE, drop=TRUE)
@@ -132,7 +131,7 @@ showLCZ(sf=redonOSM,wf="OSM",column="LCZ_PRIMARY",repr="alter",colors=testCol, u
 
 The colors one wants to use can be specified either by their name (if a known color name in R) or it's RGB code, and passed to the argument `colors`.
 
-```{r, fig.dim = c(8, 6)}
+```{r, show chosen colors, fig.dim = c(8, 6), eval = TRUE, echo = TRUE}
 
 LCZlevels<-c(2, 3, 5, 6, 8, 9, 101, 102, 104, 105, 107)
 couleurs<-c("red","brown1","orange","coral","grey","darkgreen","chartreuse4","springgreen3",
@@ -151,7 +150,7 @@ If the user doesn't enter them (by default `outCol="grouped"`).
 
 The newly created dataset can be mapped with `showLCZ` function.
 
-```{r, fig.dim = c(8, 6)}
+```{r, group and show, fig.dim = c(8, 6), eval = TRUE, echo = TRUE}
 redonOSMgrouped<-groupLCZ(redonOSM,column="LCZ_PRIMARY",
                            urban=c("1","2","3","4","5","6","7","8","9"),
                            industry="10",
@@ -190,20 +189,20 @@ the compareLCZ function will concatenate a ".1" string to the column names of th
 
 *The graphical output includes 4 graphs and is easier to read after zooming or exporting.*
 
-```{r, fig.dim = c(12,9 ), echo = TRUE, fig.show="hide"}
+```{r, compare, fig.dim = c(12,9 ), echo = TRUE, fig.show="hide"}
 comparison<-compareLCZ(sf1=redonBDT,column1="LCZ_PRIMARY", wf1="BD TOPO v2.2",
                         sf2=redonOSM,column2="LCZ_PRIMARY",wf2="Open Street Map", ref=1,
                         repr="standard",exwrite=F, location="Redon", saveG="comparison")
 ```
 
-```{r, out.width = "680px"}
+```{r, import compare plot prettier, out.width = "680px"}
 
 knitr::include_graphics("comparison.png", error=FALSE)
 
 ```
 
 The comparison also works on grouped data. 
-```{r, echo = TRUE, fig.show="hide" }
+```{r, compare grouped, echo = TRUE, fig.show="hide" }
 redonOSMgrouped<-groupLCZ(redonOSM,column="LCZ_PRIMARY",
                            urban=c("1","2","3","4","5","6","7","8","9"),
                            industry="10",
@@ -221,7 +220,7 @@ comparisonGrouped<-compareLCZ(sf1=redonOSMgrouped,column1="grouped",
            colors=c("red","black","green","grey","burlywood","blue"), saveG="comparisonGrouped") 
 ```
 
-```{r, out.width = "680px"}
+```{r, compare grouped plot prettier, out.width = "680px"}
 
 knitr::include_graphics("comparisonGrouped.png", error=FALSE)
 
@@ -229,7 +228,7 @@ knitr::include_graphics("comparisonGrouped.png", error=FALSE)
 
 A little cheat is possible ! You can try to group and compare on-the-fly with `tryGroup=TRUE`. The syntax is then as shown in the nex code chunk. 
 
-```{r, out.width="70%", echo = TRUE, fig.show="hide"}
+```{r, compare on the fly, out.width="70%", echo = TRUE, fig.show="hide"}
 comparisonGrouped<-compareLCZ(sf1=redonBDT,column1="LCZ_PRIMARY", wf1="groupedBDT",
     sf2=redonOSM, column2="LCZ_PRIMARY", wf2="groupedOSM",
     repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plot=TRUE,
@@ -256,7 +255,7 @@ comparisonGrouped<-compareLCZ(sf1=redonBDT,column1="LCZ_PRIMARY", wf1="groupedBD
 At last: it `exWrite=TRUE` the data are exported to a .csv file whose name 
 is created from the argument `wf1` and `wf2`. It can then be loaded for further analysis.  
 
-```{r}
+```{r, values}
 comparison$percAgg
 comparisonGrouped$areas
 ```
@@ -277,14 +276,12 @@ LCZ type was a good candidate. So this uniqueness can be seen as a confidence va
 When using the `importLCZvect` function one needs to specify the confidence value associated 
 to the LCZ (`confid` argument). On can also set the name of the geometry identifier (`geomID` argument ).
 
-```{r}
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"/")
-dirPathOSM<-paste0(dirPath,"osm/2022/Redon")
-dirPathBDT<-paste0(dirPath,"bdtopo_2_2/Redon")
+```{r, compare for sensitivity}
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"/lczfiles/Redon")
 
-redonOSM<-importLCZvect(dirPath=dirPathOSM,file="rsu_lcz.geojson",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
+redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
-redonBDT<-importLCZvect(dirPath=dirPathBDT,file="rsu_lcz.geojson",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
+redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
 redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU",column1 ="LCZ_PRIMARY",
                          confid1 = "LCZ_UNIQUENESS_VALUE",
@@ -304,7 +301,7 @@ The span of the confidence values is divided on as many points as the user choos
 
 For each of these thresholds, the function only keeps the reference spatial units (RSU, i.e. the geometries) for which the confidence value is higher than the threshold. Then it computes the agreement between the classifications based on these geoms.
 
-```{r, fig.show="hide"}
+```{r, perform sensitivity, fig.show="hide"}
 names(redonCompare$data)
 confidRedon<-confidSensib(inputDf=redonCompare$data,filePath="", nPoints=10,
              wf1="bdtopo_2_2", wf2="osm",
@@ -314,7 +311,7 @@ confidRedon<-confidSensib(inputDf=redonCompare$data,filePath="", nPoints=10,
              plot=TRUE, saveG = ".")
 
 ```
-```{r, out.width = "680px"}
+```{r, show sensitivity prettier, out.width = "680px"}
 
 knitr::include_graphics("GeneralUniquenessSensib.png", error=FALSE)
 
@@ -322,7 +319,7 @@ knitr::include_graphics("GeneralUniquenessSensib.png", error=FALSE)
 
 One can see that the agreement between classifications using BDTOPO and OpenStreetMap tends to increase when the confidence of the LCZ we keep increases (except for the open low LCZ !).
 
-```{r, out.width = "680px"}
+```{r, sensitivity by LCZ type, out.width = "680px"}
 
 knitr::include_graphics("byLCZUniquenessSensib.png", error=FALSE)
 

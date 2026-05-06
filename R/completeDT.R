@@ -9,13 +9,13 @@
 #' @examples 
 #' # No example as this function is not to be called by the user, only needed for the package. 
 completeDT <- function(DT, cols, defs = NULL){
-
+# due to NSE notes in R CMD check
   make_vals <- function(col) {
     if(is.factor(col)) levels(col)
     else unique(col)
   }
 
-  mDT <- do.call(CJ, c(lapply(DT[, ..cols], make_vals), list(unique=TRUE)))
+  mDT <- do.call(CJ, c(lapply(DT[, ..cols, with = FALSE], make_vals), list(unique=TRUE)))
   res <- DT[mDT, on=names(mDT)]
   if (length(defs))
     res[, names(defs) := Map(replace, .SD, lapply(.SD, is.na), defs), .SDcols=names(defs)]

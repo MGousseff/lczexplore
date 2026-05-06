@@ -2,9 +2,7 @@
 % Please edit documentation in R/compareLCZ.R
 \name{compareLCZ}
 \alias{compareLCZ}
-\title{Compares two sets of geographical classifications, especially Local Climate Zones classifications. It
-produces a map for each classification, a map of their agreement (and a pseudo Kappa coefficent),
-and a confusion matrix between them. All are stored in a list, easily reusable.}
+\title{Compares two sets of geographical classifications, especially Local Climate Zones classifications}
 \usage{
 compareLCZ(
   sf1,
@@ -23,7 +21,7 @@ compareLCZ(
   exwrite = FALSE,
   outDir = getwd(),
   location = "Your Place",
-  plot = TRUE,
+  plotNow = TRUE,
   tryGroup = FALSE,
   ...
 )
@@ -72,7 +70,7 @@ the csv file containing the values of the LCZ on the intersected geoms}
 \item{location}{: the name of the study area, as chosen as the name of the directory on the GeoClimate team cloud.
 If the area you wish to analyse is not uploaded yet, please contact the GeoClimate Team.}
 
-\item{plot}{: when FALSE none of the graphics are plotted or saved}
+\item{plotNow}{: when FALSE none of the graphics are plotted or saved}
 
 \item{tryGroup}{: when TRUE, one can group and compare on-the-fly : if the specified level names
 don't match the data, but the specified levels do, a call to the groupLCZ function will be tried,
@@ -91,26 +89,27 @@ pseudoK is a heuristic estimate of a Cohen's kappa coefficient of agreement betw
 If saveG is not an empty string, graphics are saved under "saveG.png"
 }
 \description{
-Compares two sets of geographical classifications, especially Local Climate Zones classifications. It
-produces a map for each classification, a map of their agreement (and a pseudo Kappa coefficent),
-and a confusion matrix between them. All are stored in a list, easily reusable.
+Compares two sets of geographical classifications, especially Local Climate Zones classifications
+}
+\details{
+compareLCZ produces a map for each classification,
+a map of their agreement (and a pseudo Kappa coefficent),
+and a confusion matrix between them. All are stored in a list, easily reusable
 }
 \examples{
 comparisonBDT_OSM<-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU",
 confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
 sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU",
 confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
-repr="standard", saveG="", exwrite=FALSE, location="Redon", plot=TRUE)
-# To get the summed area of each LCZ levels for both dataset : 
+repr="standard", saveG="", exwrite=FALSE, location="Redon", plotNow = TRUE)
+# To get the summed area of each LCZ levels for both dataset :
 comparisonBDT_OSM$areas
-# The plots of each dataset can be produced with the /`showLCZ/` function.
+# The plots of each dataset can be produced with the showLCZ function.
 # To get the value of the general percentage of agreement call :
 comparisonBDT_OSM$percAgg
 # The values of that confusion matrix is available in a wide form:
 comparisonBDT_OSM$matConfLarge
 # or in a long form :
 comparisonBDT_OSM$matConf
-
-# Examples for non LCZ variables are available in the importQualVar function examples.
-
+ # Examples for non LCZ variables are available in the importQualVar function examples.
 }

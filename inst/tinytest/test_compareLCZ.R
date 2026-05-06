@@ -56,7 +56,7 @@ expect_equal("ggplot"%in%class(compareRedonBDTOSM$matConfPlot),TRUE)
 
 
 redonBbox<-importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
+  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
   geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",output="bBox")
 
 redonWudapt<-importLCZraster(system.file("extdata", package = "lczexplore"),

@@ -7,7 +7,8 @@
 prepareSankeyLCZ(intersectedDf, wf1, wf2)
 }
 \arguments{
-\item{intersectedDf}{is an sf object or a data frame which contains lcz values for at least two workflows on the same geometries,
+\item{intersectedDf}{is an sf object or a data frame which contains lcz values for
+at least two workflows on the same geometries,
 and the area of the geometries}
 
 \item{wf1}{is the column name where the LCZ value of the first workflow are stored}
@@ -21,10 +22,12 @@ an object to feed plotSankeyLCZ
 Prepares the data to produce a sankey graph between two LCZ workflows
 }
 \examples{
-dirList<-list.dirs(paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Blaru", "Goussainville"))
+dirPath<-paste0(
+system.file("extdata", package = "lczexplore"),"/multipleWfs")
+allLocConcatenated<-loadMultipleLocsSfs(
+  dirPath = dirPath, inLocations = c("Blaru", "Arville"))
+allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primary", 4),
+workflowNames = c("osm","bdt","iau","wudapt"))
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
  , wf1 = "wudapt", wf2 = "osm")
 }

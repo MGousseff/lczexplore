@@ -27,5 +27,5 @@ In a given directory (or a list of directories) the function looks for LCZ dataf
 dirList<-list.dirs(paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Blaru", "Goussainville"))
+dirList = dirList, locations = c("Blaru", "Arville"))
 }

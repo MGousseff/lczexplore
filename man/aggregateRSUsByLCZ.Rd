@@ -32,10 +32,10 @@ if present in the initial sf
 For an sf object containing LCZ types, aggregates touching geometries with same value of LCZ
 }
 \examples{
-dirList<-list.dirs(paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-allLocAllWfs<-concatAllLocationsAllWfs(
- dirList = dirList, locations = c("Blaru", "Goussainville"), 
+dirPath<-paste0(
+system.file("extdata", package = "lczexplore"),"/multipleWfs")
+allLocAllWfs<-loadConcatAllLocsAllWfs(
+ dirPath = dirPath, locations = c("Blaru", "Arville"),
 workflowNames = c("osm","bdt","iau","wudapt"),
  missingGeomsWf = "iau",
  refWf = NULL,
@@ -45,5 +45,5 @@ workflowNames = c("osm","bdt","iau","wudapt"),
 )
 ASUallLocAllWfs <- aggregateRSUsByLCZ(
 allLocAllWfs,
-LCZcolumn = "lcz_primary", wfColumn = "wf", location = "location", aggregateBufferSize = 0.5)
+LCZcolumn = "lcz_primary", wfColumn = "wf", locationColumn = "location", aggregateBufferSize = 0.5)
 }

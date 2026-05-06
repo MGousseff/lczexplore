@@ -17,7 +17,10 @@
 #' @param bBox bBox is the bounding box needed to crop the raster file.
 #' It can be produced bu the importLCZvect function. It can either be of class bBox or of class sfc
 #' @return an sf file containing the geom and LCZ levels from theraster tiff within the bBox bounding box
-#' @import sf dplyr forcats
+#' @import sf
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr all_of
+#' @importFrom forcats fct_recode
 #' @importFrom terra crop
 #' @importFrom terra rast
 #' @importFrom terra as.polygons
@@ -25,7 +28,7 @@
 #'
 #' @examples
 #' redonBbox<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY", output="bBox")
+#' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY", output="bBox")
 #'
 #' redonWudapt<-importLCZraster(system.file("extdata", package = "lczexplore"),
 #' fileName="redonWudapt.tif",bBox=redonBbox)
@@ -56,10 +59,10 @@ importLCZraster<-function(dirPath, bBox, fileName="EU_LCZ_map.tif", LCZband=1, L
   effectiveImport<-function(filePath,bBox,LCZband,confidenceBand,LCZcolumn, confidenceColumn){
 
      if(confidenceBand=="") {
-    lyrs=list(LCZband)
+    lyrs<-list(LCZband)
     sfFile<-do.call(rast, list(x=filePath, lyrs=lyrs))
   } else if (confidenceBand!="") {
-    lyrs=list(LCZband,confidenceBand)
+    lyrs<-list(LCZband,confidenceBand)
     sfFile<-do.call(rast, list(x=filePath, lyrs=lyrs))
   }
 

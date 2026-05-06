@@ -3,7 +3,7 @@
 \name{produceAnalysis}
 \alias{produceAnalysis}
 \title{Calls functions of the package to produce an analysis of two set of LCZ
-produced exclusively by GeoClimate}
+produced exclusively by GeoClimate. DO NOT USE}
 \usage{
 produceAnalysis(
   location = "Redon",
@@ -50,7 +50,7 @@ are exported either in csv (both LCZ by geoms by town) either in png
 }
 \description{
 Calls functions of the package to produce an analysis of two set of LCZ
-produced exclusively by GeoClimate
+produced exclusively by GeoClimate. DO NOT USE
 }
 \details{
 Typically one will compare the LCZ produced by GeoClimate using the OpenStreetMap

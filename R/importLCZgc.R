@@ -1,18 +1,22 @@
-#' Imports the rsu_lcz geojson file produced by GeoClimate. 
+#' Imports the <wf>_lcz fgb file produced by GeoClimate.
+#' Not recommended.
 #' Use the more generic importLCZvect function
 #'
 #' @param dirPath : the path where the rsu_lcz.geojson file is.
 #' @param output : if sfFile the rsu_lcz.geojson is imported as an sf file, if bBox, a bounding box of the area is returned
+#' @param file : name of the file to load. Default is rsu_lcz.fgb, as it is the output of GeoClimate when the
+#' the rsu indicators are specified (as opposed to grid indicators).
 #' @return : if output is set to sfFile, the function returns an sf objects containing all the colums
 #' of the rsu_lcz.geojson found in the dirPath directory.
 #' If output is bBox a bounding box (seef sf package) of the area contained in the rsu_lcz file in the dirPath directory is returned.
 #' This is useful to select geoms analysed in other sf objects.
-#' @import sf dplyr
+#' @import sf
 #' @export
 #'
 #' @examples 
-#' importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/bdtopo_2_2/Redon/"))
-importLCZgc<-function(dirPath,output="sfFile"){
+#' bdtTest<-importLCZgc(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon/"),
+#' file = "bdt_lcz.fgb")
+importLCZgc<-function(dirPath,output="sfFile", file = "rsu_lcz.fgb"){
   # output can be sfFile, bBox or Contour
 
   # dependancies should be dealt with @import
@@ -25,7 +29,7 @@ importLCZgc<-function(dirPath,output="sfFile"){
   #                        "9"="9","10"="10","101"="101","102"="102","103"="103","104"="104",
   #                        "105"="105","106"="106","107"="107","101"="11","102"="12","103"="13","104"="14",
   #                        "105"="15", "106"="16","107"="17")
-  fileName<-paste0(dirPath,"rsu_lcz.geojson")
+  fileName<-paste0(dirPath,file)
   sfFile<-st_read(dsn=fileName)
   #sfFile<-sfFile %>% mutate(LCZ_PRIMARY<-factor(subset(sfFile,select=LCZ_PRIMARY,drop=T),levels=typeLevels))
 

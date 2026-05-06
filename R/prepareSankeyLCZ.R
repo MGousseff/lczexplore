@@ -1,22 +1,26 @@
 
 #' Prepares the data to produce a sankey graph between two LCZ workflows 
-#' @param intersectedDf is an sf object or a data frame which contains lcz values for at least two workflows on the same geometries, 
+#' @param intersectedDf is an sf object or a data frame which contains lcz values for
+#' at least two workflows on the same geometries,
 #' and the area of the geometries
 #' @param wf1 is the column name where the LCZ value of the first workflow are stored
 #' @param wf2 wf1 is the column name where the LCZ value of the first workflow are stored
 #' @return an object to feed plotSankeyLCZ
-#' @import sf ggplot2 dplyr ggsankeyfier
+#' @importFrom dplyr case_when
+#' @import sf ggplot2 ggsankeyfier
 #' @export
-#'
 #' @examples
-#' dirList<-list.dirs(paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-#' allLocIntersected<-concatIntersectedLocations(
-#' dirList = dirList, locations = c("Blaru", "Goussainville"))
+#' dirPath<-paste0(
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs")
+#' allLocConcatenated<-loadMultipleLocsSfs(
+#'   dirPath = dirPath, inLocations = c("Blaru", "Arville"))
+#' allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primary", 4),
+#' workflowNames = c("osm","bdt","iau","wudapt"))
 #' testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
 #'  , wf1 = "wudapt", wf2 = "osm")
 prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
-  intersectedDf<-intersectedDf[,c(wf1, wf2, "area")]
+  if("data.table" %in% class(intersectedDf)){setDF(intersectedDf)}
+   intersectedDf<-intersectedDf[, c(wf1, wf2, "area")]
   internRecode<-function(LCZvect){
     case_when(
       nchar(as.character(LCZvect))==1 ~ paste0("00",LCZvect),
@@ -34,5 +38,6 @@ prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
     levels = c("001", "002","003", "004", "005", "006", "007", "008", "009", "010",
                "101", "102", "103", "104", "105", "106", "107", "Unclassified")
   )
+  sankeyfied<-sankeyfied[order(sankeyfied$node),]
   return(sankeyfied)
 }
