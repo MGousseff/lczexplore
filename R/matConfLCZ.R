@@ -171,15 +171,17 @@ return(matConfOut)
 
 # doesn't need to be documented. 
 completeDT <- function(DT, cols, defs = NULL){
+  # Silence R CMD check notes
+  .SD <- NULL
 
   make_vals <- function(col) {
     if(is.factor(col)) levels(col)
     else unique(col)
   }
 
-  mDT <- do.call(CJ, c(lapply(DT[, ..cols], make_vals), list(unique=TRUE)))
-  res <- DT[mDT, on=names(mDT)]
+  mDT <- do.call(CJ, c(lapply(DT[, .SD, .SDcols = cols], make_vals), list(unique=TRUE)))
+  res <- DT[mDT, on = names(mDT)]
   if (length(defs))
-    res[, names(defs) := Map(replace, .SD, lapply(.SD, is.na), defs), .SDcols=names(defs)]
+    res[, names(defs) := Map(replace, .SD, lapply(.SD, is.na), defs), .SDcols = names(defs)]
   res[]
-} 
+}
