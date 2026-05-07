@@ -47,6 +47,15 @@ expect_message(
           title = "LCZ regroupées à Redon"), "case 11:"
 )
 
+test<-levCol(sf = redonBDTgrouped, column = "grouped",
+              LCZlevels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+       colors = c("red", "black", "green", "grey"))
+
+palette.colors(n = 2,
+               palette = "Polychrome 36")
+showLCZ(redonBDTgrouped, column = "grouped", repr = "alter",
+        LCZlevels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+        colors = c("red", "black", "green", "grey","#5A5156","#E4E1E3" ))
 
 expect_message(
   showLCZ(redonBDTgrouped, column = "grouped", repr = "alter", levels = c(
