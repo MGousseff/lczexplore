@@ -6,11 +6,12 @@
 # Test functionnal import
 
 redonBbox<-importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
+  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="osm_lcz.fgb",column="LCZ_PRIMARY",
   , output="bBox")
 
 expect_warning(redonWudapt<-importLCZraster(
-  system.file("extdata", package = "lczexplore"), fileName="redonWudapt.tif", bBox=redonBbox,  LCZband=1, LCZcolumn="LCZ_PRIMARY"),
+  system.file("extdata", package = "lczexplore"), fileName="redonWudapt.tif",
+  bBox=redonBbox,  LCZband=1, LCZcolumn="LCZ_PRIMARY"),
               'attribute variables are assumed to be spatially constant throughout all geometries' )
 
 # library(terra)
@@ -40,12 +41,12 @@ outBbox<-sf::st_sfc(lowCorner,upCorner,crs=4326)
 #  showLCZ(redonWudapt2, column = "LCZ")
 
 # sidneyOSM<-importLCZvect(
-#   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.geojson",
+#   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
 #   confid="LCZ_UNIQUENESS_VALUE",
 #   geomID="ID_RSU")
 
 sidneyBbox<-importLCZvect(
-  system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.geojson",
+  system.file("extdata/lczfiles/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
   ,output = "bBox")
 
 # test default import
