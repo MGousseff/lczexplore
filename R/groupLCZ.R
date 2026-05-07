@@ -36,13 +36,12 @@ groupLCZ<-function(sf, column, outCol='grouped', ...)
   args<-list(...)
   indSep<-names(args)
   indCol<-grep(x=indSep,pattern="col")
- 
 
-     if(length(indCol)==0) {
-       args<-append(list(temp),args)
-       # temp<-do.call(fct_collapse,args)
-    temp<-
-       tryCatch(expr=do.call(fct_collapse,args),
+  if(length(indCol)==0) {
+   args<-append(list(temp),args)
+     # temp<-do.call(fct_collapse,args)
+  temp<-
+   tryCatch(expr=do.call(fct_collapse,args),
              warning=function(w){
                message("One of the specified levels to group doesn't exist in the data, if it is a mispelled level of the data,
                this level will be kept as ungrouped",w)

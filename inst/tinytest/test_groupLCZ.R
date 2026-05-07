@@ -8,6 +8,22 @@ redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",urban=c("1","2","3","4",
                           vegetation=c("101","102","103","104"),
                           impervious="105",pervious="106",water="107"
                            )
+redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",urban=c("1","2","3","4","5","6","7","8","9"),
+                          industry="10",
+                          vegetation=c("101","102","103","104"),
+                          impervious="105",pervious="106",water="107", unclassified = "Unclassified"
+)
+showLCZ(sf = redonBDTgrouped, column = "grouped", repr = "alter",
+        levels = c("urban", "impervious", "vegetation", "industry", "pervious", "water", "unclassified"),
+        colors = c("red", "black", "green", "grey", "burlywood",   "blue", "ghostwhite"))
+
+showLCZ(sf = redonBDT, column = "LCZ_PRIMARY", repr = "alter",
+        urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
+        industry = "10",
+        vegetation = c("101", "102", "103", "104"),
+        impervious = "105", pervious = "106", water = "107", Unclassified = "Unclassified",
+        colors = c("red", "black", "green", "grey", "burlywood", "blue", "ghostwhite"), tryGroup = TRUE)
+
 
 redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",urban=c("1","2","3","4","5","6","7","8","9"),
                            industry="10",

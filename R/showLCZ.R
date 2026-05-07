@@ -142,7 +142,7 @@ if (tryGroup == TRUE &&
       As tryGroup=TRUE, the function groupLCZ will try to create a \"grouped\" column with level names and levels specified in (...).
       If this doesn't work, compareLCZ function may fail.")
   sfNew <- groupLCZ(sf, column = column, ...)
-  sf[["grouped"]] <- sfNew[["grouped"]]
+  sf[[column]] <- sfNew[["grouped"]]
   # print(summary(sf1))
   levColShow <- levCol(sf, "grouped", ...)
   typeLevels <- levColShow$levelsColors
