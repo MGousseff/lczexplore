@@ -40,16 +40,25 @@ importLCZvectFromFile <- function(
     query <- paste0("select * from ", nom, " limit 0") # So this query wouldn't work with such fgb files
     sourceCol <- st_read(dsn = fileName, query = query, quiet = !verbose) %>% names
     colonnes<-checkColnameCase(colonnes, sourceCol)
-    sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
-    if (drop){sfFile<-sfFile[, colonnes] }
+      inCol<-colonnes%in%sourceCol
+      badCol<-colonnes[!inCol]
+      colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+              are you sure you meant ",
+              paste(badCol),"?")
+      if (prod(inCol)==0){ stop(colErr) }
+      sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
+      if (drop){sfFile<-sfFile[, colonnes] }
     
   } else { 
       if (extension == ".fgb") {
-        sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)[,]
-        sourceCol <- names(sfFile)
-        colonnes<-checkColnameCase(colonnes, sourceCol)
-        sfFile<-sfFile
-        if (drop){sfFile<-sfFile[, colonnes] }
+        sfFile<-sf::st_read(dsn=fileName,quiet=!verbose)[,]
+        sourceCol<-names(sfFile)
+        inCol<-colonnes%in%sourceCol
+        badCol<-colonnes[!inCol]
+        colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+              are you sure you meant ",
+                  paste(badCol),"?")
+        if (prod(inCol)==0){ stop(colErr) }
       }
   }
 
