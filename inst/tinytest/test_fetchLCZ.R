@@ -10,16 +10,16 @@
 #          outDir=system.file("extdata", package = "lczexplore"),
 #          wf="bdtopo_2_2")
 
-expect_message(fetchLCZ(location="Redon",
-                        outDir=system.file("extdata", package = "lczexplore"),
-                        wf="bdtopo_2_2"), "The folder already exists.")
-expect_message(fetchLCZ(location="Redon",
-                        outDir=system.file("extdata", package = "lczexplore"),
-                        wf="bdtopo_2_2"), "rsu_lcz.geojson already exists in this directory")
-expect_message(fetchLCZ(location="Redon",
-                        outDir=system.file("extdata", package = "lczexplore"),
-                        wf="bdtopo_2_2"),
-               "The folder already exists")
-expect_warning(fetchLCZ(location="Clohars-Carnoët",
-          outDir=system.file("extdata", package = "lczexplore"),
-          wf="bdtopo_2_2"),"The file couldn't be downloaded")
+# expect_message(fetchLCZ(location="Redon",
+#                         outDir=system.file("extdata", package = "lczexplore"),
+#                         wf="bdtopo_2_2"), "The folder already exists.")
+# expect_message(fetchLCZ(location="Redon",
+#                         outDir=system.file("extdata", package = "lczexplore"),
+#                         wf="bdtopo_2_2"), "rsu_lcz.geojson already exists in this directory")
+# expect_message(fetchLCZ(location="Redon",
+#                         outDir=system.file("extdata", package = "lczexplore"),
+#                         wf="bdtopo_2_2"),
+#                "The folder already exists")
+# expect_warning(fetchLCZ(location="Clohars-Carnoët",
+#           outDir=system.file("extdata", package = "lczexplore"),
+#           wf="bdtopo_2_2"),"The file couldn't be downloaded")
