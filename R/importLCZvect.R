@@ -130,7 +130,7 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 #' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' showLCZ(redonBDTex)
-importLCZvect <- function(dirPath, file = "rsu_lcz.fgb", output = "sfFile", column = "LCZ_PRIMARY",
+importLCZvect <- function(dirPath, file = "bdt_lcz.fgb", output = "sfFile", column = "LCZ_PRIMARY",
                     geomID = "", confid = "",
                     typeLevels =  .lczenv$typeLevelsDefault,
                     drop = T, verbose = FALSE, sfIn = NULL, naAsUnclassified = TRUE) {

@@ -56,7 +56,7 @@ expect_equal("ggplot"%in%class(compareRedonBDTOSM$matConfPlot),TRUE)
 
 
 redonBbox<-importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="rsu_lcz.geojson",column="LCZ_PRIMARY",
+  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="bdt_lcz.fgb",column="LCZ_PRIMARY",
   geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",output="bBox")
 
 redonWudapt<-importLCZraster(system.file("extdata", package = "lczexplore"),
@@ -108,7 +108,7 @@ expect_warning(compareRedonBDTOSMgrouped<-
              industry="10",
              vegetation=c("101","102","103","104"),
              impervious="105",pervious="106",water="107",
-             colors=c("red","black","green","grey","burlywood","blue"),tryGroup = TRUE),
+             colors=c("red","black","green","grey","burlywood","blue"),tryGroup = TRUE, plotNow = FALSE),
                "attribute variables are assumed to be spatially constant throughout all geometries")
 
 # showLCZ(redonBDTgrouped, column = "LCZ_PRIMARY", repr = "standard")
@@ -132,14 +132,14 @@ expect_message(compareLCZ(sf1=redonBDTgrouped2, column1="groupedLCZ", wf1="BDT",
                           sf2=redonWudaptGrouped, column2="otherName", wf2="osm", exwrite=FALSE, repr="alter", plot=T,
                           urban="urban",industry="industry",vegetation="vegetation",
                           impervious="impervious",pervious="pervious",water="water",
-                          colors=c("red","black","green","grey","burlywood","blue"), saveG=""),
+                          colors=c("red","black","green","grey","burlywood","blue"), saveG="", plotNow = FALSE),
                "they will be coerced to the specified reference \\(redonBDTgrouped2\\)"
 )
 
 expect_message(compareLCZ(sf1=redonBDTgrouped2, column1="groupedLCZ", wf1="BDT",
            sf2=redonOSMgrouped2, column2="otherName", wf2="osm", exwrite=FALSE, repr="alter", plot=T,
            urban="urban",industry="industry",vegetation="vegetation",impervious="impervious",pervious="pervious",water="water",
-           colors=c("red","black","green","grey","burlywood","blue"), saveG=""),
+           colors=c("red","black","green","grey","burlywood","blue"), saveG="", plotNow = FALSE),
                "they will be coerced to the specified reference \\(redonBDTgrouped2\\)"
 )
 
@@ -148,7 +148,7 @@ expect_warning(compareRedonBDTOSMgrouped<-
                             column1="grouped", geomID1 = "ID_RSU", confid1="LCZ_UNIQUENESS_VALUE", wf1="groupedBDT",
                             sf2=redonOSM, 
                             column2="LCZ_PRIMARY", geomID2 = "ID_RSU", confid2="LCZ_UNIQUENESS_VALUE", wf2="groupedOSM",
-                            repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plot=TRUE,
+                            repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plotNow = FALSE,
                             urban=c("1","2","3","4","5","6","7","8","9","chaussure"),
                             industry="10",
                             vegetation=c("101","102","103","104"),
@@ -161,7 +161,7 @@ expect_warning(compareRedonBDTOSMgrouped<-
                             column1="grouped", geomID1 = "ID_RSU", confid1="LCZ_UNIQUENESS_VALUE", wf1="groupedBDT",
                             sf2=redonOSM, 
                             column2="LCZ_PRIMARY", geomID2 = "ID_RSU", confid2="LCZ_UNIQUENESS_VALUE", wf2="groupedOSM",
-                            repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plot=TRUE,
+                            repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plotNow = FALSE,
                             urban=c("1","2","3","4","5","6","7","8","chaussure"),
                             industry="10",
                             vegetation=c("101","102","103","104"),

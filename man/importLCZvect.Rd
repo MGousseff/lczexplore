@@ -7,7 +7,7 @@ an sf object from the current R session}
 \usage{
 importLCZvect(
   dirPath,
-  file = "rsu_lcz.fgb",
+  file = "bdt_lcz.fgb",
   output = "sfFile",
   column = "LCZ_PRIMARY",
   geomID = "",
