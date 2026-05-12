@@ -26,7 +26,7 @@ jobs:
             libproj-dev
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck"))
+          install.packages(c("remotes", "rcmdcheck"), repos = "http://cran.us.r-project.org")
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - uses: r-lib/actions/setup-tinytex@v2
