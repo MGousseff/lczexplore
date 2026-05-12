@@ -10,6 +10,7 @@ redonBbox<-importLCZvect(dirPath=paste0(
   , output="bBox")
 
 expect_warning(redonWudapt<-importLCZraster(
+
   system.file("extdata", package = "lczexplore"),
   fileName="redonWudapt.tif", bBox=redonBbox,
   LCZband=1, LCZcolumn="LCZ_PRIMARY"),
@@ -43,10 +44,14 @@ outBbox<-sf::st_sfc(lowCorner,upCorner,crs=4326)
 
 # sidneyOSM<-importLCZvect(
 <<<<<<< HEAD
+<<<<<<< HEAD
 #   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
 =======
 #   dirPath = system.file("extdata/mczfiles/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
 >>>>>>> 747f811 (File path correction in test files)
+=======
+#   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
+>>>>>>> MGousseff/lczexplore/afterMultipleComparisons
 #   confid="LCZ_UNIQUENESS_VALUE",
 #   geomID="ID_RSU")
 
