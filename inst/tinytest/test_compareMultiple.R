@@ -6,8 +6,8 @@
 # library(ggplot2)
 # library(forcats)
 
-sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-                        workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Goussainville"  )
+sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+                        workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 
 intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 4),
                              workflowNames = c("osm", "bdt", "iau", "wudapt"))
@@ -20,13 +20,13 @@ testAreas<-workflowAgreeAreas(multicompare_test$sfIntLong)
 testAreas$disagreeAreas
 testAreas$agreeAreas
 
-osm<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+osm<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                           file = "osm_lcz.fgb")
-bdt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+bdt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                    file = "bdt_lcz.fgb")
-iau<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+iau<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                    file = "iau_lcz.fgb", column = "lcz_primary")
-wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                    file = "wudapt_lcz.fgb", column = "lcz_primary")
 
 # multicompare_test

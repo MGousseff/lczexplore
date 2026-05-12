@@ -20,9 +20,10 @@
 # 
 # redonBDT<-importLCZvect(dirPath=dirPathBDT,file="rsu_lcz.geojson",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
-redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU",column1 ="LCZ_PRIMARY",
+redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU", column1 ="LCZ_PRIMARY",
                          confid1 = "LCZ_UNIQUENESS_VALUE",
-                         sf2=redonOSM,wf2="osm",geomID2 = "ID_RSU",column2="LCZ_PRIMARY",confid2 ="LCZ_UNIQUENESS_VALUE",exwrite=FALSE,plot=FALSE)
+                         sf2=redonOSM,wf2="osm",geomID2 = "ID_RSU", column2="LCZ_PRIMARY",
+                         confid2 ="LCZ_UNIQUENESS_VALUE", exwrite=FALSE, plot=FALSE)
 
 
 # mainPath<-system.file("extdata", package = "lczexplore")

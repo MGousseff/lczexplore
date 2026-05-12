@@ -1,4 +1,8 @@
 # library(tinytest)
+
+# NO TESTS AS THIS IS DEPRECATED
+
+
 # system.file("extdata/", package = "lczexplore") %>% list.files()
 # system.file("extdata/bdtopo_2_2", package = "lczexplore") %>% list.files()
 # file.exists(system.file("extdata/lczfiles/Redon", package = "lczexplore"))

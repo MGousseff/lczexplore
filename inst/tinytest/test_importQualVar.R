@@ -49,6 +49,7 @@ utrfComparison<-
              sf2=utrfRedonOSM, column2="TYPO_MAJ", wf2 = " UTRF OSM", 
            location = " Redon",exwrite=FALSE,repr="alter", saveG="", plotNow = FALSE)
 
+
 # utrfComparison$matConfPlot %>% print
 # utrfComparison$data
 # utrfComparison$matConf

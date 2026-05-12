@@ -1,4 +1,4 @@
-#' Deprecated, was specific to a research project
+#' Deprecated DO NOT USE, kept in case some users might need it
 #' Fetches LCZ classification data, by default from the Geomanum cloud,
 #' for locations already uploaded there by the Geoclimate team
 #'

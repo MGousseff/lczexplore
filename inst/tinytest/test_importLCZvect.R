@@ -12,8 +12,8 @@ expect_silent(redonBDT2<-importLCZvect(dirPath=paste0(system.file("extdata", pac
                             file = "bdt_lcz.fgb",
                           column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T))
 
-expect_silent(redonOSM<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon")
-                           ,file="osm_lcz.fgb",
+expect_silent(importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon")
+                           ,file="bdt_lcz.fgb",
                            column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE"))
 
 
@@ -53,7 +53,11 @@ expect_error(
 
 expect_error(
   importLCZvect(dirPath=paste0(
+<<<<<<< HEAD
     system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"), file="bdt_lcz.geojson",
+=======
+    system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"), file="bdt_lcz.fgb",
+>>>>>>> 747f811 (File path correction in test files)
     column="LCZ_PRIMARY", geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALU"),
   "It seems that some of the columns you try to import do not exist in the source file")
 
@@ -99,7 +103,19 @@ expect_warning(importLCZvect(dirPath=paste0(system.file("extdata", package = "lc
 
 # test if the drop argument allows to keep or drop comun other than specified
 test<-importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="rsu_lcz.geojson",
+  system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="bdt_lcz.fgb",
               column="LCZ_PRIMARY", geomID="ID_RSU", confid="LCZ_UNIQUENESS_VALUE", drop=FALSE)
 expect_equal("LCZ_SECONDARY"%in%names(test),TRUE)
 
+<<<<<<< HEAD
+=======
+# # Special test with a flatgeobuffer file. NOW THE NORM
+# test<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),
+#                             column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T)
+# if (file.exists("test.fgb")) file.remove("test.fgb")
+# sf::write_sf(test, "test.fgb")
+# expect_silent(test<-importLCZvect(dirPath=getwd(),file="test.fgb",
+#                     column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T))
+# rm(test)
+# if (file.exists("test.fgb")) file.remove("test.fgb")
+>>>>>>> 747f811 (File path correction in test files)

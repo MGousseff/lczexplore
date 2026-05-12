@@ -94,7 +94,6 @@ In the data structure from above section, the function would be applied
 to the `main_directory` folder.
 
 ```{r, concatenateallLocations}
-library(lczexplore)
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","iau","wudapt"),
@@ -133,6 +132,6 @@ The `createIntersect` function allows to specify a minimal area threshold. Resul
 
 ```{r, Intersect}
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
-                                        refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001)
+                                        refCrs=NULL, workflowNames=c("osm", "bdt", "iau", "wudapt"), minZeroArea=0.0001)
 ```
 

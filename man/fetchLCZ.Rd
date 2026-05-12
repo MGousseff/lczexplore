@@ -2,7 +2,7 @@
 % Please edit documentation in R/fetchLCZ.R
 \name{fetchLCZ}
 \alias{fetchLCZ}
-\title{Deprecated, was specific to a research project
+\title{Deprecated DO NOT USE, kept in case some users might need it
 Fetches LCZ classification data, by default from the Geomanum cloud,
 for locations already uploaded there by the Geoclimate team}
 \usage{
@@ -33,7 +33,11 @@ This function is intended to be used by Paendora project members, so the default
 returns no R object. The data are uploaded from the GeoClimate cloud and locally unpacked in the outDir directory
 }
 \description{
+<<<<<<< HEAD
 Deprecated, was specific to a research project
+=======
+Deprecated DO NOT USE, kept in case some users might need it
+>>>>>>> 747f811 (File path correction in test files)
 Fetches LCZ classification data, by default from the Geomanum cloud,
 for locations already uploaded there by the Geoclimate team
 }
