@@ -1,12 +1,4 @@
-# library(tinytest)
-# system.file("extdata/", package = "lczexplore") %>% list.files()
-# system.file("extdata/bdtopo_2_2", package = "lczexplore") %>% list.files()
-# file.exists(system.file("extdata/lczfiles/Redon", package = "lczexplore"))
-#
-# system.file("extdata/osm/2022", package = "lczexplore") %>% list.files()
-#
-#
-# confidSensib
+library(tinytest)
 
 
 ############################################
@@ -16,18 +8,12 @@
 ## It is still possible but not tested here as compareLCZ now ooutputs the data needed to proceed 
 ## 
 ############################################
-# redonOSM<-importLCZvect(dirPath=dirPathOSM,file="rsu_lcz.geojson",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
-# 
-# redonBDT<-importLCZvect(dirPath=dirPathBDT,file="rsu_lcz.geojson",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
 redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU", column1 ="LCZ_PRIMARY",
                          confid1 = "LCZ_UNIQUENESS_VALUE",
                          sf2=redonOSM,wf2="osm",geomID2 = "ID_RSU", column2="LCZ_PRIMARY",
                          confid2 ="LCZ_UNIQUENESS_VALUE", exwrite=FALSE, plot=FALSE)
 
-
-# mainPath<-system.file("extdata", package = "lczexplore")
-# testSourceFact<-read.csv(paste0(mainPath,"/bdtopo_2_2_osm.csv"), sep=";",header=T,stringsAsFactors = T)
 
 
 expect_warning(

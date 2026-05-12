@@ -18,6 +18,12 @@ expect_silent(importLCZvect(dirPath=paste0(system.file("extdata", package = "lcz
 
 
 # Tests if the imported version of Redon test data matches the Redon test data in the package
+redonBDT2<-importLCZvect(dirPath=paste0(
+  system.file("extdata", package = "lczexplore"), "/lczfiles/Redon"), file = "bdt_lcz.fgb",
+  column="LCZ_PRIMARY", geomID="ID_RSU", confid="LCZ_UNIQUENESS_VALUE", naAsUnclassified = FALSE)
+
+#showLCZ(redonBDT)
+#showLCZ(redonBDT2)
 
 st_crs(redonBDT2)$wkt<-gsub("é","e",st_crs(redonBDT2)$wkt)
 st_crs(redonBDT)==st_crs(redonBDT2)
@@ -53,11 +59,7 @@ expect_error(
 
 expect_error(
   importLCZvect(dirPath=paste0(
-<<<<<<< HEAD
-    system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"), file="bdt_lcz.geojson",
-=======
     system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"), file="bdt_lcz.fgb",
->>>>>>> 747f811 (File path correction in test files)
     column="LCZ_PRIMARY", geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALU"),
   "It seems that some of the columns you try to import do not exist in the source file")
 
@@ -107,15 +109,3 @@ test<-importLCZvect(dirPath=paste0(
               column="LCZ_PRIMARY", geomID="ID_RSU", confid="LCZ_UNIQUENESS_VALUE", drop=FALSE)
 expect_equal("LCZ_SECONDARY"%in%names(test),TRUE)
 
-<<<<<<< HEAD
-=======
-# # Special test with a flatgeobuffer file. NOW THE NORM
-# test<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),
-#                             column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T)
-# if (file.exists("test.fgb")) file.remove("test.fgb")
-# sf::write_sf(test, "test.fgb")
-# expect_silent(test<-importLCZvect(dirPath=getwd(),file="test.fgb",
-#                     column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T))
-# rm(test)
-# if (file.exists("test.fgb")) file.remove("test.fgb")
->>>>>>> 747f811 (File path correction in test files)
