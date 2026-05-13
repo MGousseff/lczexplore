@@ -24,6 +24,7 @@ jobs:
             libgdal-dev \
             libgeos-dev \
             libproj-dev \
+            libuv1-dev \
             pandoc
       - name: Install dependencies
         run: |
