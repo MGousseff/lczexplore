@@ -23,7 +23,8 @@ jobs:
             libudunits2-dev \
             libgdal-dev \
             libgeos-dev \
-            libproj-dev
+            libproj-dev \
+            pandoc
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck", "rmarkdown"), repos = "http://cran.us.r-project.org")
