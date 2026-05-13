@@ -102,5 +102,6 @@ expect_warning(importLCZvect(dirPath=paste0(system.file("extdata", package = "lc
 test<-importLCZvect(dirPath=paste0(
   system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),file="bdt_lcz.fgb",
               column="LCZ_PRIMARY", geomID="ID_RSU", confid="LCZ_UNIQUENESS_VALUE", drop=FALSE)
+
 expect_equal("LCZ_SECONDARY"%in%names(test),TRUE)
 
