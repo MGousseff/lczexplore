@@ -1,9 +1,9 @@
 name: RCheck
 on:
   push:
-    branches: [ afterMultipleComparisons, masterTestMerge ]
+    branches: [ afterMultipleComparisons ]
   pull_request:
-    branches: [ afterMultipleComparisons, masterTestMerge ]
+    branches: [ afterMultipleComparisons ]
 jobs:
   build:
     runs-on: ubuntu-latest
