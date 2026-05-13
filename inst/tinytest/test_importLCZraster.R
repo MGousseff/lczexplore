@@ -43,17 +43,7 @@ outBbox<-sf::st_sfc(lowCorner,upCorner,crs=4326)
 #  showLCZ(redonWudapt2, column = "LCZ")
 
 # sidneyOSM<-importLCZvect(
-<<<<<<< HEAD
-<<<<<<< HEAD
-#   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
-=======
-#   dirPath = system.file("extdata/mczfiles/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
->>>>>>> 747f811 (File path correction in test files)
-=======
-#   dirPath = system.file("extdata/osm/2022/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",
->>>>>>> MGousseff/lczexplore/afterMultipleComparisons
-#   confid="LCZ_UNIQUENESS_VALUE",
-#   geomID="ID_RSU")
+
 
 sidneyBbox<-importLCZvect(
   system.file("extdata/lczfiles/Sidney", package = "lczexplore"), file="sidney_rsu_lcz.fgb",

@@ -1,4 +1,5 @@
-#' In a given directory (or a list of directories) the function looks for LCZ datafiles, intersects them and return a datasets with intersected geometries and LCZ values for each workflow
+#' In a given directory (or a list of directories) the function looks for LCZ datafiles,
+#' intersects them and return a datasets with intersected geometries and LCZ values for each workflow
 #' @param dirList the list of directories for which the different LCZ files will be intersected
 #' @param workflowNames sets the names of workflows and define the name of the files which will be loaded and intersected
 #' @param locations : for each diretory from dirList, a location name must be fed to the function

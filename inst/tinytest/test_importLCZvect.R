@@ -1,12 +1,7 @@
 #This tests the function importLCZvect
 # library(tinytest)
 #
-# library(sf)
-# test<-st_read(
-#   "/home/gousseff/Documents/2_CodesSources/R/lczexplore/lczexplore/inst/extdata/lczfiles/Redon/rsu_lcz.geojson")
-# colonnes<-c("LCZ_PRIMARY","ID_RSU","LCZ_UNIQUENESS_VALU")
-# tetest<-try(test[colonnes]) %>% class
-# "try-error"%in%tetest
+library(sf)
 
 expect_silent(redonBDT2<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/lczfiles/Redon"),
                             file = "bdt_lcz.fgb",

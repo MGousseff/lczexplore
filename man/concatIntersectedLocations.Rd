@@ -2,7 +2,8 @@
 % Please edit documentation in R/concatIntersectedLocations.R
 \name{concatIntersectedLocations}
 \alias{concatIntersectedLocations}
-\title{In a given directory (or a list of directories) the function looks for LCZ datafiles, intersects them and return a datasets with intersected geometries and LCZ values for each workflow}
+\title{In a given directory (or a list of directories) the function looks for LCZ datafiles,
+intersects them and return a datasets with intersected geometries and LCZ values for each workflow}
 \usage{
 concatIntersectedLocations(
   dirList,
@@ -21,7 +22,8 @@ concatIntersectedLocations(
 returns an sf object with all intersections
 }
 \description{
-In a given directory (or a list of directories) the function looks for LCZ datafiles, intersects them and return a datasets with intersected geometries and LCZ values for each workflow
+In a given directory (or a list of directories) the function looks for LCZ datafiles,
+intersects them and return a datasets with intersected geometries and LCZ values for each workflow
 }
 \examples{
 dirList<-list.dirs(paste0(
