@@ -1,10 +1,9 @@
-#' Take sf files with an lcz_primary column, and concatenates them in a single sf object, 
+#' Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 #' adding a column for location and workflow names 
 #' @param sfList the list of LCZ sf objects
 #' @param location the name of the location at which all LCZ are created
 #' @param refCrs a number telling which sf of the sfList will be the reference in termes of Coordinate Reference System
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
+#' @importFrom sf st_transform st_crs st_drop_geometry
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
@@ -14,30 +13,27 @@
 #' @export
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville"  )
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 #' zoneSf <- sf::read_sf(
-#' paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville/zone.fgb")
+#' paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville/zone.fgb")
 #' )
-#' GoussainvilleAllWfs <-  concatAlocationWorkflows(
-#' sfList = sfList,  location = "Goussainville") 
-concatAlocationWorkflows<-function(sfList, location="location", refCrs = 1){
-  if (is.null(location)){
-    location<- sfList[[1]]["location"][1]
+#' ArvilleAllWfs <-  concatAlocationWorkflows(
+#' sfList = sfList, location = "Arville")
+concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
+
+  if (is.na(location) | is.null(location)){
+    location<- tryCatch(
+    {st_drop_geometry(sfList[[1]][[1]][1,"location"]) %>% as.character},
+    error=function(...){
+      message("No location column or location column that contains not character")
+    })
   }
-  concatDf<-data.frame(
-    matrix(ncol=4, nrow=0)
-  )
-names(concatDf)<-c("lcz_primary", location, "wf", "geometry")
-refCrs<-st_crs(sfList[[refCrs]]$geometry)
-  for (i in 1:length(sfList)){
-    inSf<-st_transform(
-            sfList[[i]],
-            crs = refCrs)
-    concatDf<-rbind(concatDf,inSf)
-  }
-  concatSf<-st_as_sf(concatDf)
-  rm(concatDf) ; gc()
-  concatSf<-mutate(concatSf, area = st_area(concatSf), .before = geometry)
-return(concatSf)
+
+  refCrs<-st_crs(sfList[[refCrs]]$geometry)
+  sfList<-lapply(sfList, st_transform, crs = refCrs)
+  #lapply(sfList, function(x){print(st_crs(x))})
+  concatSf<-do.call(rbind, sfList)
+  concatSf$location<-location
+  return(concatSf)
 }

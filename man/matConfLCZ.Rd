@@ -60,6 +60,6 @@ Most of the time this function will not be called directly
 by the user but by the compareLCZ function
 }
 \examples{
-matConfRedonBDTOSM<-matConfLCZ(sf1=redonBDT,column1='LCZ_PRIMARY',
-sf2=redonOSM,column2='LCZ_PRIMARY',plot=TRUE)
+matConfRedonBDTOSM <- matConfLCZ(sf1=redonBDT, column1 = 'LCZ_PRIMARY',
+sf2 = redonOSM, column2 = 'LCZ_PRIMARY', plotNow = TRUE)
 }

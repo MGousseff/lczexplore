@@ -5,8 +5,7 @@
 #' @param column is the name of the column containing the LCZ to be grouped
 #' @param outCol is the name of the colum in which the grouped LCZ will be put
 #' @param ... the names of the groups followed by the levels the regrouped for instance urban=c("1","2","3","4","5","6","7","8","9")
-#' @import forcats dplyr rlang grDevices
-
+#' @import forcats
 #' @return a file containing the original geom and lcz, and a new grouped column
 #' @export
 #'
@@ -37,13 +36,12 @@ groupLCZ<-function(sf, column, outCol='grouped', ...)
   args<-list(...)
   indSep<-names(args)
   indCol<-grep(x=indSep,pattern="col")
- 
 
-     if(length(indCol)==0) {
-       args<-append(list(temp),args)
-       # temp<-do.call(fct_collapse,args)
-    temp<-
-       tryCatch(expr=do.call(fct_collapse,args),
+  if(length(indCol)==0) {
+   args<-append(list(temp),args)
+     # temp<-do.call(fct_collapse,args)
+  temp<-
+   tryCatch(expr=do.call(fct_collapse,args),
              warning=function(w){
                message("One of the specified levels to group doesn't exist in the data, if it is a mispelled level of the data,
                this level will be kept as ungrouped",w)

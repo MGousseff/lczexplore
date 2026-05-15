@@ -2,11 +2,12 @@
 % Please edit documentation in R/importLCZvect.R
 \name{importLCZvect}
 \alias{importLCZvect}
-\title{Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)}
+\title{Imports Local Climate Zone classifications from a vector source, a geographical file or
+an sf object from the current R session}
 \usage{
 importLCZvect(
   dirPath,
-  file = "rsu_lcz.geojson",
+  file = "bdt_lcz.fgb",
   output = "sfFile",
   column = "LCZ_PRIMARY",
   geomID = "",
@@ -53,11 +54,12 @@ returns an sf object containing at least the geoms and the LCZ values,
 and if specified, columns for the IDs of the geoms and the confidence value of the LCZ levels.
 }
 \description{
-Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)
+Imports Local Climate Zone classifications from a vector source, a geographical file or
+an sf object from the current R session
 }
 \examples{
 redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-"/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+"/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 showLCZ(redonBDTex)
 }

@@ -1,0 +1,137 @@
+---
+title: "lczexplore_multiple_workflows"
+author: "Matthieu Gousseff"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+resource_files:
+  - vignettes/Redon.png
+vignette: >
+    %\VignetteIndexEntry{lczexplore_multiple_workflows}
+    %\VignetteEngine{knitr::knitr}
+    %\VignetteEncoding{UTF-8}
+    \usepackage[UTF-8]{inputenc}
+---
+
+```{r, settings, include = FALSE}
+knitr::opts_chunk$set(
+        collapse = TRUE,
+        comment = "#>"
+)
+if (!require("png")) {
+  install.packages("png",repos = "http://cran.us.r-project.org")
+  library("png")
+}
+
+```
+
+For general use of `lczexplore` see `lczexplore_en vignette`.
+This vignette focuses on loading, concatenating, intersecting and comparing multiple (3 to 5) workflows on the same set of areas.
+WARNING : At present time, only vector workflows can be processed when comparing more than 2 workflows. User needs to convert raster LCZ maps to vector. One way to do it is to use `lczexplore::importLCZraster` function and re-export to FlatGeobuf (.fgb) using `sf::write_sf`.
+
+To avoid analysis of multiple locations and multiple workflows to become messy, the following data structure is strongly recommended, although it remains possible to load, concatenate and compare multiple files organized differently.
+
+# Multiple workflows and one or multiple study areas
+
+## Input data structure
+This section illustrates the case where several LCZ maps were produced for several places, and are not loaded as sf objects in R yet.
+To keep the workflow simple, the data needs to be organized in the following way.
+
+This data structure is proposed to help import and concatenate the workflows, but there maybe different ways to build
+the main sf data object.
+
+From a main directory, data are stored in subdirectories named after locations of each study area.
+In each subdirectory, the
+data are stored in files named `wfNamei_lcz.fgb` where wfNamei are the names of the workflows.
+
+Other spatial extensions may work, but only `.fgb` files were tested for import task.
+
+Example of file structure :
+--main_data_directory
+    |
+    |--location1
+        |--wf1_lcz.fgb
+        |--wf2_lcz.fgb
+    |--location2
+        |--wf1_lcz.fgb
+        |--wf2_lcz.fgb
+
+The main data directory must contain only the data subdirectories, as the loading functions will span the subdirectories searching for data.
+
+## Importing lcz maps for a single location and several workflows
+
+The function loadMultipleSfs allows to load the lcz maps files from a directory into a list of `sf` objects.
+In the data structure from above section, the function would be applied to one of the `location1` and `location2` directories.
+
+```{r, loadMultiple, eval = TRUE, echo = TRUE}
+library(lczexplore)
+blaruDirPath<-paste0(system.file("extdata/multipleWfs/Blaru", package="lczexplore"),"/")
+blaruSfList<-loadMultipleSfs(dirPath = blaruDirPath,
+                             workflowNames = c("osm","bdt","iau","wudapt"),
+                             fileExtension =".fgb" )
+```
+
+To concatenate the sf objects from the list returned by `loadMultipleSfs` into a single `sf` object, use `concatAlocationWorkflows`.
+
+The sf objects contained in the list you feed `concatAlocationWorkflows` may not all have the same CRS. By default,
+the CRS of the first sf object of the list is used to convert all the sf objects of the list, but on can specify
+which sf's CRS to use by feeding its position in the list to the argument `refCrs`.
+
+```{r, concatenateOneLocation, eval = TRUE, echo = TRUE}
+
+BlaruAllWfs<-concatAlocationWorkflows(blaruSfList, refCrs = 1)
+class(BlaruAllWfs)
+test<-subset(BlaruAllWfs, wf=="wudapt")
+showLCZ(test, column = "lcz_primary")
+```
+
+## Importing maps from several locations and several workflows
+### General case
+
+In case of several workflows and several locations, the function loadMultipleLocsSfs allow to load all the
+data in a list, and concatAllLocsWorkflows concatenate them into a single sf file.
+
+In the data structure from above section, the function would be applied
+to the `main_directory` folder.
+
+```{r, concatenateallLocations}
+twoLocsDir<-paste0(
+  system.file("extdata", package = "lczexplore"),"/multipleWfs")
+twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","iau","wudapt"),
+                               inLocation = c("Arville", "Blaru"))
+```
+The function `concatAllLocsWorkflows` concatenates the sf of this list into a single sf object. If all the `sf` objects of the list don't share the same coordinate reference system, you can specify which one is the reference and they will all be reprojected into this CRS (by default, the CRS of the first `sf` object of the list).
+
+The function `loadConcatAllLocsWorkflows` proceeds thes two steps at a time.
+It also offers some refinements (see next section).
+
+### An advanced fonction
+When, for a location, some workflows have missing geometries, i.e. don't map some area and leave them as holes,
+one can put a zone.fgb file in the directory, and the function `loadConcatAllLocsAllWfs` will allow to use it
+and create the missing geometries and assign them a given type.
+Feed the name of the workflow whose geometries are missing to the `missingGeomWf` argument, and
+the function will intersect it with the `zone.fgb` geometries.
+Sometimes, the missing geometries can be of one type, as a decision from the designers of the LCZ workflow.
+In this case, one can choose another workflow as a reference (through `refWf`) and the corresponding LCZ typ (through `refLCZ`). The remaining geometries which wouldn't intersect with the Chosen LCZ type of the chosen reference workflow will receive the value fed to `residualLCZvalue`.
+
+```{r load concat complete}
+twoLocsDir<-paste0(
+  system.file("extdata", package = "lczexplore"),"/multipleWfs")
+
+allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+                                       missingGeomsWf = "iau", refWf = NULL, refLCZ = NA,
+                                       residualLCZvalue = NA, column = "lcz_primary")
+```
+
+
+
+## Intersecting geometries from the different workflows
+In the case of only two workflows, the function `compareLCZ` loads the two `sf` objects, intersects their geometries,
+produce the array of correspondance between the LCZ types of the two workflows. With more than two workflows, one needs more control over the intersection steps. One of the reasons is that intersecting the spatial units of multiple workflows can lead to artificially small geometries.
+
+The `createIntersect` function allows to specify a minimal area threshold. Resulting geometries whose area are lesser than this threshold will be discarded.
+
+```{r, Intersect}
+twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
+                                        refCrs=NULL, workflowNames=c("osm", "bdt", "iau", "wudapt"), minZeroArea=0.0001)
+```
+

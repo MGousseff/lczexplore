@@ -6,8 +6,9 @@
 #' @param useStandCol is set to TRUE if one wants recognized standard levels to be associated with standard colors. Default is FALSE
 #' @param ... other parameters specified, expected a vector of levels and a vector of colors
 #' whose name must begin with colors. Other cases are handled to enhance usability.
-#' @import dplyr sf
-#' @importFrom grDevices palette.colors
+#' @import sf
+#' @importFrom magrittr "%>%"
+#' @importFrom randomcoloR randomColor
 #'
 #' @return output is a list containing levelsColors, a named vector, which names are the levels
 #' present in the data and which values are the associated colors,
@@ -83,7 +84,7 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
         and colors will be chosen from a standard palette."
 
     typeLevels <- standLevCol(levels = uniqueData,
-                              colors = palette.colors(n = length(uniqueData), palette = "Polychrome 36"),
+                              colors = randomcoloR::randomColor(count = length(uniqueData)),
                               useStandCol = useStandCol)
   }
 
@@ -103,11 +104,12 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
     else if (length(argCol) < length(uniqueData)) {
       case <- "3: No levels but a color vector which size does not cover the number of levels in the data, missing colors will be picked from a standard palette. "
       lengthDiff <- length(uniqueData) - length(argCol)
-      typeLevels <- c(argCol, palette.colors(n = lengthDiff, palette = "Polychrome 36"))
+      typeLevels <- c(argCol, randomcoloR::randomColor(count = lengthDiff))
       names(typeLevels) <- uniqueData
     }
     else if (length(argCol) > length(uniqueData)) {
-      case <- "3.1 : No levels but a color vector which size is greater than the number of levels in the data, unused colors were dropped. "
+      case <- "3.1 : No levels but a color vector which size is greater than the number of levels in the data,
+      unused colors were dropped. "
       typeLevels <- argCol[1:length(uniqueData)]
       names(typeLevels) <- uniqueData
     }
@@ -123,15 +125,16 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
     ########### Case where the levels cover the levels of unique Data
     if (prod(uniqueData %in% argLev[[1]]) == 1) {
 
-      case <- "7: No color vector but a level vector whose names cover the levels in the data (even if some levels may not be present in the data)"
-      typeLevels <- palette.colors(n = length(argLev[[1]]), palette = "Polychrome 36")
+      case <- "7: No color vector but a level vector whose names cover the levels in the data
+      (even if some levels may not be present in the data)"
+      typeLevels <- randomcoloR::randomColor(count = length(argLev[[1]]))
       names(typeLevels) <- argLev[[1]]
     } else if (prod(uniqueData %in% argLev[[1]]) == 0) {
       ########### Case where the levels do not cover the levels of unique Data
       case <- "8: No color vector but a level vector whose names don't cover the levels in the data.
          Missing levels will be deduced from the data and colors will be chosen from a standard palette."
       temp <- unique(c(uniqueData, argLev[[1]]))
-      typeLevels <- palette.colors(n = length(temp), palette = "Polychrome 36")
+      typeLevels <- randomcoloR::randomColor(count = length(temp))
       names(typeLevels) <- temp
     }
   }
@@ -153,7 +156,7 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
 
       indMiss <- !uniqueData %in% names(argLev[[1]])
       nMiss <- sum(indMiss)
-      miss <- palette.colors(n = nMiss, palette = "Polychrome 36")
+      miss <- randomcoloR::randomColor(count = nMiss)
       names(miss) <- uniqueData[indMiss]
       typeLevels <- c(argLev[[1]], miss)
 
@@ -201,7 +204,7 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
 
       ######## case when vectors not of the same size and more levels than colors
       complement <- length(argLev[[1]]) - length(argCol)
-      typeLevels <- c(argCol, palette.colors(n = complement, palette = "Polychrome 36"))
+      typeLevels <- c(argCol,randomcoloR::randomColor(count = complement))
       names(typeLevels) <- argLev[[1]]
       recall <- levCol(sf = sf, column = column, drop = drop, levels = typeLevels)
       typeLevels <- recall$levelsColors
@@ -250,8 +253,7 @@ levCol <- function(sf, column, drop = FALSE, useStandCol = FALSE, ...) {
       case,
       " Some of the specified colors are unknown to R and were replaced by colors picked from a Polychrome Palette")
     colFalse <- !areColors(typeLevels)
-    typeLevels[colFalse] <- palette.colors(
-      n = sum(as.numeric(colFalse)), palette = "Polychrome 36")
+    typeLevels[colFalse] <- randomcoloR::randomColor(count = sum(as.numeric(colFalse)))
   }
 
   #############################################################################################

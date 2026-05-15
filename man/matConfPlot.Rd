@@ -34,6 +34,7 @@ the second classification}
 }
 \value{
 returns a plot of a matrice of confusion
+importFrom forcats fct_recode
 }
 \description{
 Plots a tile graph of a confusion matrix between two sets of lcz on the same area

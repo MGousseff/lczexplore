@@ -2,8 +2,8 @@
 # library(tinytest)
 #
 # library(sf)
-library(tidyr)
-require(dplyr)
+# library(tidyr)
+# require(dplyr)
 
 #showLCZ(redonBDT)
 #showLCZ(redonOSM)
@@ -20,7 +20,7 @@ matConfLongAuto<-matConfRedonBDTBDT$matConf
 
 
 matConfLargeAuto<-matConfLongAuto %>%
-  pivot_wider(names_from=LCZ_PRIMARY, values_from=agreePercArea, values_fill=0)
+  tidyr::pivot_wider(names_from=LCZ_PRIMARY, values_from=agreePercArea, values_fill=0)
 
 realMatConfLargeAuto<-as.matrix(matConfLargeAuto[,!is.na(as.numeric(names(matConfLargeAuto)))])
 testAuto<-prod((round(diag(realMatConfLargeAuto), 5)==100)|(round(diag(realMatConfLargeAuto), 5) ==0))
@@ -55,7 +55,7 @@ matConfRedonOSMBDTGrouped<-matConfLCZ(sf1 = redonOSMgrouped, column1 = "grouped"
 
 
 matConfLargeHetero<-matConfRedonBDTOSM$matConf %>%
-  pivot_wider(names_from=LCZ_PRIMARY, values_from=agreePercArea, values_fill=0)
+  tidyr::pivot_wider(names_from=LCZ_PRIMARY, values_from=agreePercArea, values_fill=0)
 
 unorderedNames<-names(matConfLargeHetero)[!names(matConfLargeHetero)%in%c("LCZ_PRIMARY.1", "Unclassified")]
 orderedNames<-unorderedNames[order(as.numeric(unorderedNames))]

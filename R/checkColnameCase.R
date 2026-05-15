@@ -18,12 +18,12 @@ checkColnameCase<-function(userColNames, dataColNames){
               are you sure you meant ",
               paste(badCol), "?")
   if (prod(inCol) == 0) {
-    if(tolower(badCol)%in%dataColNames){
+    if(prod(tolower(badCol)%in%dataColNames)==0){
       message(paste0(badCol,
-                     " doesn't seem to be a column of your dataset, but ",
+                     " do-es-n't seem to be a column-s of your dataset, but ",
                      tolower(badCol),
-                     " is and was loaded instead. If this was not the desired column, please check your source data. "))
-      userColNames[userColNames == badCol]<-tolower(badCol)  
+                     " is/are and was/were loaded instead. If this was not the desired column, please check your source data. "))
+      userColNames[userColNames %in% badCol]<-tolower(badCol)
     } else {
       stop(colErr)
     }

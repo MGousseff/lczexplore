@@ -5,15 +5,17 @@
 #' @param aggregateBufferSize is the size of a buffer you can add to the geometries before agregation. 
 #' Useful when you suspect numeric precision to create false disjunction of geometries.
 #' @param locationColumn is the name of the column where the location is stored
-#' @import sf dplyr 
+#' @import sf
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr group_by summarise mutate ungroup all_of across
 #' @return an sf object containing the agregated geometries, their LCZ types and the wf and location columns 
 #' if present in the initial sf
 #' @export
 #' @examples
-#' dirList<-list.dirs(paste0(
-#' system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-#' allLocAllWfs<-concatAllLocationsAllWfs(
-#'  dirList = dirList, locations = c("Blaru", "Goussainville"), 
+#' dirPath<-paste0(
+#' system.file("extdata", package = "lczexplore"),"/multipleWfs")
+#' allLocAllWfs<-loadConcatAllLocsAllWfs(
+#'  dirPath = dirPath, locations = c("Blaru", "Arville"),
 #' workflowNames = c("osm","bdt","iau","wudapt"),
 #'  missingGeomsWf = "iau",
 #'  refWf = NULL,
@@ -23,7 +25,7 @@
 #')
 #' ASUallLocAllWfs <- aggregateRSUsByLCZ(
 #' allLocAllWfs,
-#' LCZcolumn = "lcz_primary", wfColumn = "wf", location = "location", aggregateBufferSize = 0.5)
+#' LCZcolumn = "lcz_primary", wfColumn = "wf", locationColumn = "location", aggregateBufferSize = 0.5)
 aggregateRSUsByLCZ<-function(sf, aggregateBufferSize = 0, LCZcolumn, wfColumn, locationColumn="location"){
   groupCols<-as.list(environment())[c("wfColumn", "locationColumn", "LCZcolumn")]
   presentColArgs<-!c(missing(wfColumn), missing(locationColumn), missing(LCZcolumn))

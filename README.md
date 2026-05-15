@@ -39,12 +39,12 @@ If you are kind enough to cite this package, please check in the /inst directory
 # Installation
 This package can be installed from github using the install_github function of the devtools package. 
 ```R
-library(devtools)
-devtools::install_github("orbisgis/lczexplore")
+# library(devtools)
+# devtools::install_github("orbisgis/lczexplore")
 ```
 It can also be installed from the tarball file. 
 ```R
-install.packages("/path/lczexplore_0.0.1.0000.tar.gz ",repos=NULL)
+# install.packages("/path/lczexplore_0.0.1.0000.tar.gz ",repos=NULL)
 
 ```
 where path is the folder where you download the tarball sources. 

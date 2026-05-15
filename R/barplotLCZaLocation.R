@@ -2,7 +2,7 @@
 #' of LCZ regarding of their source (workflow)
 #' NOTE: to represent the map of LCZ for a given fil, use `showLCZ` function instead
 #' @param dirPath is the path where the datasets are stored
-#' @param location is the name of the locations for the plot is produced
+#' @param inLocation is the name of the locations for the plot is produced
 #' @param refWf is a reference workflow name, passed to the function addMissingRSUs when needed
 #' @param refLCZ is a reference LCZtype, passed to the function addMissingRSUs when needed
 #' @param residualLCZvalue a LCZ default type, passed to the function addMissingRSUs when needed
@@ -12,18 +12,20 @@
 #' @param plotSave If TRUE, the plot will be saved in the directory pointed by dirPath 
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom caret dummyVars
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer units utils grDevices rlang
+#' @importFrom dplyr mutate group_by summarise
+#' @importFrom tidyr  replace_na
+#' @import sf forcats units RColorBrewer units utils grDevices
 #' @return Cramer's V between pairs of levels, in a matrix (cramerMatrix) or long form (cramerLong), 
 #' and a dataframe with the nbOutAssociation most significant association
 #' @export
 #' @examples
 #' barplotLCZaLocation(
-#' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
+#' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 #' refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
-#' location = "Goussainville", plotNow = TRUE)
-barplotLCZaLocation<-function(dirPath, location, workflowNames = c("osm", "bdt", "iau", "wudapt"),
+#' inLocation = "Arville", plotSave = "/tmp", plotNow = TRUE)
+barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "iau", "wudapt"),
                               refWf = NULL, refLCZ = NA, residualLCZvalue=NA,
-                              plotNow = FALSE, plotSave = TRUE){
+                              plotNow = FALSE, plotSave = "\tmp"){
   colorMap<-rev(c("#8b0101","#cc0200","#fc0001","#be4c03","#ff6602","#ff9856",
                   "#fbed08","#bcbcba","#ffcca7","#57555a","#006700","#05aa05",
                   "#648423","#bbdb7a","#010101","#fdf6ae","#6d67fd", "ghostwhite"))
@@ -38,7 +40,7 @@ barplotLCZaLocation<-function(dirPath, location, workflowNames = c("osm", "bdt",
                     "LCZ G: Water", "Unclassified"))
 
   sfList<-loadMultipleSfs(dirPath = dirPath,
-                         workflowNames = workflowNames , location = location )
+                          workflowNames = workflowNames , inLocation = inLocation )
   if(substr(dirPath, nchar(dirPath), nchar(dirPath))!="/"){dirPath<-paste0(dirPath, "/")}
   zoneSfPath<-paste0(dirPath,"zone.fgb")
   zoneSf<-read_sf(zoneSfPath)
@@ -46,19 +48,30 @@ barplotLCZaLocation<-function(dirPath, location, workflowNames = c("osm", "bdt",
                                     refLCZ = refLCZ,
                          residualLCZvalue = residualLCZvalue, column = "lcz_primary")
   concatSf<-concatAlocationWorkflows(sfList = sfList,
-                                     location = location, refCrs = 1)
-  surfaces<-concatSf %>%
-    mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
-    mutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
-    mutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
-    dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(location))
+                                     location = inLocation, refCrs = 1)
 
-  location<-unique(surfaces$location)
+  if (!("area"%in%names(concatSf))){
+    concatSf$area<-st_area(concatSf)
+  }
+
+  surfaces<-concatSf %>%
+    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
+    dplyr::mutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
+    dplyr::mutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
+    dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))
+
+  inLocation<-unique(surfaces$location)
+
+  #utils::globalVariables(c("fill")) # Trick to avoid R CMD check to raise a note a bout no binding for glob var fill
+
   outPlot<-ggplot(surfaces) +
-    geom_col(aes(fill=lcz_primary, y=area, x=wf, color = after_scale(fill))) +
+    geom_col(aes(fill=.data$lcz_primary, y=.data$area, x=.data$wf, color = after_scale(fill))) +
     # scale_fill_viridis(discrete = T) +
-    scale_fill_manual(values=colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
-    ggtitle(paste0("LCZ repartition by workflow for ", location))
+    scale_fill_manual(
+      values=colorMap,
+      breaks = names(colorMap),
+      labels = etiquettes, na.value = "ghostwhite") +
+    ggtitle(paste0("LCZ repartition by workflow for ", inLocation))
 
   
   if(is.logical(plotSave) && plotSave){
@@ -66,8 +79,9 @@ barplotLCZaLocation<-function(dirPath, location, workflowNames = c("osm", "bdt",
     ggsave(plotName, outPlot)}
   
   if (is.character(plotSave)){
-    if(substring( plotSave, first = nchar(plotSave), last = nchar(plotSave)) !="/"){ plotSave<-paste0(plotSave, "/") }
-    plotName<-paste0(plotSave, location,"_LCZbyWfBarplot.png")
+    if(substring( plotSave, first = nchar(plotSave), last = nchar(plotSave)) !="/"){
+      plotSave<-paste0(plotSave, "/") }
+    plotName<-paste0(plotSave, inLocation, "_LCZbyWfBarplot.png")
     ggsave(plotName, outPlot)
   }
   if (plotNow){print(outPlot)}
