@@ -1,6 +1,7 @@
 #' Checks if a string or a vector of strings define colors in R
 #'
 #' @param x is the input string
+#' @importFrom grDevices col2rgb
 #' @return a vector of booleans indicting if the elements of x define a color in R (TRUE) or don't (FALSE)
 #' @export
 #'
@@ -13,6 +14,6 @@ areColors <- function(x) {
   x[numInd]<-"number not seen as color"
   sapply(x, function(X) {
     tryCatch(is.matrix(col2rgb(X)),
-             error = function(x) FALSE)
+             error = function(...) FALSE)
   })
 }

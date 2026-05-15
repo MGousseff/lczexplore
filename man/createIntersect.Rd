@@ -8,33 +8,43 @@ createIntersect(
   sfList,
   columns,
   refCrs = NULL,
-  sfWf = NULL,
+  workflowNames = NULL,
   minZeroArea = 1e-04
 )
 }
 \arguments{
 \item{sfList}{a list which contains the classifications to compare, as sf objects}
 
-\item{columns}{a vector which contains, for each sf of sfList, the name of the column of the classification to compare}
+\item{columns}{a vector which contains, for each sf of sfList,
+the name of the columns of the classification to compare}
 
-\item{refCrs}{a number which indicates which sf object from sfList will provide the CRS in which all the sf objects will be projected before comparison
+\item{refCrs}{a number which indicates which sf object from sfList will provide
+the CRS in which all the sf objects will be projected before comparison
 By defautl it is set to an empty string and no ID is loaded.}
 
-\item{sfWf}{a vector of strings which contains the names of the workflows used to produce the sf objects}
+\item{workflowNames}{a vector of strings which contains the names of the workflows used to produce the sf objects}
 
 \item{minZeroArea}{all geometries smaller than this value are discarded (avoids numeric precision problems)}
 }
 \value{
-an sf file with values of LCZ from all the input
+a single sf file with values of LCZ from all the input
 are assigned to geometries resulting from intersection of all input geometries
 }
 \description{
 Intersect multiple sf files in which Local Climate Zones are set for polygon geometries
 }
+\details{
+The input SfList can contain two levels, the first level being the locations,
+the second being the workflow. In this case, the output will still be a single sf object,
+concatenating the workflows and locations as columns
+}
 \examples{
-sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville")
-GoussainvilleIntersect <- createIntersect(
+sfList<-loadMultipleSfs(
+dirPath = paste0(
+system.file("extdata", package = "lczexplore"),
+"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+ArvilleIntersect <- createIntersect(
  sfList = sfList, columns = rep("lcz_primary", 4),  
- sfWf = c("osm","bdt","iau","wudapt"))
+ workflowNames = c("osm","bdt","iau","wudapt"))
 }

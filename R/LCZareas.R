@@ -3,8 +3,8 @@
 #' @param sf is the sf dataset containing the LCZ
 #' @param column allows to specify in which column are the LCZ
 #' @param LCZlevels is the vector of expected levels in column
-#' @import dplyr sf
-#'
+#' @import sf
+#' @importFrom dplyr mutate group_by_at summarize ungroup
 #' @return The percentage of the total area covered by each LCZ
 #' @export
 #'
@@ -14,13 +14,13 @@ LCZareas <- function(sf, column, LCZlevels) {
   # Creation of a colum with geometry area
 
   sf <- tryCatch({
-    mutate(sf, area = st_area(geometry)) %>% drop_units
+    dplyr::mutate(sf, area = st_area(geometry)) %>% drop_units
   },
-    error = function(e) {
+    error = function(...) {
       message("Some geometries don't seem valid, the function will try to make them valid, it may take a bit longer.")
       sf %>%
         st_make_valid %>%
-        mutate(area = st_area(geometry)) %>%
+        dplyr::mutate(area = st_area(geometry)) %>%
         drop_units
     }
 
@@ -30,8 +30,8 @@ LCZareas <- function(sf, column, LCZlevels) {
   # area by LCZ LCZ
   areaLCZ <- sf %>%
     st_drop_geometry %>%
-    group_by_at(.vars = column) %>%
-    summarize(area = sum(area, na.rm = T)) %>%
+    dplyr::group_by_at(.vars = column) %>%
+    dplyr::summarize(area = sum(area, na.rm = T)) %>%
     drop_units %>%
     ungroup()
   areaLCZ$area <- round(areaLCZ$area / sum(areaLCZ$area, na.rm = T) * 100, digits = 2)

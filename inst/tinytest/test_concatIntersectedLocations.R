@@ -1,5 +1,5 @@
 dirList<-list.dirs("/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/newDataTree")[-1]
-library(dplyr)
+# library(dplyr)
 # allLCZDirNames2022<-list.dirs("/home/gousseff/Documents/3_data/data_article_LCZ_diff_algos/GeoClimate/2022")
 # 
 # osmTownNames2022<-gsub(
@@ -35,7 +35,7 @@ library(dplyr)
 # sfList<-loadMultipleSfs(dirList[1])
 # 
 # intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 4),
-#                              sfWf = c("osm","bdt","iau","wudapt"))
+#                              workflowNames = c("osm","bdt","iau","wudapt"))
 # 
 # multicompare_test<-compareMultipleLCZ(allLocIntersected,
 #                                       LCZcolumns = c("osm","bdt","iau","wudapt"),

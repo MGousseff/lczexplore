@@ -30,11 +30,11 @@ with same level of LCZ which touch each other
 For a given LCZ sf object, plots the number of geometries and an average area indicator per level of LCZ
 }
 \examples{
-dirList<-list.dirs(paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
-allLocAllWfs<-concatAllLocationsAllWfs(
- dirList = dirList, 
-    locations = c("Blaru", "Goussainville"), 
+dirPath<-paste0(
+system.file("extdata", package = "lczexplore"),"/multipleWfs")
+allLocAllWfs<-loadConcatAllLocsAllWfs(
+ dirPath = dirPath,
+    locations = c("Blaru", "Arville"),
     workflowNames = c("osm","bdt","iau","wudapt"),
  missingGeomsWf = "iau",
  refWf = NULL,

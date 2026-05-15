@@ -21,7 +21,8 @@
 #' @param repr is standard when original LCZ values are expected, alter otherwise
 #' @param plot if TRUE the graph is plotted
 #' @param saveG if not an empty string, specifies where to save graphs
-#' @import dplyr ggplot2
+#' @import ggplot2
+#' @importFrom dplyr distinct
 #' @return returns an object called output, which contains the values of the thresholds
 #' for the confidence value and the agreement between classifications for the LCZ levels presents in the dataset
 #' @export

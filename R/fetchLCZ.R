@@ -1,4 +1,6 @@
-#' Fetches LCZ classification data, by default from the Geomanum cloud, for locations already uploaded there by the Geoclimate team
+#' Deprecated DO NOT USE, kept in case some users might need it
+#' Fetches LCZ classification data, by default from the Geomanum cloud,
+#' for locations already uploaded there by the Geoclimate team
 #'
 #' @param location is the name of the place for which you want to get the GeoClimate data
 #' @param outDir is the path to the directory in which fetchLCZ will unpack the data
@@ -8,8 +10,6 @@
 #' This function is intended to be used by Paendora project members, so the default is the Geomanum Foundation cloud.
 #' @param ... allows to pass arguments from the produce analysis function to the groupLCZ and compareLCZ functions
 #' @import utils methods
-
-
 #' @return returns no R object. The data are uploaded from the GeoClimate cloud and locally unpacked in the outDir directory
 #' @export
 #'

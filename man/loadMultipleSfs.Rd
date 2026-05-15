@@ -3,12 +3,16 @@
 \name{loadMultipleSfs}
 \alias{loadMultipleSfs}
 \title{In a given directory (or a list of directories) the function looks for LCZ datafiles
-and load them in a list}
+and load them in a list. In each directory, files must have names built as follow :
+\if{html}{\out{<wf>}}_lcz.\if{html}{\out{<fileExtension>}}, where wf are the values specified in workflowNames parameter and
+fileExtension is a fil extension known by sf drivers, like fgb, geojson...}
 \usage{
 loadMultipleSfs(
   dirPath,
   workflowNames = c("osm", "bdt", "iau", "wudapt"),
-  location
+  inLocation = NA,
+  fileExtension = ".fgb",
+  column = "lcz_primary"
 )
 }
 \arguments{
@@ -16,7 +20,11 @@ loadMultipleSfs(
 
 \item{workflowNames}{sets the names of workflows}
 
-\item{location}{is the name of the location at which all LCZ are created}
+\item{inLocation}{is the name of the location at which all LCZ are created}
+
+\item{fileExtension}{is the extensions of the files to load (.fgb is the recommended format)}
+
+\item{column}{is the name of the column containing the LCZ types, must be the same in all files.}
 }
 \value{
 returns graphics of comparison and an object called matConfOut which contains :
@@ -28,10 +36,12 @@ If saveG is not an empty string, graphics are saved under "saveG.png"
 }
 \description{
 In a given directory (or a list of directories) the function looks for LCZ datafiles
-and load them in a list
+and load them in a list. In each directory, files must have names built as follow :
+\if{html}{\out{<wf>}}_lcz.\if{html}{\out{<fileExtension>}}, where wf are the values specified in workflowNames parameter and
+fileExtension is a fil extension known by sf drivers, like fgb, geojson...
 }
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville"  )
+system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 }

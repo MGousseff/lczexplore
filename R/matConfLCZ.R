@@ -15,22 +15,27 @@
 #' @param drop if TRUE the empty LCZ types are dropped
 #' When comparing othe variable, like grouped LCZ, the grouped levels have to be specified.
 #' @param ... a set of unspecified arguments, for instance when the produceAnalysis function calls other functions
-#'
+#' @importFrom dplyr mutate
+#' @import sf units data.table
+#' @importFrom magrittr "%>%"
 #' @return returns an object called matConfOut which contains
 #' matConfLong, a confusion matrix in a longer form, which can be written in a file by the compareLCZ function
 #' and is used by the geom_tile function of the ggplot2 package.
 #' matConfPlot is a ggplot2 object showing the confusion matrix. If plot=TRUE, it is also directly plotted
 #' marginAreas contains the sums of each LCZ area
 #' percAgg is the general agreement between the two sets of LCZ, expressed as a percentage of the total area of the study zone
-#' @import sf ggplot2 dplyr cowplot forcats units tidyr RColorBrewer rlang data.table
-
 #' @export
 #'
 #' @examples
-#' matConfRedonBDTOSM<-matConfLCZ(sf1=redonBDT,column1='LCZ_PRIMARY',
-#' sf2=redonOSM,column2='LCZ_PRIMARY',plot=TRUE)
+#' matConfRedonBDTOSM <- matConfLCZ(sf1=redonBDT, column1 = 'LCZ_PRIMARY',
+#' sf2 = redonOSM, column2 = 'LCZ_PRIMARY', plotNow = TRUE)
 matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLevelsDefault,
-                       plotNow = FALSE, wf1 = "Reference", wf2 = "Alternative", sfInt = NULL, drop = FALSE, ...) {
+                       plotNow = FALSE, wf1 = "Reference", wf2 = "Alternative",
+                       sfInt = NULL, drop = FALSE, ...) {
+  # avoid notes about visible binding
+  .<-sumArea<-percArea<-marginLevels<-NULL
+
+
 if (is.null(sfInt)){
   # coerce the crs of sf2 to the crs of sf1
   allLevels<-unique(
@@ -104,7 +109,9 @@ if (is.null(sfInt)){
 col1<-eval(substitute(column1), envir = parent.frame())
 col2<-eval(substitute(column2), envir = parent.frame())
 
-areaLCZ1<-sfInt[,.(sumArea = sum(area, na.rm = TRUE)), keyby=col1, env = list(col1 = substitute(col1))][
+areaLCZ1<-sfInt[,
+  .(sumArea = sum(area, na.rm = TRUE)),
+  keyby=col1, env = list(col1 = substitute(col1))][
   , .(col1, percArea1 = 100*sumArea / sum(sumArea)), env = list(col1 = substitute(col1))]
 
   # marginal for second LCZ
@@ -164,15 +171,17 @@ return(matConfOut)
 
 # doesn't need to be documented. 
 completeDT <- function(DT, cols, defs = NULL){
+  # Silence R CMD check notes
+  .SD <- NULL
 
   make_vals <- function(col) {
     if(is.factor(col)) levels(col)
     else unique(col)
   }
 
-  mDT <- do.call(CJ, c(lapply(DT[, ..cols], make_vals), list(unique=TRUE)))
-  res <- DT[mDT, on=names(mDT)]
+  mDT <- do.call(CJ, c(lapply(DT[, .SD, .SDcols = cols], make_vals), list(unique=TRUE)))
+  res <- DT[mDT, on = names(mDT)]
   if (length(defs))
-    res[, names(defs) := Map(replace, .SD, lapply(.SD, is.na), defs), .SDcols=names(defs)]
+    res[, names(defs) := Map(replace, .SD, lapply(.SD, is.na), defs), .SDcols = names(defs)]
   res[]
-} 
+}

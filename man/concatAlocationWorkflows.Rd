@@ -2,10 +2,10 @@
 % Please edit documentation in R/concatAlocationWorkflows.R
 \name{concatAlocationWorkflows}
 \alias{concatAlocationWorkflows}
-\title{Take sf files with an lcz_primary column, and concatenates them in a single sf object,
+\title{Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 adding a column for location and workflow names}
 \usage{
-concatAlocationWorkflows(sfList, location = "location", refCrs = 1)
+concatAlocationWorkflows(sfList, location = NA, refCrs = 1)
 }
 \arguments{
 \item{sfList}{the list of LCZ sf objects}
@@ -23,16 +23,16 @@ pseudoK is a heuristic estimate of a Cohen's kappa coefficient of agreement betw
 If saveG is not an empty string, graphics are saved under "saveG.png"
 }
 \description{
-Take sf files with an lcz_primary column, and concatenates them in a single sf object,
+Take a list of sf files with lcz_primary and wf columns, and concatenates them in a single sf object,
 adding a column for location and workflow names
 }
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville"  )
+system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
 zoneSf <- sf::read_sf(
-paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville/zone.fgb")
+paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville/zone.fgb")
 )
-GoussainvilleAllWfs <-  concatAlocationWorkflows(
-sfList = sfList,  location = "Goussainville") 
+ArvilleAllWfs <-  concatAlocationWorkflows(
+sfList = sfList, location = "Arville")
 }

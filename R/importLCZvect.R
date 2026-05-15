@@ -13,8 +13,7 @@
 #' levels actually present in column
 #' @param drop : the default is TRUE, which means all the column are 
 #' dropped excepted those specified in previous parameters
-#' @import dplyr forcats rlang sf
-#' @importFrom terra crop
+#' @import   sf
 #' @importFrom tidyr drop_na
 #' @importFrom terra rast
 #' @return returns an sf object containing at least the geoms and the LCZ values, 
@@ -22,10 +21,10 @@
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvectFromFile(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 importLCZvectFromFile <- function(
-  dirPath, file = "rsu_lcz.geojson", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
+  dirPath, file = "bdt_lcz.fgb", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
   if (!file.exists(dirPath)) { stop(message = "The directory set in dirPath doesn't seem to exist") }
 
   fileName <- paste0(dirPath, "/", file)
@@ -41,16 +40,25 @@ importLCZvectFromFile <- function(
     query <- paste0("select * from ", nom, " limit 0") # So this query wouldn't work with such fgb files
     sourceCol <- st_read(dsn = fileName, query = query, quiet = !verbose) %>% names
     colonnes<-checkColnameCase(colonnes, sourceCol)
-    sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
-    if (drop){sfFile<-sfFile[, colonnes] }
+      inCol<-colonnes%in%sourceCol
+      badCol<-colonnes[!inCol]
+      colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+              are you sure you meant ",
+              paste(badCol),"?")
+      if (prod(inCol)==0){ stop(colErr) }
+      sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
+      if (drop){sfFile<-sfFile[, colonnes] }
     
   } else { 
       if (extension == ".fgb") {
-        sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)[,]
-        sourceCol <- names(sfFile)
-        colonnes<-checkColnameCase(colonnes, sourceCol)
-        sfFile<-sfFile
-        if (drop){sfFile<-sfFile[, colonnes] }
+        sfFile<-sf::st_read(dsn=fileName,quiet=!verbose)[,]
+        sourceCol<-names(sfFile)
+        inCol<-colonnes%in%sourceCol
+        badCol<-colonnes[!inCol]
+        colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+              are you sure you meant ",
+                  paste(badCol),"?")
+        if (prod(inCol)==0){ stop(colErr) }
       }
   }
 
@@ -58,8 +66,7 @@ importLCZvectFromFile <- function(
 }
 
 
-#' Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)
-#'
+#' Imports Local Climate Zone classifications from an existing sf object
 #' @param sfIn is the sf object containing the LCZ map
 #' @param column indicates the name of the column containing LCZ values. 
 #' LCZ values are expected to be of a standard LCZ format (1 to 17, or 1 to 10 and 101 to 107 or 1 to G),
@@ -68,16 +75,15 @@ importLCZvectFromFile <- function(
 #' If an empty string, no column is loaded.
 #' @param confid is the name of the column containing a confidence indicator to filter geoms,
 #' for instance the uniqueness of the LCZ level of each geom
-#' @import dplyr forcats rlang sf
-#' @importFrom terra crop
-#' @importFrom tidyr drop_na
-#' @importFrom terra rast
+#' @import  sf
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr all_of
 #' @return returns an sf object containing at least the geoms and the LCZ values, 
 #' and if specified, columns for the IDs of the geoms and the confidence value of the LCZ levels.
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' redonBDTex2<-importLCZvectFromSf(sfIn = redonBDTex , column="LCZ_PRIMARY",
 #'                                  geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
@@ -92,7 +98,8 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 }
 
 
-#' Imports Local Climate Zone classifications from a standard geographical file (tested : geojson, shp, more to come)
+#' Imports Local Climate Zone classifications from a vector source, a geographical file or
+#' an sf object from the current R session
 #'
 #' @param dirPath is the path of the directory of the file
 #' @param file is the name of the file from which the LCZ are imported
@@ -112,19 +119,18 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 #' levels actually present in column
 #' @param drop : the default is TRUE, which means all the column are 
 #' dropped excepted those specified in previous parameters
-#' @import dplyr forcats rlang sf
-#' @importFrom terra crop
-#' @importFrom tidyr drop_na
-#' @importFrom terra rast
+#' @import forcats  sf
+#' @importFrom dplyr mutate all_of
+#' @importFrom forcats fct_na_value_to_level
 #' @return returns an sf object containing at least the geoms and the LCZ values, 
 #' and if specified, columns for the IDs of the geoms and the confidence value of the LCZ levels.
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "/bdtopo_2_2/Redon"), file="rsu_lcz.geojson", column="LCZ_PRIMARY",
+#' "/lczfiles/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' showLCZ(redonBDTex)
-importLCZvect <- function(dirPath, file = "rsu_lcz.geojson", output = "sfFile", column = "LCZ_PRIMARY",
+importLCZvect <- function(dirPath, file = "bdt_lcz.fgb", output = "sfFile", column = "LCZ_PRIMARY",
                     geomID = "", confid = "",
                     typeLevels =  .lczenv$typeLevelsDefault,
                     drop = T, verbose = FALSE, sfIn = NULL, naAsUnclassified = TRUE) {
@@ -140,7 +146,7 @@ importLCZvect <- function(dirPath, file = "rsu_lcz.geojson", output = "sfFile", 
 
   # if typeLevels is empty
   if (length(typeLevels) == 1) {
-    typeLevels <- unique(subset(sfFile, select = all_of(column), drop = TRUE))
+    typeLevels <- unique(subset(sfFile, select = dplyr::all_of(column), drop = TRUE))
     names(typeLevels) <- typeLevels
   }
 
@@ -172,7 +178,7 @@ importLCZvect <- function(dirPath, file = "rsu_lcz.geojson", output = "sfFile", 
 
     sfFile <-
       sfFile %>%
-        mutate(!!column := 
+        dplyr::mutate(!!column :=
           factor(sfFile[[column]], levels = typeLevels))  #%>%
         # 
     if (naAsUnclassified){ sfFile[[column]]<- forcats::fct_na_value_to_level(sfFile[[column]], "Unclassified") }

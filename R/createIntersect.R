@@ -1,33 +1,58 @@
 #' Intersect multiple sf files in which Local Climate Zones are set for polygon geometries 
 #' @param sfList a list which contains the classifications to compare, as sf objects
-#' @param columns a vector which contains, for each sf of sfList, the name of the column of the classification to compare
-#' @param refCrs a number which indicates which sf object from sfList will provide the CRS in which all the sf objects will be projected before comparison
+#' @param columns a vector which contains, for each sf of sfList,
+#' the name of the columns of the classification to compare
+#' @param refCrs a number which indicates which sf object from sfList will provide
+#' the CRS in which all the sf objects will be projected before comparison
 #' By defautl it is set to an empty string and no ID is loaded.
-#' @param sfWf a vector of strings which contains the names of the workflows used to produce the sf objects 
+#' @param workflowNames a vector of strings which contains the names of the workflows used to produce the sf objects
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
-#' @importFrom ggplot2 geom_sf guides ggtitle aes
-#' @import sf dplyr cowplot forcats units tidyr RColorBrewer utils grDevices rlang
-#' @return an sf file with values of LCZ from all the input 
+#' @details The input SfList can contain two levels, the first level being the locations,
+#' the second being the workflow. In this case, the output will still be a single sf object,
+#' concatenating the workflows and locations as columns
+#' @importFrom dplyr mutate
+#' @import sf utils
+#' @importFrom magrittr "%>%"
+#' @return a single sf file with values of LCZ from all the input
 #' are assigned to geometries resulting from intersection of all input geometries
 #' @export
 #' @examples
-#' sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Goussainville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), location = "Goussainville")
-#' GoussainvilleIntersect <- createIntersect(
+#' sfList<-loadMultipleSfs(
+#' dirPath = paste0(
+#' system.file("extdata", package = "lczexplore"),
+#' "/multipleWfs/Arville"),
+#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+#' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
-#'  sfWf = c("osm","bdt","iau","wudapt"))
-createIntersect<-function(sfList, columns, refCrs=NULL, sfWf=NULL, minZeroArea=0.0001){
-  sfInt<-sfList[[1]] %>% select(columns[1])
-  if (is.null(refCrs)){refCrs<-st_crs(sfInt)}
-  for (i in 2:length(sfList)){
-    sfProv<-sfList[[i]] %>% select(columns[i])
-    if (st_crs(sfProv) != refCrs ) {sfProv<-st_transform(sfProv, crs=refCrs)}
-    sfInt<-st_intersection(sfInt,sfProv)
+#'  workflowNames = c("osm","bdt","iau","wudapt"))
+createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001){
+
+  if (collapse::ldepth(sfList)>1){
+    intersectedList<-lapply(sfList, createIntersect,
+                            columns = columns, refCrs = refCrs, workflowNames = workflowNames, minZeroArea = minZeroArea )
+
+    for (i in seq_along(intersectedList)) {
+      intersectedList[[i]]$location <- names(sfList)[i]
+          }
+    sfInt<-do.call(rbind, intersectedList)
+    return(sfInt)
   }
-  if (!is.null(sfWf) & length(sfWf) == length(sfList)){
-    names(sfInt)[1:(ncol(sfInt)-1)]<-sfWf
-  } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ",1:length(sfList)) }
-  sfInt<-mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
+
+  # sfInt<-sfList[[1]] %>% select(columns[1])
+
+  if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])}
+
+  sfIntCRSed <- lapply(seq_along(sfList), function(i) {
+    sf_obj <- sfList[[i]][, columns[i], drop = FALSE]
+    if (st_crs(sf_obj) != refCrs) st_transform(sf_obj, crs = refCrs) else sf_obj
+  })
+
+  sfInt <- Reduce(st_intersection, sfIntCRSed)
+  if (!is.null(workflowNames) & length(workflowNames) == length(sfList)){
+    names(sfInt)[1:(ncol(sfInt)-1)]<-workflowNames
+  } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ", seq_along(sfList)) }
+
+  sfInt<-dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                                          .before=geometry)
   sfInt<-sfInt[sfInt$area>minZeroArea,]
   return(sfInt) 
@@ -52,7 +77,7 @@ createIntersect<-function(sfList, columns, refCrs=NULL, sfWf=NULL, minZeroArea=0
 # 
 # 
 # intersected<-createIntersec(sfList = sfList, columns = c(rep("LCZ_PRIMARY",4),"lcz_primary"), 
-#                             sfWf = c("BDT11","BDT22","OSM11","OSM22","WUDAPT"))
+#                             workflowNames = c("BDT11","BDT22","OSM11","OSM22","WUDAPT"))
 # 
 # 
 # test_list<-list(a=c(1,2),b="top",c=TRUE)
