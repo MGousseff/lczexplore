@@ -4,7 +4,12 @@
 \alias{plotSankeyfiedLCZ}
 \title{Plots a sankey graph between two LCZ workflows}
 \usage{
-plotSankeyfiedLCZ(sankeyfied, plotNow = TRUE, colorMap = NULL)
+plotSankeyfiedLCZ(
+  sankeyfied,
+  plotNow = TRUE,
+  colorMap = NULL,
+  v_space = "auto"
+)
 }
 \arguments{
 \item{sankeyfied}{is the data as produced by the prepareSankeyLCZ function}
@@ -12,6 +17,8 @@ plotSankeyfiedLCZ(sankeyfied, plotNow = TRUE, colorMap = NULL)
 \item{plotNow}{is set to TRUE by default, if set to FAULT the graph is not plotted.}
 
 \item{colorMap}{is a vector of colors whose names cover the valus of the nodes in sankeyfied}
+
+\item{v_space}{allows a separation between LCZ type bars}
 }
 \value{
 returns a sanky plot of LCZ workflows on the same areas
