@@ -20,6 +20,10 @@
 #'  , wf1 = "wudapt", wf2 = "osm")
 prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
   if("data.table" %in% class(intersectedDf)){setDF(intersectedDf)}
+  if("sf" %in% class(intersectedDf)){
+    intersectedDf<-st_drop_geometry(intersectedDf)
+    intersectedDf<-as.data.frame(intersectedDf)
+  }
    intersectedDf<-intersectedDf[, c(wf1, wf2, "area")]
   internRecode<-function(LCZvect){
     case_when(
@@ -29,6 +33,17 @@ prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
   }
   intersectedDf[[wf1]]<-internRecode(intersectedDf[[wf1]])
   intersectedDf[[wf2]]<-internRecode(intersectedDf[[wf2]])
+
+#   intersectedDf <- aggregate(
+#   area ~ get(wf1) + get(wf2),
+#   data = intersectedDf,
+#   FUN = sum
+# )
+# restore column names after aggregate renames them
+names(intersectedDf)[1:2] <- c(wf1, wf2)
+
+  print(names(intersectedDf))
+
   sankeyfied<-ggsankeyfier::pivot_stages_longer(
     data = st_drop_geometry(intersectedDf),
     stages_from = c(wf1, wf2),

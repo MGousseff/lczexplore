@@ -6,7 +6,7 @@
 in each subdirectory, and load them in a list
 In each directory, files must have names built as follow :
 \if{html}{\out{<wf>}}_lcz.\if{html}{\out{<fileExtension>}}, where wf are the values specified in workflowNames parameter and
-fileExtension is a fil extension known by sf drivers, like fgb, geojson...}
+fileExtension is a file extension known by sf drivers, like fgb, geojson...}
 \usage{
 loadMultipleLocsSfs(
   dirPath = paste0(system.file("extdata", package = "lczexplore"), "/multipleWfs/"),
@@ -40,7 +40,7 @@ In a given directory the function looks different locations as subdirectories an
 in each subdirectory, and load them in a list
 In each directory, files must have names built as follow :
 \if{html}{\out{<wf>}}_lcz.\if{html}{\out{<fileExtension>}}, where wf are the values specified in workflowNames parameter and
-fileExtension is a fil extension known by sf drivers, like fgb, geojson...
+fileExtension is a file extension known by sf drivers, like fgb, geojson...
 }
 \examples{
 sfList<-loadMultipleLocsSfs(dirPath = paste0(

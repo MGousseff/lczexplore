@@ -2,7 +2,8 @@
 % Please edit documentation in R/intersectAlocation.R
 \name{intersectAlocation}
 \alias{intersectAlocation}
-\title{Intersects several sf files for a given location identified by a given directory path and name}
+\title{DEPRECATED: use concatIntersectedLocations with the proper arguments
+Intersects several sf files for a given location identified by a given directory path and name}
 \usage{
 intersectAlocation(
   dirPath,
@@ -40,6 +41,7 @@ an sf file with values of LCZ from all the input
 assigned to geometries resulting from intersection of all input geometries
 }
 \description{
+DEPRECATED: use concatIntersectedLocations with the proper arguments
 Intersects several sf files for a given location identified by a given directory path and name
 }
 \details{

@@ -1,7 +1,8 @@
 #' Plots a sankey graph between two LCZ workflows 
 #' @param sankeyfied is the data as produced by the prepareSankeyLCZ function
 #' @param colorMap is a vector of colors whose names cover the valus of the nodes in sankeyfied
-#' @param plotNow is set to TRUE by default, if set to FAULT the graph is not plotted. 
+#' @param plotNow is set to TRUE by default, if set to FAULT the graph is not plotted.
+#' @param v_space allows a separation between LCZ type bars
 #' @return returns a sanky plot of LCZ workflows on the same areas
 #' @import sf ggplot2 ggsankeyfier
 #' @export
@@ -14,7 +15,7 @@
 #'  , wf1 = "wudapt", wf2 = "osm")
 #' testSankeyPlot<-plotSankeyfiedLCZ(
 #' sankeyfied = testSankey, plotNow=TRUE)
-plotSankeyfiedLCZ<-function(sankeyfied, plotNow=TRUE, colorMap = NULL){
+plotSankeyfiedLCZ<-function(sankeyfied, plotNow=TRUE, colorMap = NULL, v_space = "auto"){
   if(is.null(colorMap)) {
      colorMap<-.lczenv$colorMapDefault
     # colorMap<-lczexplore:::.lczenv$colorMapDefault
@@ -29,24 +30,23 @@ plotSankeyfiedLCZ<-function(sankeyfied, plotNow=TRUE, colorMap = NULL){
   colorMap<-colorMap[sort(names(colorMap))]
   print(colorMap)
 
-  # pos <- position_sankey(split_nodes = TRUE, align = "top",
-  #                        width = 0.2, v_space = 0.15, h_space = 0.25)
-  v_space <- 1
+
+  sharedPosition <- position_sankey(
+    v_space   = v_space,
+    h_space   = "auto",
+    split_nodes = FALSE,
+    align     = "top",
+    order     = "as_is"
+  )
 
   sankeyPlot<-ggplot(
     data = sankeyfied,
     aes(x = stage, y = area, group = node, connector = connector,
                          edge_id = edge_id, fill = node)) +
     ggsankeyfier::geom_sankeyedge(
-      position = position_sankey(
-        v_space = v_space,
-        h_space = "auto",
-        split_nodes = F,
-        align = "center",
-        order = "as_is"
-      )) +
+      position = sharedPosition) +
     ggsankeyfier::geom_sankeynode(
-       order = "as_is", split_nodes = FALSE) +
+      position = sharedPosition) +
     guides(
       # fill   = guide_legend(ncol = 1),
       #      alpha  = guide_legend(ncol = 1),

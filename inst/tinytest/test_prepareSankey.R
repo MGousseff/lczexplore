@@ -3,12 +3,16 @@ dirPath<-paste0(
 allLocSfList<-loadMultipleLocsSfs(
   dirPath = dirPath, inLocations = c("Blaru", "Arville"), workflowNames = c("osm","bdt","iau","wudapt"))
 
-test<-concatAllLocsWorkflows(allLocSfList)
+# test<-concatAllLocsWorkflows(allLocSfList)
 
 allLocIntersected<-createIntersect(allLocSfList, columns = rep("lcz_primary", 4),
                                    workflowNames = c("osm", "bdt", "iau", "wudapt"))
+
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
   , wf1 = "wudapt", wf2 = "osm")
+
+
+
 plotSankeyfiedLCZ(
   sankeyfied = testSankey, plotNow=TRUE)
 
@@ -34,3 +38,5 @@ allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primar
                                    workflowNames = c("osm", "bdt", "iau", "wudapt") )
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
   , wf1 = "wudapt", wf2 = "osm")
+plotSankeyfiedLCZ(
+  sankeyfied = testSankey, plotNow=TRUE)
