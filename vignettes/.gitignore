@@ -1,4 +1,15 @@
 *.html
-*.R
-
+.idea/
 /.quarto/
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+inst/doc
+Dires D'expert_osm.csv
+/comparisonGroupedR.png
+/byLCZUniquenessSensib.png
+/comparison.png
+/vignettes/lczexplore_multiple_workflows_files/figure-html/concatenateOneLocation-1.png
+/GeneralUniquenessSensib.png
