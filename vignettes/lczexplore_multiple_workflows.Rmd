@@ -126,7 +126,11 @@ allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames
 
 ## Intersecting geometries from the different workflows
 In the case of only two workflows, the function `compareLCZ` loads the two `sf` objects, intersects their geometries,
-produce the array of correspondance between the LCZ types of the two workflows. With more than two workflows, one needs more control over the intersection steps. One of the reasons is that intersecting the spatial units of multiple workflows can lead to artificially small geometries.
+produce the array of correspondance between the LCZ types of the two workflows.
+
+With more than two workflows, one needs more control over the intersection steps.
+First, in case of multiple locations, the intersection of the several workflows must occur within each location.
+Second, intersecting the spatial units of multiple workflows can lead to artificially small geometries.
 
 The `createIntersect` function allows to specify a minimal area threshold. Resulting geometries whose area are lesser than this threshold will be discarded.
 
@@ -134,4 +138,6 @@ The `createIntersect` function allows to specify a minimal area threshold. Resul
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
                                         refCrs=NULL, workflowNames=c("osm", "bdt", "iau", "wudapt"), minZeroArea=0.0001)
 ```
+
+
 
