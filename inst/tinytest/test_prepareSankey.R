@@ -6,7 +6,7 @@ allLocSfList<-loadMultipleLocsSfs(
 # test<-concatAllLocsWorkflows(allLocSfList)
 
 allLocIntersected<-createIntersect(allLocSfList, columns = rep("lcz_primary", 4),
-                                   workflowNames = c("osm", "bdt", "iau", "wudapt"))
+                                   workflowNames = c("osm", "bdt"= "osm", "wudapt"))
 
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
   , wf1 = "wudapt", wf2 = "osm")
@@ -23,7 +23,7 @@ sfList<-loadMultipleSfs(
   workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
 ArvilleIntersect <- createIntersect(
   sfList = sfList, columns = rep("lcz_primary", 4),
-  workflowNames = c("osm", "bdt", "iau", "wudapt"))
+  workflowNames = c("osm", "bdt"= "osm", "wudapt"))
 testSankey<-prepareSankeyLCZ(intersectedDf = ArvilleIntersect
   , wf1 = "wudapt", wf2 = "osm")
 plotSankeyfiedLCZ(
@@ -35,7 +35,7 @@ dirPath<-paste0(
 allLocConcatenated<-loadMultipleLocsSfs(
   dirPath = dirPath, inLocations = c("Blaru", "Arville"))
 allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primary", 4),
-                                   workflowNames = c("osm", "bdt", "iau", "wudapt") )
+                                   workflowNames = c("osm", "bdt"= "osm", "wudapt") )
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
   , wf1 = "wudapt", wf2 = "osm")
 plotSankeyfiedLCZ(

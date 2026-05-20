@@ -9,12 +9,13 @@ adding a column for location and workflow names}
 \usage{
 addMissingRSUs(
   sfList,
-  missingGeomsWf = "iau",
+  missingGeomsWf = "osm",
   zoneSf,
   refWf = "bdt",
   refLCZ = "107",
   residualLCZvalue = "105",
-  column = "lcz_primary"
+  column = "lcz_primary",
+  refCRS
 )
 }
 \arguments{
@@ -50,13 +51,13 @@ adding a column for location and workflow names
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
- workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+ workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
 zoneSf <- sf::read_sf(
   paste0(
    system.file("extdata", package = "lczexplore"),
    "/multipleWfs/Arville/zone.fgb")
 )
-SfList<-addMissingRSUs(
+sfList<-addMissingRSUs(
 sfList, zoneSf = zoneSf, refWf = NULL,
  refLCZ = "Unclassified", residualLCZvalue = "Unclassified")
 }

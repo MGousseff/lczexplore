@@ -71,7 +71,7 @@ un raster, par exemple).
 
 
 ```{r, import des fichiers, eval = TRUE, echo = TRUE}
-dirPath<-system.file("extdata/lczfiles/Redon",package="lczexplore")
+dirPath<-system.file("extdata/multipleWfs/Redon",package="lczexplore")
 redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY", verbose=FALSE)
 redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY", verbose = FALSE)
 ```
@@ -254,7 +254,7 @@ Cette uniqueness peut donc être vue comme une mesure de confiance.
 
 La fonction `importLCZvect` permet d'indiquer quelles colonnes du geojson contiennent l'identifiant de la géométrie (`geomID`) et l'indicateur de confiance associé (`confid`) nécessaires à l'analyse de sensibilité. 
 ```{r, analyse sensibilite, eval = TRUE, echo = TRUE }
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"/lczfiles/Redon")
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"multipleWfs/Redon")
 
 redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 

@@ -20,12 +20,12 @@
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+#' workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville", columns = "lcz_primary")
 loadMultipleSfs<-function(
-  dirPath, workflowNames = c("osm","bdt","iau","wudapt"),
+  dirPath, workflowNames = c("osm","bdt","wudapt"),
   inLocation=NA,
   fileExtension =".fgb",
-  column = "lcz_primary"){
+  columns = "lcz_primary"){
   typeLevels<-c("1"="1","2"="2","3"="3","4"="4","5"="5","6"="6","7"="7","8"="8",
                 "9"="9","10"="10",
                 "101"="101","102"="102","103"="103","104"="104", "105"="105","106"="106","107"="107",
@@ -37,20 +37,21 @@ loadMultipleSfs<-function(
     inLocation <- gsub(pattern = "(.*)(/)(.+)(/$)", replacement ="\\3", x = dirPath)
     print(inLocation)
   }
+  if (length(columns) == 1){columns <- rep(columns, length(workflowNames))}
   dirPath<-checkDirSlash(dirPath)
   print(dirPath)
   sfList<-list()
-  for (i in workflowNames){
-    inName<-paste0(dirPath, i, "_lcz", fileExtension)
+  for (i in seq_along(workflowNames)){
+    inName<-paste0(dirPath, workflowNames[i], "_lcz", fileExtension)
     inSf<-read_sf(inName)
-    inSf$lcz_primary<-inSf[[column]]
+    inSf$lcz_primary<-inSf[[columns[i]]]
     names(inSf)<-tolower(names(inSf))
 
     inSf<-select(inSf,lcz_primary) %>% mutate(
       lcz_primary=factor(lcz_primary, levels = typeLevels))
-    inSf<-dplyr::mutate(inSf, wf = i, location = inLocation, .before = geometry)
-    inSf[[column]]<-forcats::fct_recode(inSf[[column]], !!!typeLevels)
-    sfList[[i]]<-inSf
+    inSf<-dplyr::mutate(inSf, wf = workflowNames[i], location = inLocation, .before = geometry)
+    inSf[[columns[i]]]<-forcats::fct_recode(inSf[[columns[i]]], !!!typeLevels)
+    sfList[[workflowNames[i]]]<-inSf
   }
   return(sfList)
 }
@@ -58,4 +59,4 @@ loadMultipleSfs<-function(
 #
 # sfList1loc<-loadMultipleSfs(dirPath = paste0(
 # system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-# workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+# workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )

@@ -9,10 +9,11 @@ NOTE: to represent the map of LCZ for a given fil, use \code{showLCZ} function i
 barplotLCZaLocation(
   dirPath,
   inLocation,
-  workflowNames = c("osm", "bdt", "iau", "wudapt"),
+  workflowNames = c("osm", "bdt", "wudapt"),
   refWf = NULL,
   refLCZ = NA,
   residualLCZvalue = NA,
+  missingGeom = "osm",
   plotNow = FALSE,
   plotSave = "\\tmp"
 )

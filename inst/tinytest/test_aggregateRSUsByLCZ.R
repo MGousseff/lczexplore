@@ -3,7 +3,7 @@
  allLocAllWfs<-loadConcatAllLocsAllWfs(
   dirPath = dirPath, locations = c("Blaru", "Arville"),
  workflowNames = c("osm","bdt","iau","wudapt"),
-  missingGeomsWf = "iau",
+  missingGeomsWf= "osm",
   refWf = NULL,
   refLCZ = "Unclassified",
   residualLCZvalue = "Unclassified",

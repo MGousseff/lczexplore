@@ -15,7 +15,7 @@ collapse::ldepth(sfList)
 
 ArvilleIntersect <- createIntersect(
   sfList = sfList, columns = rep("lcz_primary", 4),
-  workflowNames = c("osm", "bdt", "iau", "wudapt"))
+  workflowNames = c("osm", "bdt"= "osm", "wudapt"))
 
 sfListTwoLocs<-loadMultipleLocsSfs(dirPath = paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
@@ -23,6 +23,6 @@ sfListTwoLocs<-loadMultipleLocsSfs(dirPath = paste0(
 
 collapse::ldepth(sfListTwoLocs)
 twoLocsIntersec <- createIntersect(sfList = sfListTwoLocs, columns = rep("lcz_primary", 4),
-                                   workflowNames = c("osm", "bdt", "iau", "wudapt"))
+                                   workflowNames = c("osm", "bdt"= "osm", "wudapt"))
 
 

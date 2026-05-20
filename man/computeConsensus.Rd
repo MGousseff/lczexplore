@@ -22,7 +22,7 @@ Compute an indicator of consensus among workflows for each LCZ type
 dirList <- list.dirs(paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Blaru", "Arville"))
+dirList = dirList, locations = c("Redon", "Arville"))
 consensus <- computeConsensus(inDf = allLocIntersected,
-wfNames = c("bdt","osm", "wudapt", "iau"))
+wfNames = c("bdt","osm", "wudapt"= "osm"))
 }

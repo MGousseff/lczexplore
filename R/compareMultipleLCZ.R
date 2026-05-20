@@ -18,13 +18,13 @@
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = 
 #' paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+#' workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville")
 #' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
-#'  workflowNames = c("osm","bdt","iau","wudapt"))
+#'  workflowNames = c("osm","bdt","wudapt"))
 #' ArvilleMultipleComparison<-compareMultipleLCZ(
 #'  sfInt = ArvilleIntersect,
-#'  LCZcolumns = c("osm","bdt","iau","wudapt"),
+#'  LCZcolumns = c("osm","bdt","wudapt"),
 #'  trimPerc = 0.5)
 compareMultipleLCZ<-function(sfInt, LCZcolumns, workflowNames=NULL, trimPerc=0.05){
   if (is.null(LCZcolumns)) { 

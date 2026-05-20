@@ -21,65 +21,62 @@
 #' dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),
 #' "/multipleWfs/Arville"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville")
+#' workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville")
 #' ArvilleIntersect <- createIntersect(
 #'  sfList = sfList, columns = rep("lcz_primary", 4),  
-#'  workflowNames = c("osm","bdt","iau","wudapt"))
+#'  workflowNames = c("osm","bdt","wudapt"))
+#' # Two Locations
+#' sfList2<-loadMultipleLocsSfs(
+#'  dirPath = paste0(
+#'      system.file("extdata", package = "lczexplore"),
+#'      "/multipleWfs"),
+#'  workflowNames = c("osm","bdt","wudapt"))
+#'
+#' TwoLocsIntersect <- createIntersect(
+#'  sfList = sfList2, columns = rep("lcz_primary", 3),
+#'  workflowNames = c("osm","bdt","wudapt"))
 createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001){
+ if(is.null(columns) | prod(!is.na(columns)==0)){
+  message("You didn't specify the name of the LCZ columns, an attempt with lcz_primary is tried")
+  columns<-rep("lcz_primary", length(workflowNames))
+}
+
+
+
+  if (length(columns) == 1){columns <- rep(columns,length(workflowNames))}
 
   if (collapse::ldepth(sfList)>1){
     intersectedList<-lapply(sfList, createIntersect,
-                            columns = columns, refCrs = refCrs, workflowNames = workflowNames, minZeroArea = minZeroArea )
-
+                            columns = columns, refCrs = refCrs, workflowNames = workflowNames,
+                            minZeroArea = minZeroArea )
     for (i in seq_along(intersectedList)) {
       intersectedList[[i]]$location <- names(sfList)[i]
           }
     sfInt<-do.call(rbind, intersectedList)
     return(sfInt)
-  }
+  } else {
+    if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])} else {refCrs}<-st_crs(sfList[[refCrs]])
+    if(!is.null(sfList[[1]][["location"]]))
+      {locationRef<-sfList[[1]][["location"]][1]} else {locationRef<-"No specified Location"}
 
-  # sfInt<-sfList[[1]] %>% select(columns[1])
+    sfListCRSed <- lapply(seq_along(sfList), function(i) {
+      sf_obj <- sfList[[i]][, columns[i], drop = FALSE]
+      if (st_crs(sf_obj) != refCrs){sf_obj<- st_transform(sf_obj, crs = refCrs)}
+      return(sf_obj)
+    })
 
-  if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])}
-
-  sfIntCRSed <- lapply(seq_along(sfList), function(i) {
-    sf_obj <- sfList[[i]][, columns[i], drop = FALSE]
-    if (st_crs(sf_obj) != refCrs) st_transform(sf_obj, crs = refCrs) else sf_obj
-  })
-
-  sfInt <- Reduce(st_intersection, sfIntCRSed)
-  if (!is.null(workflowNames) & length(workflowNames) == length(sfList)){
-    names(sfInt)[1:(ncol(sfInt)-1)]<-workflowNames
-  } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ", seq_along(sfList)) }
+    sfInt <- Reduce(st_intersection, sfListCRSed)
+    print(summary(sfInt))
+    if (!is.null(workflowNames) & length(workflowNames) == length(sfList)){
+      names(sfInt)[1:(ncol(sfInt)-1)]<-workflowNames
+    } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ", seq_along(sfList)) }
 
   sfInt<-dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
-                                         .before=geometry)
+                                           .before=geometry)
   sfInt<-sfInt[sfInt$area>minZeroArea,]
+  sfInt$location<-locationRef }
+
+
   return(sfInt) 
 }
 
-# sfBDT_11_78030<-importLCZvect(dirPath="/home/gousseff/Documents/0_DocBiblioTutosPublis/0_ArticlesScientEtThèses/ArticleComparaisonLCZGCWUDAPTEXPERTS/BDT/2011/bdtopo_2_78030",
-#                    file="rsu_lcz.fgb", column="LCZ_PRIMARY")
-# class(sfBDT_11_78030)
-# sfBDT_22_78030<-importLCZvect(dirPath="/home/gousseff/Documents/0_DocBiblioTutosPublis/0_ArticlesScientEtThèses/ArticleComparaisonLCZGCWUDAPTEXPERTS/BDT/2022/bdtopo_3_78030",
-#                               file="rsu_lcz.fgb", column="LCZ_PRIMARY")
-# sf_OSM_11_Auffargis<-importLCZvect(dirPath="/home/gousseff/Documents/0_DocBiblioTutosPublis/0_ArticlesScientEtThèses/ArticleComparaisonLCZGCWUDAPTEXPERTS/OSM/2011/osm_Auffargis/",
-#                                    file="rsu_lcz.fgb", column="LCZ_PRIMARY")
-# sf_OSM_22_Auffargis<-importLCZvect(dirPath="/home/gousseff/Documents/0_DocBiblioTutosPublis/0_ArticlesScientEtThèses/ArticleComparaisonLCZGCWUDAPTEXPERTS/OSM/2022/osm_Auffargis/",
-#                                    file="rsu_lcz.fgb", column="LCZ_PRIMARY")
-# sf_WUDAPT_78030<-importLCZvect("/home/gousseff/Documents/0_DocBiblioTutosPublis/0_ArticlesScientEtThèses/ArticleComparaisonLCZGCWUDAPTEXPERTS/WUDAPT", 
-#                                file ="wudapt_78030.geojson", column="lcz_primary")
-# 
-# sfList<-list(BDT11 = sfBDT_11_78030, BDT22 = sfBDT_22_78030, OSM11= sf_OSM_11_Auffargis, OSM22 = sf_OSM_22_Auffargis, 
-#              WUDAPT = sf_WUDAPT_78030)
-# showLCZ(sfList[[1]])
-# 
-# 
-# 
-# intersected<-createIntersec(sfList = sfList, columns = c(rep("LCZ_PRIMARY",4),"lcz_primary"), 
-#                             workflowNames = c("BDT11","BDT22","OSM11","OSM22","WUDAPT"))
-# 
-# 
-# test_list<-list(a=c(1,2),b="top",c=TRUE)
-# length(test_list)
-# for (i in test_list[2:3]) print(str(i))

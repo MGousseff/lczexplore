@@ -21,11 +21,11 @@
 #' @examples
 #' sfList<-loadMultipleLocsSfs(dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
-#' workflowNames = c("osm","bdt","iau","wudapt"), inLocation = c("Arville", "Blaru"))
+#' workflowNames = c("osm","bdt","wudapt"), inLocation = c("Arville", "Redon"))
 loadMultipleLocsSfs<-function(
   dirPath = paste0(
     system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
-  workflowNames = c("osm","bdt","iau","wudapt"), inLocations = c("Arville", "Blaru"),
+  workflowNames = c("osm","bdt","wudapt"), inLocations = c("Arville", "Redon"),
   fileExtension = ".fgb", columns = NULL){
 
   dirList<-list.dirs(dirPath, recursive = FALSE)
@@ -59,4 +59,4 @@ loadMultipleLocsSfs<-function(
 
 # sfListAll<-loadMultipleLocsSfs(dirPath = paste0(
 # system.file("extdata", package = "lczexplore"),"/multipleWfs/"),
-# workflowNames = c("osm","bdt","iau","wudapt"), inLocations = c(NA, "Blaru"))
+# workflowNames = c("osm","bdt","wudapt"), inLocations = c(NA, "Redon"))

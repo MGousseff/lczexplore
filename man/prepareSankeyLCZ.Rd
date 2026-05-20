@@ -25,9 +25,9 @@ Prepares the data to produce a sankey graph between two LCZ workflows
 dirPath<-paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs")
 allLocConcatenated<-loadMultipleLocsSfs(
-  dirPath = dirPath, inLocations = c("Blaru", "Arville"))
+  dirPath = dirPath, inLocations = c("Redon", "Arville"))
 allLocIntersected<-createIntersect(allLocConcatenated, columns = rep("lcz_primary", 4),
-workflowNames = c("osm","bdt","iau","wudapt"))
+workflowNames = c("osm","bdt","wudapt"))
 testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
  , wf1 = "wudapt", wf2 = "osm")
 }
