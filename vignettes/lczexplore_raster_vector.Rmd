@@ -53,7 +53,7 @@ Any bounding box of the bounding box class of the package `sf` can be used to cr
 
 ```{r, import, eval = TRUE, echo = TRUE}
 redonBbox<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-"/lczfiles/Redon"), file="osm_lcz.fgb",column="LCZ_PRIMARY",output="bBox")
+"multipleWfs/Redon"), file="osm_lcz.fgb",column="LCZ_PRIMARY",output="bBox")
 
 
 # Example with osmdata function getbb, not run, to avoid installation of the package

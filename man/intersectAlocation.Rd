@@ -7,7 +7,7 @@ Intersects several sf files for a given location identified by a given directory
 \usage{
 intersectAlocation(
   dirPath,
-  workflowNames = c("osm", "bdt", "iau", "wudapt"),
+  workflowNames = c("osm", "bdt", "wudapt"),
   location,
   addMissingRSUs = TRUE,
   missingGeomsWf = "iau",

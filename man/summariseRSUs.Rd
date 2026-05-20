@@ -26,9 +26,9 @@ For a given LCZ sf object, returns the number of geometries and their mean area 
 dirPath<-paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs")
 allLocAllWfs<-loadConcatAllLocsAllWfs(
- dirPath = dirPath, locations = c("Blaru", "Arville"),
-workflowNames = c("osm","bdt","iau","wudapt"),
- missingGeomsWf = "iau",
+ dirPath = dirPath, locations = c("Redon", "Arville"),
+workflowNames = c("osm","bdt","wudapt"),
+ missingGeomsWf= "osm",
  refWf = NULL,
  refLCZ = "Unclassified",
  residualLCZvalue = "Unclassified",

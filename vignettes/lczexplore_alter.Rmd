@@ -49,7 +49,7 @@ the expected levels and colors to use.
 First, let's load the example data of Redon City.
 ```{r, import LCZ files, echo = TRUE, eval = TRUE}
 library(lczexplore)
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"/lczfiles/Redon")
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"multipleWfs/Redon")
 redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY")
 redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY")
 #

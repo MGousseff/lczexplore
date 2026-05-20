@@ -8,7 +8,7 @@ intersects them and return a datasets with intersected geometries and LCZ values
 concatIntersectedLocations(
   dirList,
   locations,
-  workflowNames = c("osm", "bdt", "iau", "wudapt")
+  workflowNames = c("osm", "bdt", "wudapt")
 )
 }
 \arguments{
@@ -29,5 +29,5 @@ intersects them and return a datasets with intersected geometries and LCZ values
 dirList<-list.dirs(paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
 allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Blaru", "Arville"))
+dirList = dirList, locations = c("Redon", "Arville"))
 }

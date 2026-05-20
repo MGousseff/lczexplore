@@ -16,9 +16,9 @@
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs")
 #' allLocAllWfs<-loadConcatAllLocsAllWfs(
 #'  dirPath = dirPath,
-#'     locations = c("Blaru", "Arville"),
-#'     workflowNames = c("osm","bdt","iau","wudapt"),
-#'  missingGeomsWf = "iau",
+#'     locations = c("Redon", "Arville"),
+#'     workflowNames = c("osm","bdt","wudapt"),
+#'  missingGeomsWf= "osm",
 #'  refWf = NULL,
 #'  refLCZ = "Unclassified",
 #'  residualLCZvalue = "Unclassified",
@@ -26,7 +26,7 @@
 #')
 #' summarisedRSUs<-summariseRSUs(allLocAllWfs, aggregatingColumns = c("wf", "lcz_primary"))
 #' plotSummarisedRSUs(summarisedSfIn = summarisedRSUs)
-plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", "osm", "bdt"),
+plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt"= "osm", "osm", "bdt"),
                              plotNow = TRUE, graphPath = "") {
 
   colorMap <- .lczenv$colorMapDefault
@@ -36,8 +36,8 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", 
   names(initalAlphas) <- workflowNames
   allPlotNames <- NULL
   wf2 <- c(5, 1, 2, 0)
-  if (prod(workflowNames == c("wudapt", "iau", "osm", "bdt"))==0){
-    wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT", iau = "IAU")
+  if (prod(workflowNames == c("wudapt"= "osm", "osm", "bdt"))==0){
+    wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT", iau= "osm")
   } else {wfNamedVector<-workflowNames}
 
 
@@ -54,7 +54,7 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "iau", 
         scale_alpha_manual(values = wfAlphas) +
         scale_fill_manual(values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
         scale_color_manual(name = "LCZ type", values = colorMap, breaks = names(colorMap), labels = etiquettes, na.value = "ghostwhite") +
-        scale_shape_manual(values = wf2, name = "Workflows", labels = wfNamedVector, breaks = c("wudapt", "iau", "osm", "bdt")) +
+        scale_shape_manual(values = wf2, name = "Workflows", labels = wfNamedVector, breaks = c("wudapt"= "osm", "osm", "bdt")) +
         guides(fill = "none", colour = guide_legend(order = 1),
                shape = guide_legend(order = 2),
                size = guide_legend(order = 3)) +

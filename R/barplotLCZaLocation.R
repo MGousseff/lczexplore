@@ -23,8 +23,8 @@
 #' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 #' refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
 #' inLocation = "Arville", plotSave = "/tmp", plotNow = TRUE)
-barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "iau", "wudapt"),
-                              refWf = NULL, refLCZ = NA, residualLCZvalue=NA,
+barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "wudapt"),
+                              refWf = NULL, refLCZ = NA, residualLCZvalue=NA, missingGeom = "osm",
                               plotNow = FALSE, plotSave = "\tmp"){
   colorMap<-rev(c("#8b0101","#cc0200","#fc0001","#be4c03","#ff6602","#ff9856",
                   "#fbed08","#bcbcba","#ffcca7","#57555a","#006700","#05aa05",
@@ -44,7 +44,7 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
   if(substr(dirPath, nchar(dirPath), nchar(dirPath))!="/"){dirPath<-paste0(dirPath, "/")}
   zoneSfPath<-paste0(dirPath,"zone.fgb")
   zoneSf<-read_sf(zoneSfPath)
-  sfList<-addMissingRSUs(sfList, missingGeomsWf="iau", zoneSf = zoneSf, refWf = refWf, 
+  sfList<-addMissingRSUs(sfList, missingGeomsWf=missingGeom, zoneSf = zoneSf, refWf = refWf,
                                     refLCZ = refLCZ,
                          residualLCZvalue = residualLCZvalue, column = "lcz_primary")
   concatSf<-concatAlocationWorkflows(sfList = sfList,
@@ -55,7 +55,7 @@ barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt
   }
 
   surfaces<-concatSf %>%
-    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt", "iau"))) %>%
+    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt"= "wud"))) %>%
     dplyr::mutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
     dplyr::mutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
     dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))

@@ -19,7 +19,7 @@
 #' @export
 #' @examples
 #' # deprecated : use concatIntersectedLocations with the proper arguments
-intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","iau","wudapt"), location,
+intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","wudapt"), location,
                              addMissingRSUs = TRUE,
                              missingGeomsWf="iau", refWf = NULL, refLCZ = "Unclassified",
                              residualLCZvalue = "Unclassified",
@@ -28,7 +28,7 @@ intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","iau","wudap
   zoneSfPath<-paste0(dirPath, "zone.fgb")
   zoneSf<-read_sf(zoneSfPath)
 
-  sfList<-loadMultipleSfs(dirPath = dirPath, workflowNames = c("osm","bdt","iau","wudapt"), inLocation = location )
+  sfList<-loadMultipleSfs(dirPath = dirPath, workflowNames = c("osm","bdt","wudapt"), inLocation = location )
   sfList<-addMissingRSUs(sfList = sfList,
                          missingGeomsWf="iau", zoneSf =zoneSf, refWf = refWf, refLCZ = refLCZ,
                          residualLCZvalue = residualLCZvalue,

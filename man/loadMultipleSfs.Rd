@@ -9,7 +9,7 @@ fileExtension is a fil extension known by sf drivers, like fgb, geojson...}
 \usage{
 loadMultipleSfs(
   dirPath,
-  workflowNames = c("osm", "bdt", "iau", "wudapt"),
+  workflowNames = c("osm", "bdt", "wudapt"),
   inLocation = NA,
   fileExtension = ".fgb",
   column = "lcz_primary"
@@ -43,5 +43,5 @@ fileExtension is a fil extension known by sf drivers, like fgb, geojson...
 \examples{
 sfList<-loadMultipleSfs(dirPath = paste0(
 system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
 }

@@ -21,17 +21,17 @@
 #' @examples
 #' sfList<-loadMultipleSfs(dirPath = paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-#'  workflowNames = c("osm","bdt","iau","wudapt"), inLocation = "Arville"  )
+#'  workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
 #' zoneSf <- sf::read_sf(
 #'   paste0(
 #'    system.file("extdata", package = "lczexplore"),
 #'    "/multipleWfs/Arville/zone.fgb")
 #' )
-#' SfList<-addMissingRSUs(
+#' sfList<-addMissingRSUs(
 #' sfList, zoneSf = zoneSf, refWf = NULL,
 #'  refLCZ = "Unclassified", residualLCZvalue = "Unclassified")
-addMissingRSUs<-function(sfList, missingGeomsWf="iau", zoneSf, refWf = "bdt", refLCZ = "107", residualLCZvalue="105",
-                           column = "lcz_primary"){
+addMissingRSUs<-function(sfList, missingGeomsWf="osm", zoneSf, refWf = "bdt", refLCZ = "107", residualLCZvalue="105",
+                           column = "lcz_primary", refCRS){
   refCRS<-st_crs(sfList[[missingGeomsWf]])
   zoneSf<-st_transform(zoneSf,
                        crs=refCRS)
