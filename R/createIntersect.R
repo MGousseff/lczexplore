@@ -76,7 +76,6 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
   sfInt<-sfInt[sfInt$area>minZeroArea,]
   sfInt$location<-locationRef }
 
-
   return(sfInt) 
 }
 
