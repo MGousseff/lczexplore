@@ -22,12 +22,13 @@ concatIntersectedLocations<-function(dirList, locations, workflowNames = c("osm"
       workflowNames = c("osm","bdt","wudapt"),
       inLocation = locations[i], column = columns[i] )
   }
-
+  print(names(sfList[[1]][[1]]))
   concatIntersectedSf<-createIntersect(
-  sfList = sfList, columns = columns, refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001
+  sfList = sfList, columns = columns, refCrs=NULL, workflowNames=workflowNames,
+  minZeroArea=0.0001
   )
 
-  concatIntersectedSf$location<-factor(
-    concatIntersectedDf$location, levels = .lczenv$typeLevelsDefault)
+  # concatIntersectedSf$location<-factor(
+  #   concatIntersectedSf$location, levels = .lczenv$typeLevelsDefault)
   return(concatIntersectedSf)
 }
