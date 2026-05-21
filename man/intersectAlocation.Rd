@@ -10,7 +10,7 @@ intersectAlocation(
   workflowNames = c("osm", "bdt", "wudapt"),
   location,
   addMissingRSUs = TRUE,
-  missingGeomsWf = "iau",
+  missingGeomsWf = "osm",
   refWf = NULL,
   refLCZ = "Unclassified",
   residualLCZvalue = "Unclassified",

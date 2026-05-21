@@ -40,8 +40,10 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
   message("You didn't specify the name of the LCZ columns, an attempt with lcz_primary is tried")
   columns<-rep("lcz_primary", length(workflowNames))
 }
-
-
+  if(is.null(workflowNames) | prod(!is.na(workflowNames)==0)){
+    message("One or all workflow names are missing")
+    stop()
+  }
 
   if (length(columns) == 1){columns <- rep(columns,length(workflowNames))}
 
@@ -56,8 +58,10 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
     return(sfInt)
   } else {
     if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])} else {refCrs}<-st_crs(sfList[[refCrs]])
-    if(!is.null(sfList[[1]][["location"]]))
-      {locationRef<-sfList[[1]][["location"]][1]} else {locationRef<-"No specified Location"}
+    if(!is.null(sfList[[1]][["location"]])) {
+      locationRef<-sfList[[1]][["location"]][1]
+    } else {
+      locationRef<-"No specified Location"}
 
     sfListCRSed <- lapply(seq_along(sfList), function(i) {
       sf_obj <- sfList[[i]][, columns[i], drop = FALSE]
@@ -68,13 +72,14 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
     sfInt <- Reduce(st_intersection, sfListCRSed)
     print(summary(sfInt))
     if (!is.null(workflowNames) & length(workflowNames) == length(sfList)){
-      names(sfInt)[1:(ncol(sfInt)-1)]<-workflowNames
-    } else { names(sfInt)[1:(ncol(sfInt)-1)]<-paste0("LCZ", seq_along(sfList)) }
+      names(sfInt)[seq_along(workflowNames)]<-workflowNames
+    } else { names(sfInt)[seq_along(sfList)]<-paste0("LCZ", seq_along(sfList)) }
 
   sfInt<-dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                                            .before=geometry)
   sfInt<-sfInt[sfInt$area>minZeroArea,]
-  sfInt$location<-locationRef }
+  sfInt<-dplyr::mutate(sfInt,location=locationRef,.before=geometry)
+  }
 
   return(sfInt) 
 }
