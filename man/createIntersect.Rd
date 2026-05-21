@@ -20,7 +20,7 @@ the name of the columns of the classification to compare}
 
 \item{refCrs}{a number which indicates which sf object from sfList will provide
 the CRS in which all the sf objects will be projected before comparison
-By defautl it is set to an empty string and no ID is loaded.}
+By defautl the first sf object CRs is applied to all sf objects.}
 
 \item{workflowNames}{a vector of strings which contains the names of the workflows used to produce the sf objects}
 

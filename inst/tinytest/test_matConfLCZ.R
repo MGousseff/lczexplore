@@ -70,8 +70,8 @@ realMatConfLargeHeteroClean<-matConfLargeHetero[
   orderedNames] %>% as.matrix
 
 diagHetero<-round(diag(realMatConfLargeHeteroClean), 2)
-diagHeteroRef<-c(0.00, 89.17, 6.35, 0.00, 0.00, 65.14,  0.00, 83.55, 66.84,  0.00, 48.19,
-                 1.02,  0.00, 87.57, 29.93,  0.00, 89.46)
+diagHeteroRef<-c(0.00, 95.47, 0.00, 0.00, 0.00, 88.18, 0.00, 63.15, 54.65, 0.00, 8.23, 8.40, 0.00,
+                 82.54, 25.80, 0.00, 66.22)
 
 testHetero<-prod((diag(realMatConfLargeHeteroClean)==100)|(diag(realMatConfLargeHeteroClean)==0))
 

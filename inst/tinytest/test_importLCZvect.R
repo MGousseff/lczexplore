@@ -34,7 +34,7 @@ expect_error(importLCZvect(dirPath=paste0(
 ## Error if directory doesn't exist
 
 expect_error(importLCZvect(dirPath=paste0(
-  system.file("extdata", package = "lczexplore"), "/multipleWfs/Redon"), file="bdt_lcz.fgb",
+  system.file("extdata", package = "lczexplore"), "/multipleWfs/Clohars-Carnoët"), file="bdt_lcz.fgb",
   column="LCZ_PRIMARY", geomID="ID_RSU", confid="LCZ_UNIQUENESS_VALUE"),
   "The directory set in dirPath doesn't seem to exist")
 

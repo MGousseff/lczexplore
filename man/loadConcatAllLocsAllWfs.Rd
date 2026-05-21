@@ -7,7 +7,7 @@
 loadConcatAllLocsAllWfs(
   dirPath,
   locations = NA,
-  workflowNames = c("osm", bdt = "osm", "wud"),
+  workflowNames = c("osm", "bdt", "wud"),
   missingGeomsWf = "osm",
   refWf = NULL,
   refLCZ = NA,
