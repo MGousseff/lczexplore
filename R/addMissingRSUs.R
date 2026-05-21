@@ -31,7 +31,7 @@
 #' sfList, zoneSf = zoneSf, refWf = NULL,
 #'  refLCZ = "Unclassified", residualLCZvalue = "Unclassified")
 addMissingRSUs<-function(sfList, missingGeomsWf="osm", zoneSf, refWf = "bdt", refLCZ = "107", residualLCZvalue="105",
-                           column = "lcz_primary", refCRS){
+                           column = "lcz_primary"){
   refCRS<-st_crs(sfList[[missingGeomsWf]])
   zoneSf<-st_transform(zoneSf,
                        crs=refCRS)
