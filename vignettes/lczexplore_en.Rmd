@@ -277,7 +277,7 @@ When using the `importLCZvect` function one needs to specify the confidence valu
 to the LCZ (`confid` argument). On can also set the name of the geometry identifier (`geomID` argument ).
 
 ```{r, compare for sensitivity}
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"multipleWfs/Redon")
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"/multipleWfs/Redon")
 
 redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 

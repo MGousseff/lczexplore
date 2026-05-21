@@ -254,7 +254,7 @@ Cette uniqueness peut donc être vue comme une mesure de confiance.
 
 La fonction `importLCZvect` permet d'indiquer quelles colonnes du geojson contiennent l'identifiant de la géométrie (`geomID`) et l'indicateur de confiance associé (`confid`) nécessaires à l'analyse de sensibilité. 
 ```{r, analyse sensibilite, eval = TRUE, echo = TRUE }
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"multipleWfs/Redon")
+dirPath<-paste0(system.file("extdata",package="lczexplore"),"/multipleWfs/Redon")
 
 redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
