@@ -14,8 +14,7 @@ addMissingRSUs(
   refWf = "bdt",
   refLCZ = "107",
   residualLCZvalue = "105",
-  column = "lcz_primary",
-  refCRS
+  column = "lcz_primary"
 )
 }
 \arguments{

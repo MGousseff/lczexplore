@@ -6,7 +6,8 @@
 #' @param workflowNames sets the names of workflows
 #' @param inLocation is the name of the location at which all LCZ are created
 #' @param fileExtension is the extensions of the files to load (.fgb is the recommended format)
-#' @param column is the name of the column containing the LCZ types, must be the same in all files.
+#' @param columns the name (string) of the column containing LCZ types.
+#' If the different workflows do no use the same column names, a vector of names is passed
 #' @importFrom forcats fct_recode
 #' @importFrom dplyr mutate
 #' @import sf units RColorBrewer utils grDevices
@@ -55,8 +56,3 @@ loadMultipleSfs<-function(
   }
   return(sfList)
 }
-
-#
-# sfList1loc<-loadMultipleSfs(dirPath = paste0(
-# system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-# workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
