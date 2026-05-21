@@ -11,22 +11,28 @@
 #' dirList<-list.dirs(paste0(
 #' system.file("extdata", package = "lczexplore"),"/multipleWfs"), recursive = FALSE)
 #' allLocIntersected<-concatIntersectedLocations(
-#' dirList = dirList, locations = c("Redon", "Arville"), columns = "lcz_primary")
-concatIntersectedLocations<-function(dirList, locations, workflowNames = c("osm","bdt","wudapt"),
+#'  dirList = dirList, inLocations = c("Arville", "Redon"), columns = "lcz_primary")
+concatIntersectedLocations<-function(dirList, workflowNames = c("osm","bdt","wudapt"),
+                                     inLocations,
                                      columns = "lcz_primary"){
   sfList<-list()
+  if (length(inLocations)!=length(dirList) | is.null(inLocations)){
+    inLocations<-gsub(pattern = "(.*)(/)(.+)(/$|/{0})", replacement = "\\3", x = dirList)}
+
   if (length(columns == 1)){columns <- rep( columns, length(workflowNames))}
+  intersectedList<-list()
+
   for (i in seq_along(dirList)){
-    sfList[[i]]<-loadMultipleSfs(
+    intersectedList[[i]]<-loadMultipleSfs(
       dirPath = dirList[i],
       workflowNames = c("osm","bdt","wudapt"),
-      inLocation = locations[i], column = columns[i] )
+      inLocation = inLocations[i], column = columns[i] ) %>%
+      createIntersect(columns = columns, refCrs=NULL, workflowNames=workflowNames,
+      minZeroArea=0.0001
+    )
   }
-  print(names(sfList[[1]][[1]]))
-  concatIntersectedSf<-createIntersect(
-  sfList = sfList, columns = columns, refCrs=NULL, workflowNames=workflowNames,
-  minZeroArea=0.0001
-  )
+
+  concatIntersectedSf<-do.call(rbind, intersectedList)
 
   # concatIntersectedSf$location<-factor(
   #   concatIntersectedSf$location, levels = .lczenv$typeLevelsDefault)

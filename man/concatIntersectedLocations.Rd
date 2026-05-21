@@ -3,31 +3,32 @@
 \name{concatIntersectedLocations}
 \alias{concatIntersectedLocations}
 \title{In a given directory (or a list of directories) the function looks for LCZ datafiles,
-intersects them and return a datasets with intersected geometries and LCZ values for each workflow}
+intersects them and return a dataset with intersected geometries and LCZ values for each workflow}
 \usage{
 concatIntersectedLocations(
   dirList,
-  locations,
-  workflowNames = c("osm", "bdt", "wudapt")
+  workflowNames = c("osm", "bdt", "wudapt"),
+  inLocations,
+  columns = "lcz_primary"
 )
 }
 \arguments{
 \item{dirList}{the list of directories for which the different LCZ files will be intersected}
 
-\item{locations}{: for each diretory from dirList, a location name must be fed to the function}
-
 \item{workflowNames}{sets the names of workflows and define the name of the files which will be loaded and intersected}
+
+\item{locations}{: for each diretory from dirList, a location name must be fed to the function}
 }
 \value{
 returns an sf object with all intersections
 }
 \description{
 In a given directory (or a list of directories) the function looks for LCZ datafiles,
-intersects them and return a datasets with intersected geometries and LCZ values for each workflow
+intersects them and return a dataset with intersected geometries and LCZ values for each workflow
 }
 \examples{
 dirList<-list.dirs(paste0(
-system.file("extdata", package = "lczexplore"),"/multipleWfs"))[-1]
+system.file("extdata", package = "lczexplore"),"/multipleWfs"), recursive = FALSE)
 allLocIntersected<-concatIntersectedLocations(
-dirList = dirList, locations = c("Redon", "Arville"))
+ dirList = dirList, inLocations = c("Arville", "Redon"), columns = "lcz_primary")
 }
