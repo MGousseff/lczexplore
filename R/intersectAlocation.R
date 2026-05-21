@@ -21,7 +21,7 @@
 #' # deprecated : use concatIntersectedLocations with the proper arguments
 intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","wudapt"), location,
                              addMissingRSUs = TRUE,
-                             missingGeomsWf="iau", refWf = NULL, refLCZ = "Unclassified",
+                             missingGeomsWf="osm", refWf = NULL, refLCZ = "Unclassified",
                              residualLCZvalue = "Unclassified",
                              column = "lcz_primary"){
   dirPath<-checkDirSlash(dirPath)
@@ -30,7 +30,7 @@ intersectAlocation<-function(dirPath, workflowNames = c("osm","bdt","wudapt"), l
 
   sfList<-loadMultipleSfs(dirPath = dirPath, workflowNames = c("osm","bdt","wudapt"), inLocation = location )
   sfList<-addMissingRSUs(sfList = sfList,
-                         missingGeomsWf="iau", zoneSf =zoneSf, refWf = refWf, refLCZ = refLCZ,
+                         missingGeomsWf=missingGeomsWf, zoneSf =zoneSf, refWf = refWf, refLCZ = refLCZ,
                          residualLCZvalue = residualLCZvalue,
                          column = "lcz_primary")
   intersecSf<-createIntersect(sfList=sfList, columns=rep("lcz_primary", length(workflowNames)),

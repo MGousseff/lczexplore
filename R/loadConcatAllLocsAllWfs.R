@@ -32,7 +32,7 @@
 #'  residualLCZvalue = "Unclassified",
 #'  column = "lcz_primary"
 #' )
-loadConcatAllLocsAllWfs<-function(dirPath, locations = NA, workflowNames = c("osm", "bdt"= "osm", "wud"),
+loadConcatAllLocsAllWfs<-function(dirPath, locations = NA, workflowNames = c("osm", "bdt", "wud"),
                                   missingGeomsWf= "osm", refWf = NULL, refLCZ = NA,
                                   residualLCZvalue = NA, column = "lcz_primary"){
   # allLocAllWfSf<-matrix(ncol = 5, nrow = 0)

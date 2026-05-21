@@ -64,9 +64,9 @@ In the data structure from above section, the function would be applied to one o
 
 ```{r, loadMultiple, eval = TRUE, echo = TRUE}
 library(lczexplore)
-blaruDirPath<-paste0(system.file("extdata/multipleWfs/Blaru", package="lczexplore"),"/")
-blaruSfList<-loadMultipleSfs(dirPath = blaruDirPath,
-                             workflowNames = c("osm","bdt","iau","wudapt"),
+redonDirPath<-paste0(system.file("extdata/multipleWfs/Redon", package="lczexplore"),"/")
+redonSfList<-loadMultipleSfs(dirPath = redonDirPath,
+                             workflowNames = c("osm","bdt","wudapt"),
                              fileExtension =".fgb" )
 ```
 
@@ -78,9 +78,9 @@ which sf's CRS to use by feeding its position in the list to the argument `refCr
 
 ```{r, concatenateOneLocation, eval = TRUE, echo = TRUE}
 
-BlaruAllWfs<-concatAlocationWorkflows(blaruSfList, refCrs = 1)
-class(BlaruAllWfs)
-test<-subset(BlaruAllWfs, wf=="wudapt")
+redonAllWfs<-concatAlocationWorkflows(redonSfList, refCrs = 1)
+class(redonAllWfs)
+test<-subset(redonAllWfs, wf=="wudapt")
 showLCZ(test, column = "lcz_primary")
 ```
 
@@ -96,8 +96,8 @@ to the `main_directory` folder.
 ```{r, concatenateallLocations}
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
-twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","iau","wudapt"),
-                               inLocation = c("Arville", "Blaru"))
+twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","wudapt"),
+                               inLocation = c("Arville", "Redon"))
 ```
 The function `concatAllLocsWorkflows` concatenates the sf of this list into a single sf object. If all the `sf` objects of the list don't share the same coordinate reference system, you can specify which one is the reference and they will all be reprojected into this CRS (by default, the CRS of the first `sf` object of the list).
 
@@ -113,11 +113,11 @@ the function will intersect it with the `zone.fgb` geometries.
 Sometimes, the missing geometries can be of one type, as a decision from the designers of the LCZ workflow.
 In this case, one can choose another workflow as a reference (through `refWf`) and the corresponding LCZ typ (through `refLCZ`). The remaining geometries which wouldn't intersect with the Chosen LCZ type of the chosen reference workflow will receive the value fed to `residualLCZvalue`.
 
-```{r load concat complete}
+```{r, load concat complete}
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 
-allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt"= "osm", "wudapt"),
+allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "wudapt"),
                                        missingGeomsWf= "osm", refWf = NULL, refLCZ = NA,
                                        residualLCZvalue = NA, column = "lcz_primary")
 ```
@@ -135,8 +135,10 @@ Second, intersecting the spatial units of multiple workflows can lead to artific
 The `createIntersect` function allows to specify a minimal area threshold. Resulting geometries whose area are lesser than this threshold will be discarded.
 
 ```{r, Intersect}
+
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
-                                        refCrs=NULL, workflowNames=c("osm", "bdt"= "osm", "wudapt"), minZeroArea=0.0001)
+                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.0001)
+
 ```
 
 
