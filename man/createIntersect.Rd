@@ -47,4 +47,14 @@ workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville")
 ArvilleIntersect <- createIntersect(
  sfList = sfList, columns = rep("lcz_primary", 4),  
  workflowNames = c("osm","bdt","wudapt"))
+# Two Locations
+sfList2<-loadMultipleLocsSfs(
+ dirPath = paste0(
+     system.file("extdata", package = "lczexplore"),
+     "/multipleWfs"),
+ workflowNames = c("osm","bdt","wudapt"))
+
+TwoLocsIntersect <- createIntersect(
+ sfList = sfList2, columns = rep("lcz_primary", 3),
+ workflowNames = c("osm","bdt","wudapt"))
 }

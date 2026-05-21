@@ -21,7 +21,7 @@
 #' @export
 #' @examples 
 #' redonBDTex<-importLCZvectFromFile(dirPath=paste0(system.file("extdata", package = "lczexplore"),
-#' "multipleWfs/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
+#' "/multipleWfs/Redon"), file="bdt_lcz.fgb", column="LCZ_PRIMARY",
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 importLCZvectFromFile <- function(
   dirPath, file = "bdt_lcz.fgb", column, geomID = "", confid = "", verbose = TRUE, drop = TRUE) {
