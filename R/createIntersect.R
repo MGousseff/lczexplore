@@ -4,7 +4,7 @@
 #' the name of the columns of the classification to compare
 #' @param refCrs a number which indicates which sf object from sfList will provide
 #' the CRS in which all the sf objects will be projected before comparison
-#' By defautl it is set to an empty string and no ID is loaded.
+#' By defautl the first sf object CRs is applied to all sf objects.
 #' @param workflowNames a vector of strings which contains the names of the workflows used to produce the sf objects
 #' @param minZeroArea all geometries smaller than this value are discarded (avoids numeric precision problems)
 #' @details The input SfList can contain two levels, the first level being the locations,
@@ -36,10 +36,12 @@
 #'  sfList = sfList2, columns = rep("lcz_primary", 3),
 #'  workflowNames = c("osm","bdt","wudapt"))
 createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZeroArea=0.0001){
+
  if(is.null(columns) | prod(!is.na(columns)==0)){
-  message("You didn't specify the name of the LCZ columns, an attempt with lcz_primary is tried")
-  columns<-rep("lcz_primary", length(workflowNames))
-}
+    message("You didn't specify the name of the LCZ columns, an attempt with lcz_primary is tried")
+    columns<-rep("lcz_primary", length(workflowNames))
+ }
+
   if(is.null(workflowNames) | prod(!is.na(workflowNames)==0)){
     message("One or all workflow names are missing")
     stop()
@@ -48,6 +50,7 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
   if (length(columns) == 1){columns <- rep(columns,length(workflowNames))}
 
   if (collapse::ldepth(sfList)>1){
+
     intersectedList<-lapply(sfList, createIntersect,
                             columns = columns, refCrs = refCrs, workflowNames = workflowNames,
                             minZeroArea = minZeroArea )
@@ -57,7 +60,8 @@ createIntersect<-function(sfList, columns, refCrs=NULL, workflowNames=NULL, minZ
     sfInt<-do.call(rbind, intersectedList)
     return(sfInt)
   } else {
-    if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])} else {refCrs}<-st_crs(sfList[[refCrs]])
+    if (is.null(refCrs)){refCrs<-st_crs(sfList[[1]])} else {refCrs<-st_crs(sfList[[refCrs]])}
+
     if(!is.null(sfList[[1]][["location"]])) {
       locationRef<-sfList[[1]][["location"]][1]
     } else {

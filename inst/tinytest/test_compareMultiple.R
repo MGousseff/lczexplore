@@ -9,25 +9,41 @@
 sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                         workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
 
-intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 4),
+intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 3),
                              workflowNames = c("osm", "bdt", "wudapt"))
 
-multicompare_test<-compareMultipleLCZ(intersected, 
+expect_silent(multicompare_test<-compareMultipleLCZ(intersected,
                                       LCZcolumns = c("osm","bdt","wudapt"),
-                                      trimPerc = 0.5)
+                                      trimPerc = 0.5))
 
-testAreas<-workflowAgreeAreas(multicompare_test$sfIntLong)
-testAreas$disagreeAreas
-testAreas$agreeAreas
+expect_silent(testAreas<-workflowAgreeAreas(multicompare_test$sfIntLong))
+
+expect_equal(testAreas$areaAgree[1], 7733495)
+expect_equal(round(testAreas$areaDisagree[1], 2), 80362.35)
 
 osm<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                           file = "osm_lcz.fgb")
 bdt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                    file = "bdt_lcz.fgb")
-iau<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
-                   file = "iau_lcz.fgb", column = "lcz_primary")
 wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
                    file = "wudapt_lcz.fgb", column = "lcz_primary")
+
+sfList2<-list(osm = osm, bdt = bdt, wudapt = wudapt)
+
+test3<- concatAlocationWorkflowsFromSession(sfList = sfList2,
+                                            workflowNames = c("osm", "bdt", "wudapt"),
+                                            location = "Arville",
+                                            columns = c("LCZ_PRIMARY", "LCZ_PRIMARY", "lcz_primary" ))
+
+intersected<-createIntersect(sfList = test3, columns = rep("lcz_primary", 3),
+                             workflowNames = c("osm", "bdt", "wudapt"))
+
+expect_silent(multicompare_test<-compareMultipleLCZ(intersected,
+                                                    LCZcolumns = c("osm","bdt","wudapt"),
+                                                    trimPerc = 0.5))
+
+expect_silent(testAreas<-workflowAgreeAreas(multicompare_test$sfIntLong))
+
 
 # multicompare_test
 # 
