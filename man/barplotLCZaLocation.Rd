@@ -32,6 +32,9 @@ where workflow is on of the values in workflowNames vector}
 
 \item{residualLCZvalue}{a LCZ default type, passed to the function addMissingRSUs when needed}
 
+\item{missingGeom}{allows to indicate which workflow is supposed to have missing geometries
+(not used most of the time)}
+
 \item{plotNow}{If TRUE, the boxplot of the repartition will be printed}
 
 \item{plotSave}{If TRUE, the plot will be saved in the directory pointed by dirPath}

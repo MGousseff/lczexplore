@@ -24,7 +24,8 @@ loadMultipleSfs(
 
 \item{fileExtension}{is the extensions of the files to load (.fgb is the recommended format)}
 
-\item{column}{is the name of the column containing the LCZ types, must be the same in all files.}
+\item{columns}{the name (string) of the column containing LCZ types.
+If the different workflows do no use the same column names, a vector of names is passed}
 }
 \value{
 returns graphics of comparison and an object called matConfOut which contains :

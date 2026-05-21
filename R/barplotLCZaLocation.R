@@ -4,6 +4,8 @@
 #' @param dirPath is the path where the datasets are stored
 #' @param inLocation is the name of the locations for the plot is produced
 #' @param refWf is a reference workflow name, passed to the function addMissingRSUs when needed
+#' @param missingGeom allows to indicate which workflow is supposed to have missing geometries
+#' (not used most of the time)
 #' @param refLCZ is a reference LCZtype, passed to the function addMissingRSUs when needed
 #' @param residualLCZvalue a LCZ default type, passed to the function addMissingRSUs when needed
 #' @param workflowNames is a vector of prefixes. The LCZ files must be named workflow_rsu.fgb

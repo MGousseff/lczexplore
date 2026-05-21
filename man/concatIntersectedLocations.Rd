@@ -15,9 +15,13 @@ concatIntersectedLocations(
 \arguments{
 \item{dirList}{the list of directories for which the different LCZ files will be intersected}
 
-\item{workflowNames}{sets the names of workflows and define the name of the files which will be loaded and intersected}
+\item{workflowNames}{sets the names of workflows and define the name of the files
+which will be loaded and intersected}
 
-\item{locations}{: for each diretory from dirList, a location name must be fed to the function}
+\item{inLocations}{: for each diretory from dirList, a location name must be fed to the function}
+
+\item{columns}{the name (string) of the column containing LCZ types.
+If the different workflows do no use the same column names, a vector of names is passed}
 }
 \value{
 returns an sf object with all intersections

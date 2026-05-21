@@ -51,7 +51,7 @@ loadMultipleLocsSfs<-function(
     loadMultipleSfs(
     dirPath = dirList[loc_i],
     inLocation = inLocations[loc_i],
-    workflowNames = workflowNames, fileExtension = fileExtension, column = columns[loc_i]
+    workflowNames = workflowNames, fileExtension = fileExtension, columns = columns[loc_i]
   )
   }
   return(allLocAllWfs)
