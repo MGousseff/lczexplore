@@ -24,28 +24,36 @@ if (!require("png")) {
 
 ```
 
-For general use of `lczexplore` see `lczexplore_en vignette`.
-This vignette focuses on loading, concatenating, intersecting and comparing multiple (3 to 5) workflows on the same set of areas.
-WARNING : At present time, only vector workflows can be processed when comparing more than 2 workflows. User needs to convert raster LCZ maps to vector. One way to do it is to use `lczexplore::importLCZraster` function and re-export to FlatGeobuf (.fgb) using `sf::write_sf`.
+This vignette focuses on loading, intersecting and comparing multiple (3 to 5) workflows on the same set of areas.
+The first part of the vignette describes the recommended pipeline, which should cover most of the cases.
 
-To avoid analysis of multiple locations and multiple workflows to become messy, the following data structure is strongly recommended, although it remains possible to load, concatenate and compare multiple files organized differently.
+Some specific functions are described later on for more specific cases.
 
-# Multiple workflows and one or multiple study areas
+Note : Only vector workflows (as opposed to raster) can be processed when comparing more than 2 workflows.  `lczexplore::importLCZraster` function allows to import raster images with an LCZ band and `sf::write_sf` re-exports
+them, for instance to FlatGeobuf (.fgb)
+
+# Context and vocabulary
+## Local Climate Zones
+Climate change is a growing concern for city planners with a special focus on Urban Heat Island phenomenons.
+Stewardt and Oke have proposed a classification of Local Climate Zones (LCZ) that describe rural and urban areas, with 10 built types and 7 land cover types. Several workflows allow to produce LCZ maps, and non can be considered as
+an absolut reference. This vignette shows how to compare 3 to 5 workflows (i.e. their resulting maps) at a time.
+
+## Spatial Units
+To create an LCZ map, one need to partition the study territory into spatial units, and then assign an LCZ type
+to each spatial unit.
+
+
+# Data preparation for multiple workflows and multiple study areas
+The most generic case study is when several maps are available for several locations.
+A simple folder tree allows an easy analysis.
+
 
 ## Input data structure
-This section illustrates the case where several LCZ maps were produced for several places, and are not loaded as sf objects in R yet.
+This section illustrates the case where several LCZ maps were produced for several places, and stored
+into local files.
+
 To keep the workflow simple, the data needs to be organized in the following way.
 
-This data structure is proposed to help import and concatenate the workflows, but there maybe different ways to build
-the main sf data object.
-
-From a main directory, data are stored in subdirectories named after locations of each study area.
-In each subdirectory, the
-data are stored in files named `wfNamei_lcz.fgb` where wfNamei are the names of the workflows.
-
-Other spatial extensions may work, but only `.fgb` files were tested for import task.
-
-Example of file structure :
 --main_data_directory
     |
     |--location1
@@ -55,54 +63,116 @@ Example of file structure :
         |--wf1_lcz.fgb
         |--wf2_lcz.fgb
 
-The main data directory must contain only the data subdirectories, as the loading functions will span the subdirectories searching for data.
+The main data directory must contain only the data subdirectories,
+as the loading functions will span the subdirectories searching for data.
 
-## Importing lcz maps for a single location and several workflows
+In each subdirectory, the data are stored in files named `wfNamei_lcz.fgb`
+where <wfNamei> are the names of the workflows. In the tree above, the workflows are called wf1 and wf2.
 
-The function loadMultipleSfs allows to load the lcz maps files from a directory into a list of `sf` objects.
-In the data structure from above section, the function would be applied to one of the `location1` and `location2` directories.
+Other spatial extensions may work, but `.fgb` files are recommended and were the most tested.
 
-```{r, loadMultiple, eval = TRUE, echo = TRUE}
-library(lczexplore)
-redonDirPath<-paste0(system.file("extdata/multipleWfs/Redon", package="lczexplore"),"/")
-redonSfList<-loadMultipleSfs(dirPath = redonDirPath,
-                             workflowNames = c("osm","bdt","wudapt"),
-                             fileExtension =".fgb" )
-```
+## General steps to compare several LCZ maps
 
-To concatenate the sf objects from the list returned by `loadMultipleSfs` into a single `sf` object, use `concatAlocationWorkflows`.
+*Import.* First, all the data is loaded in a list.
+This list contains a sublist for each location, and each location sublist contains one sf object for each LCZ map.
+*Intersection.* Second, the spatial units of all maps (i.e. the geometries bearing the LCZ type) are intersected.
+On any resulting geometry, a pair of workflow either totally agree or totally disagree. Intersection is done within lists,
+which allows to try to intersect only geometries of the same location. The result is concatenated in a single sf objects
+which contains a column for each lcz map, a column with the location name, a column with the area and a column with the
+geometry for each intersected spatial unit.
+*Visualisation* Simple descriptive barplots allow to have a general idea of the behavior of the different workflows.
+*Comparison* Pairwise agreement between workflow and consensus value for each LCZ type quantify comparison.
 
-The sf objects contained in the list you feed `concatAlocationWorkflows` may not all have the same CRS. By default,
-the CRS of the first sf object of the list is used to convert all the sf objects of the list, but on can specify
-which sf's CRS to use by feeding its position in the list to the argument `refCrs`.
+![pipeline](../inst/extdata/pipeline4vignette.svg)
 
-```{r, concatenateOneLocation, eval = TRUE, echo = TRUE}
-
-redonAllWfs<-concatAlocationWorkflows(redonSfList, refCrs = 1)
-class(redonAllWfs)
-test<-subset(redonAllWfs, wf=="wudapt")
-showLCZ(test, column = "lcz_primary")
-```
 
 ## Importing maps from several locations and several workflows
-### General case
 
-In case of several workflows and several locations, the function loadMultipleLocsSfs allow to load all the
-data in a list, and concatAllLocsWorkflows concatenate them into a single sf file.
+In case of several workflows and several locations, the function `loadMultipleLocsSfs` allow to load all the
+data in a list.
 
 In the data structure from above section, the function would be applied
 to the `main_directory` folder.
+The small data files for this vignette are in the `inst/extdata/multipleWfs` folder, which contains the locations
+Arville and Redon, for which three LCZ maps are available, produced by the following workflows :
+- GeoClimate based on OpenStreetMap input data
+- GeoClimate based on french Geographical Information Institute database called BDTOPO
+- WUDAPT, based on satellite images and machine learning.
 
-```{r, concatenateallLocations}
+
+```{r,loadAllLocsAllWfs}
+require(lczexplore)
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","wudapt"),
                                inLocation = c("Arville", "Redon"))
 ```
-The function `concatAllLocsWorkflows` concatenates the sf of this list into a single sf object. If all the `sf` objects of the list don't share the same coordinate reference system, you can specify which one is the reference and they will all be reprojected into this CRS (by default, the CRS of the first `sf` object of the list).
 
-The function `loadConcatAllLocsWorkflows` proceeds thes two steps at a time.
-It also offers some refinements (see next section).
+The function `loadMultipleLocsSfs` loads all the input .fgb files in a list.
+
+When comparing maps for only one location use the similar function `loadMultipleSfs`.
+
+## Intersecting geometries from the different workflows
+The spatial units
+
+In the case of only two workflows, the function `compareLCZ` loads the two `sf` objects, intersects their geometries,
+produce the array of correspondance between the LCZ types of the two workflows.
+
+With more than two workflows, one needs more control over the intersection steps.
+First, in case of multiple locations, the intersection of the several workflows must occur within each location.
+Second, intersecting the spatial units of multiple workflows can lead to artificially small geometries.
+
+The `createIntersect` function allows to specify a minimal area threshold. Resulting geometries whose area are lesser than this threshold will be discarded.
+
+```{r, Intersect}
+twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
+                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.000)
+```
+
+Note : the function `createIntersect` is able to see if the list fed to the sfList argument has one or two levels,
+i.e. if there are one or multiple locations.
+
+# Visualizing the data
+
+## Reminder: visualize a single map
+The `twoLocsSfList` list contains one sf object per workflow per location.
+This sf object can be fed to the function `showLCZ()` for a map and a summary of the area classified in each LCZ type.
+
+```{r, showLCZ}
+showLCZ(sf = twoLocsSfList$Redon$osm, column = "lcz_primary", repr = "standard")
+```
+
+## Reminder: comparing two simple maps
+One can also compare two maps from the same location using the function `compareLCZ()`
+
+```{r, compareLCZ}
+redonOSM <- twoLocsSfList$Redon$osm
+redonBDT <- twoLocsSfList$Redon$bdt
+compareLCZ(sf1 = redonOSM, sf2 = redonBDT, column1 = "lcz_primary", column2 = "lcz_primary")
+```
+
+## Visual exploration of multiple maps
+Pairwise visualisation can be tedious, especially when several locations are involved.
+The sf object containing all the intersected spatial units and the LCZ type each workflow assigned them allows to
+begin the comparison.
+
+### Area per LCZ type and workflow
+
+The function `barplotLCZfromIntersected` allows the visualisation of what area is classified into each LCZ type
+of each workflow.
+```{r, barplotLCZfromIntersected}
+areaPerLCZtype<-barplotLCZfromIntersect(twoLocsSfIntersected
+
+```
+
+
+
+
+
+
+
+
+
 
 ### An advanced fonction
 When, for a location, some workflows have missing geometries, i.e. don't map some area and leave them as holes,
@@ -121,25 +191,3 @@ allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames
                                        missingGeomsWf= "osm", refWf = NULL, refLCZ = NA,
                                        residualLCZvalue = NA, column = "lcz_primary")
 ```
-
-
-
-## Intersecting geometries from the different workflows
-In the case of only two workflows, the function `compareLCZ` loads the two `sf` objects, intersects their geometries,
-produce the array of correspondance between the LCZ types of the two workflows.
-
-With more than two workflows, one needs more control over the intersection steps.
-First, in case of multiple locations, the intersection of the several workflows must occur within each location.
-Second, intersecting the spatial units of multiple workflows can lead to artificially small geometries.
-
-The `createIntersect` function allows to specify a minimal area threshold. Resulting geometries whose area are lesser than this threshold will be discarded.
-
-```{r, Intersect}
-
-twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
-                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.0001)
-
-```
-
-
-
