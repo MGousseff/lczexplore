@@ -15,7 +15,8 @@ vignette: >
 ```{r, settings, include = FALSE}
 knitr::opts_chunk$set(
         collapse = TRUE,
-        comment = "#>"
+        comment = "#>",
+        out.width="100%"
 )
 if (!require("png")) {
   install.packages("png",repos = "http://cran.us.r-project.org")
@@ -138,38 +139,64 @@ i.e. if there are one or multiple locations.
 The `twoLocsSfList` list contains one sf object per workflow per location.
 This sf object can be fed to the function `showLCZ()` for a map and a summary of the area classified in each LCZ type.
 
-```{r, showLCZ}
+```{r, showLCZ, fig.width=8, fig.height=5}
 showLCZ(sf = twoLocsSfList$Redon$osm, column = "lcz_primary", repr = "standard")
 ```
 
 ## Reminder: comparing two simple maps
 One can also compare two maps from the same location using the function `compareLCZ()`
 
-```{r, compareLCZ}
+```{r, compareLCZ, fig.width=16, fig.height=10}
 redonOSM <- twoLocsSfList$Redon$osm
 redonBDT <- twoLocsSfList$Redon$bdt
 compareLCZ(sf1 = redonOSM, sf2 = redonBDT, column1 = "lcz_primary", column2 = "lcz_primary")
 ```
 
-## Visual exploration of multiple maps
-Pairwise visualisation can be tedious, especially when several locations are involved.
-The sf object containing all the intersected spatial units and the LCZ type each workflow assigned them allows to
-begin the comparison.
-
-### Area per LCZ type and workflow
+## Area per LCZ type and workflow for more than 2 workflows
 
 The function `barplotLCZfromIntersected` allows the visualisation of what area is classified into each LCZ type
 of each workflow.
-```{r, barplotLCZfromIntersected}
-areaPerLCZtype<-barplotLCZfromIntersect(twoLocsSfIntersected
+```{r, barplotLCZfromIntersected, fig.width=8, fig.height=5}
+areaPerLCZtype<-barplotLCZfromIntersect(sfIn = twoLocsSfIntersected, workflowNames = c("osm", "bdt", "wudapt"))
+```
 
+# Compare multiple workflows
+the function `compareMultipleLCZ` outputs a list containing two objects.
+The first one is an sf objects, named sfInt. It the LCZ type for each workflow,
+the pairwise agreements, and the number of workflows who agree for each geometry (ie, intersected spatial units).
+
+```{r, multiple comparison}
+twoLocsCompared <- compareMultipleLCZ(
+  sfInt = twoLocsSfIntersected,
+  LCZcolumns = c("osm","bdt","wudapt"),
+  trimPerc = 0)
+```
+## Pairwise agreements
+From this sfInt object, the function `workflowAgreeAreas` compute pairwise agreement between workflows,
+defined as the sum (or percentage) of the area on which two workflows agree.
+
+```{r, multiple pairwise agreement}
+workflowAgreement<-workflowAgreeAreas(twoLocsCompared$sfIntLong)
+```
+
+## Repartition from one workflow to another and data visualisations
+
+To explore this agreement further, we compute all the repartition from an LCZ type from a workflow to the LCZ types of another workflow, using the function `createMultipleMatConf`
+
+```{r, multiple confusion matrix}
+twoLocsMatConfLong<-createMultipleMatConf(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
+```
+
+To avoid exploring all the pairwise possible matrices, we can explore these correspondences through
+a circular chord diagram, using the function `drawChordDiagram`.
+
+```{r, chord diagram, fig.width=8, fig.height=5}
+drawChordDiagram(multiMatConfLongIn = twoLocsMatConfLong)
 ```
 
 
 
-
-
-
+### General repartitions of types from one workflow to another
 
 
 

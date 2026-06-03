@@ -18,3 +18,4 @@ exampleNoWf<-barplotLCZfromIntersect(twoLocsIntersect,
                                  stat = "perc")
 exampleNoCol<-barplotLCZfromIntersect(twoLocsIntersect,
                                  workflowNames = c("osm", "bdt", "wudapt"), stat = "perc")
+exampleNoColNoWf<-barplotLCZfromIntersect(twoLocsIntersect, stat = "perc")
