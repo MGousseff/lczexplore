@@ -9,19 +9,18 @@
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
 #' @export
-createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault){
+createMultipleMatConf<-function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault, columns = NULL){
   if(nrow(allWfsIn)>100){message("This function computes all the pairwise confusion matrices and can take some time")}
   for (i in 1 : (length(wfNamesIn)-1)) {
     for (j in (i+1) : length(wfNamesIn)){
-      # for (i in 1 : 2) {
-      #   for (j in i + 1 : 3){
-      sf1<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[i]), column = "lcz_primary")
-      sf2<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[j]), column = "lcz_primary")
+      if (is.null(columns)){columns <- rep("lcz_primary", length(wfNamesIn))}
+      sf1<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[i]), column = columns[i])
+      sf2<-importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[j]), column = columns[j])
       compareName<-paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
-               sf1 = sf1, column1 = "lcz_primary",
-               sf2 = sf2, column2 = "lcz_primary",
+               sf1 = sf1, column1 = columns[i],
+               sf2 = sf2, column2 = columns[j],
                typeLevels = unique(names(typeLevelsDefaultIn)),
                plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )

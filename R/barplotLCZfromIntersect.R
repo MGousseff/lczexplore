@@ -8,6 +8,7 @@
 #' @param plotNow If TRUE, the boxplot of the repartition will be printed
 #' @param plotSave If a proper directory Path, the plot will be saved there
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
+#' @importFrom collapse fmutate fselect frename fgroup_by fsummarise fsum
 #' @importFrom caret dummyVars
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom tidyr  replace_na
@@ -33,19 +34,26 @@ barplotLCZfromIntersect<-function(sfIn, workflowNames = NULL, columns = NULL, st
   if (
      (is.null(columns) | prod(!is.na(columns))==0) &
         ( !is.null(workflowNames)) & prod(!is.na(workflowNames))==1 & length(workflowNames)>1){
-    message(paste0("The names of the columns of the lcz types for each workflow are missing,",
+    message(paste0("The names of the columns of the lcz types for each workflow are missing, ",
                    "an attempt will be made with workflowNames instead "))
     columns <- workflowNames
   }
 
-  if (
-    (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &&
-      (!is.null(columns) && prod(!is.na(columns)==1) && length(columns)>1)){
-    message(paste0("The names of the workflows are missing,",
+  if (  (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &
+      (!is.null(columns) | prod(!is.na(columns))== 1)  ) {
+    message(paste0("The names of the workflows are missing, ",
                    "an attempt will be made with column names instead "))
-     workflowNames <- columns
+    workflowNames <- columns
   }
 
+  if (
+    (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &&
+      (is.null(columns) | prod(!is.na(columns)==0))){
+    message(paste0("The names of the workflows and of the columns are missing.",
+                   "Will try to replace them with names of columns other than location, area and geometry,",
+                   "but this is hazardous."))
+    workflowNames<-columns<-names(sfIn)[!names(sfIn)%in%c("location", "area", "geometry")]
+  }
 
   if (!("area"%in%names(sfIn))){
     concatSf$area<-st_area(sfIn)
