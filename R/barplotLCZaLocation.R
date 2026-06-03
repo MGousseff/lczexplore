@@ -1,6 +1,6 @@
 #' in a given directory, if several LCZ files are present, plots the repartition 
 #' of LCZ regarding of their source (workflow)
-#' NOTE: to represent the map of LCZ for a given fil, use `showLCZ` function instead
+#' NOTE: to represent the map of LCZ for a given file, use `showLCZ` function instead
 #' @param dirPath is the path where the datasets are stored
 #' @param inLocation is the name of the locations for the plot is produced
 #' @param refWf is a reference workflow name, passed to the function addMissingRSUs when needed
@@ -17,8 +17,7 @@
 #' @importFrom dplyr mutate group_by summarise
 #' @importFrom tidyr  replace_na
 #' @import sf forcats units RColorBrewer units utils grDevices
-#' @return Cramer's V between pairs of levels, in a matrix (cramerMatrix) or long form (cramerLong), 
-#' and a dataframe with the nbOutAssociation most significant association
+#' @return A barplot of LCZ area percentage by LCZ type and workflow
 #' @export
 #' @examples
 #' barplotLCZaLocation(
