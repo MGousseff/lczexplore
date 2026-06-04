@@ -36,6 +36,7 @@ plots the repartition of LCZ types regarding of their source (map/workflow)
 from an sf object containing all spatial units and LCZ value, typically the output of createIntersect
 }
 \examples{
+
 # Two Locations
 sfList2<-loadMultipleLocsSfs(
  dirPath = paste0(

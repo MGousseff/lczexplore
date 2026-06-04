@@ -16,6 +16,7 @@
 #' @return A barplot of LCZ area percentage by LCZ type and workflow
 #' @export
 #' @examples
+#'
 #' # Two Locations
 #' sfList2<-loadMultipleLocsSfs(
 #'  dirPath = paste0(
@@ -31,29 +32,10 @@
 #'                             workflowNames = c("osm", "bdt", "wudapt"))
 barplotLCZfromIntersect<-function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc",  plotNow = TRUE, plotSave = "",
                                   labelType = "short"){
-  if (
-     (is.null(columns) | prod(!is.na(columns))==0) &
-        ( !is.null(workflowNames)) & prod(!is.na(workflowNames))==1 & length(workflowNames)>1){
-    message(paste0("The names of the columns of the lcz types for each workflow are missing, ",
-                   "an attempt will be made with workflowNames instead "))
-    columns <- workflowNames
-  }
+  checkedWfCol<-checkColumnWorkflowNames(columns=columns, workflowNames = workflowNames)
+  columns<-checkedWfCol$columns
+  workflowNames<-checkedWfCol$workflowNames
 
-  if (  (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &
-      (!is.null(columns) | prod(!is.na(columns))== 1)  ) {
-    message(paste0("The names of the workflows are missing, ",
-                   "an attempt will be made with column names instead "))
-    workflowNames <- columns
-  }
-
-  if (
-    (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &&
-      (is.null(columns) | prod(!is.na(columns)==0))){
-    message(paste0("The names of the workflows and of the columns are missing.",
-                   "Will try to replace them with names of columns other than location, area and geometry,",
-                   "but this is hazardous."))
-    workflowNames<-columns<-names(sfIn)[!names(sfIn)%in%c("location", "area", "geometry")]
-  }
 
   if (!("area"%in%names(sfIn))){
     concatSf$area<-st_area(sfIn)
@@ -106,3 +88,35 @@ if (plotNow) print(outPlot)
 
 }
 
+
+
+
+
+checkColumnWorkflowNames<-function(columns, workflowNames){
+  if (
+    (is.null(columns) | prod(!is.na(columns))==0) &
+      ( !is.null(workflowNames)) & prod(!is.na(workflowNames))==1 & length(workflowNames)>1){
+    message(paste0("The names of the columns of the lcz types for each workflow are missing, ",
+                   "an attempt will be made with workflowNames instead "))
+    columns <- workflowNames
+  }
+
+  if (  (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &
+    (!is.null(columns) | prod(!is.na(columns))== 1)  ) {
+    message(paste0("The names of the workflows are missing, ",
+                   "an attempt will be made with column names instead "))
+    workflowNames <- columns
+  }
+
+  if (
+    (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &&
+      (is.null(columns) | prod(!is.na(columns)==0))){
+    message(paste0("The names of the workflows and of the columns are missing.",
+                   "Will try to replace them with names of columns other than location, area and geometry,",
+                   "but this is hazardous."))
+    workflowNames<-columns<-names(sfIn)[!names(sfIn)%in%c("location", "area", "geometry")]
+  }
+  output <- list(columns = columns, workflowNames = workflowNames)
+  return(output)
+
+}
