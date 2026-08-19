@@ -1,5 +1,4 @@
-
-#' Prepares the data to produce a sankey graph between two LCZ workflows 
+#' Prepares the data to produce a sankey graph between two LCZ workflows
 #' @param intersectedDf is an sf object or a data frame which contains lcz values for
 #' at least two workflows on the same geometries,
 #' and the area of the geometries
@@ -18,41 +17,43 @@
 #' workflowNames = c("osm","bdt","wudapt"))
 #' testSankey<-prepareSankeyLCZ(intersectedDf = allLocIntersected
 #'  , wf1 = "wudapt", wf2 = "osm")
-prepareSankeyLCZ<-function(intersectedDf, wf1, wf2){
-  if("data.table" %in% class(intersectedDf)){setDF(intersectedDf)}
-  if("sf" %in% class(intersectedDf)){
-    intersectedDf<-st_drop_geometry(intersectedDf)
-    intersectedDf<-as.data.frame(intersectedDf)
+prepareSankeyLCZ <- function(intersectedDf, wf1, wf2) {
+  if ("data.table" %in% class(intersectedDf)) { setDF(intersectedDf) }
+  if ("sf" %in% class(intersectedDf)) {
+    intersectedDf <- st_drop_geometry(intersectedDf)
+    intersectedDf <- as.data.frame(intersectedDf)
   }
-   intersectedDf<-intersectedDf[, c(wf1, wf2, "area")]
-  internRecode<-function(LCZvect){
+  intersectedDf <- intersectedDf[, c(wf1, wf2, "area")]
+
+  internRecode <- function(LCZvect) {
     case_when(
-      nchar(as.character(LCZvect))==1 ~ paste0("00",LCZvect),
-      nchar(as.character(LCZvect))==2 ~ paste0("0",LCZvect),
+      nchar(as.character(LCZvect)) == 1 ~ paste0("00", LCZvect),
+      nchar(as.character(LCZvect)) == 2 ~ paste0("0", LCZvect),
       .default = as.character(LCZvect))
   }
-  intersectedDf[[wf1]]<-internRecode(intersectedDf[[wf1]])
-  intersectedDf[[wf2]]<-internRecode(intersectedDf[[wf2]])
 
-#   intersectedDf <- aggregate(
-#   area ~ get(wf1) + get(wf2),
-#   data = intersectedDf,
-#   FUN = sum
-# )
-# restore column names after aggregate renames them
-names(intersectedDf)[1:2] <- c(wf1, wf2)
+  intersectedDf[[wf1]] <- internRecode(intersectedDf[[wf1]])
+  intersectedDf[[wf2]] <- internRecode(intersectedDf[[wf2]])
+
+  #   intersectedDf <- aggregate(
+  #   area ~ get(wf1) + get(wf2),
+  #   data = intersectedDf,
+  #   FUN = sum
+  # )
+  # restore column names after aggregate renames them
+  names(intersectedDf)[1:2] <- c(wf1, wf2)
 
   print(names(intersectedDf))
 
-  sankeyfied<-ggsankeyfier::pivot_stages_longer(
+  sankeyfied <- ggsankeyfier::pivot_stages_longer(
     data = st_drop_geometry(intersectedDf),
     stages_from = c(wf1, wf2),
     values_from = "area"
   )
-  sankeyfied$node<-ordered(sankeyfied$node,
-    levels = c("001", "002","003", "004", "005", "006", "007", "008", "009", "010",
-               "101", "102", "103", "104", "105", "106", "107", "Unclassified")
+  sankeyfied$node <- ordered(sankeyfied$node,
+                             levels = c("001", "002", "003", "004", "005", "006", "007", "008", "009", "010",
+                                        "101", "102", "103", "104", "105", "106", "107", "Unclassified")
   )
-  sankeyfied<-sankeyfied[order(sankeyfied$node),]
+  sankeyfied <- sankeyfied[order(sankeyfied$node),]
   return(sankeyfied)
 }

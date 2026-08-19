@@ -26,52 +26,55 @@
 #'  sfInt = ArvilleIntersect,
 #'  LCZcolumns = c("osm","bdt","wudapt"),
 #'  trimPerc = 0.5)
-compareMultipleLCZ<-function(sfInt, LCZcolumns, workflowNames=NULL, trimPerc=0.05){
-  if (is.null(LCZcolumns)) { 
-    LCZcolumns<-names(sfInt)[!names(sfInt)%in%c("area", "geometry")]
+compareMultipleLCZ <- function(sfInt, LCZcolumns, workflowNames = NULL, trimPerc = 0.05) {
+  if (is.null(LCZcolumns)) {
+    LCZcolumns <- names(sfInt)[!names(sfInt) %in% c("area", "geometry")]
   }
-  sfInt <- sfInt %>% subset(area>quantile(sfInt$area, probs=trimPerc) & !is.na(area))
+  sfInt <- sfInt %>% subset(area > quantile(sfInt$area, probs = trimPerc) & !is.na(area))
   # if input intersected file comes from a concatenation, it will have a location column that is not needed
-  if("location" %in% names(sfInt)){ sfInt<-sfInt[,!names(sfInt)=="location"]}
-  
-  sfIntnogeom<-st_drop_geometry(sfInt)
-  
-  if (is.null(workflowNames) | length(workflowNames)!=length(LCZcolumns)){workflowNames<-LCZcolumns}
-  
-  allLevels<- sfIntnogeom[,LCZcolumns] %>% lapply(levels) %>% unlist %>% unique()
-  sfIntnogeom[, LCZcolumns] <-   sfIntnogeom[, LCZcolumns] %>%  lapply(function(x) factor(x, levels=allLevels))
-  
+  if ("location" %in% names(sfInt)) { sfInt <- sfInt[, !names(sfInt) == "location"] }
+
+  sfIntnogeom <- st_drop_geometry(sfInt)
+
+  if (is.null(workflowNames) | length(workflowNames) != length(LCZcolumns)) { workflowNames <- LCZcolumns }
+
+  allLevels <- sfIntnogeom[, LCZcolumns] %>%
+    lapply(levels) %>%
+    unlist %>%
+    unique()
+  sfIntnogeom[, LCZcolumns] <- sfIntnogeom[, LCZcolumns] %>% lapply(function(x) factor(x, levels = allLevels))
+
   for (i in 1:(length(LCZcolumns) - 1)) {
-    for(j in (i+1):length(LCZcolumns)){
-      compName<-paste0(workflowNames[i],"_",workflowNames[j])
+    for (j in (i + 1):length(LCZcolumns)) {
+      compName <- paste0(workflowNames[i], "_", workflowNames[j])
       print(compName)
-      sfIntnogeom[,compName]<-sfIntnogeom[ , LCZcolumns[i]] == sfIntnogeom[ , LCZcolumns[j]]
+      sfIntnogeom[, compName] <- sfIntnogeom[, LCZcolumns[i]] == sfIntnogeom[, LCZcolumns[j]]
     }
   }
-  rangeCol<-(length(LCZcolumns)+2):ncol(sfIntnogeom)
+  rangeCol <- (length(LCZcolumns) + 2):ncol(sfIntnogeom)
   print(rangeCol)
   # print(names(sfIntnogeom[,rangeCol]))
-  sfIntnogeom$nbAgree<-apply(
-     X = sfIntnogeom[,rangeCol],MARGIN=1,sum)
-  sfIntnogeom$maxAgree<-apply(
-    X = sfIntnogeom[, seq_along(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE ))
- print(head(sfIntnogeom))
-  
+  sfIntnogeom$nbAgree <- apply(
+    X = sfIntnogeom[, rangeCol], MARGIN = 1, sum)
+  sfIntnogeom$maxAgree <- apply(
+    X = sfIntnogeom[, seq_along(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE))
+  print(head(sfIntnogeom))
+
   # long format
-  sfIntLong<-tidyr::pivot_longer(sfIntnogeom, cols=names(sfIntnogeom)[rangeCol], names_to = "whichWfs", values_to = "agree")
-  
+  sfIntLong <- tidyr::pivot_longer(sfIntnogeom, cols = names(sfIntnogeom)[rangeCol], names_to = "whichWfs", values_to = "agree")
+
   # Get the reference LCZ column on which 2 wf agree
-  
-  whichLCZagree <- gsub( x = sfIntLong$whichWfs, pattern = "(.*)(_)(.*)", replacement = "\\1")
-  indRow<- seq_len(nrow(sfIntLong))
-  z<-data.frame(indRow, whichLCZagree)
 
-  sfIntLong$LCZvalue<-apply(z, 1, function(x) unlist(st_drop_geometry(sfIntLong)[x[1], x[2]]))
+  whichLCZagree <- gsub(x = sfIntLong$whichWfs, pattern = "(.*)(_)(.*)", replacement = "\\1")
+  indRow <- seq_len(nrow(sfIntLong))
+  z <- data.frame(indRow, whichLCZagree)
 
-  sfInt<-cbind(sfIntnogeom,sfInt$geometry)  %>% st_as_sf()
-  
-  
-  output<-list(sfInt=sfInt, sfIntLong=sfIntLong)
+  sfIntLong$LCZvalue <- apply(z, 1, function(x) unlist(st_drop_geometry(sfIntLong)[x[1], x[2]]))
+
+  sfInt <- cbind(sfIntnogeom, sfInt$geometry) %>% st_as_sf()
+
+
+  output <- list(sfInt = sfInt, sfIntLong = sfIntLong)
 }
 
 

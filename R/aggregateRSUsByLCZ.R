@@ -26,15 +26,21 @@
 #' ASUallLocAllWfs <- aggregateRSUsByLCZ(
 #' allLocAllWfs,
 #' LCZcolumn = "lcz_primary", wfColumn = "wf", locationColumn = "location", aggregateBufferSize = 0.5)
-aggregateRSUsByLCZ<-function(sf, aggregateBufferSize = 0, LCZcolumn, wfColumn, locationColumn="location"){
-  groupCols<-as.list(environment())[c("wfColumn", "locationColumn", "LCZcolumn")]
-  presentColArgs<-!c(missing(wfColumn), missing(locationColumn), missing(LCZcolumn))
-  groupCols<-unname(unlist(groupCols[presentColArgs]))
+aggregateRSUsByLCZ <- function(sf, aggregateBufferSize = 0, LCZcolumn, wfColumn, locationColumn = "location") {
+  groupCols <- as.list(environment())[c("wfColumn", "locationColumn", "LCZcolumn")]
+  presentColArgs <- !c(missing(wfColumn), missing(locationColumn), missing(LCZcolumn))
+  groupCols <- unname(unlist(groupCols[presentColArgs]))
   print(groupCols)
-  clustered <- sf %>% st_buffer(dist = aggregateBufferSize) %>% 
+  clustered <- sf %>%
+    st_buffer(dist = aggregateBufferSize) %>%
     dplyr::group_by(across(all_of(groupCols))) %>%
-    dplyr::summarise()  %>% ungroup %>% 
-     st_cast("MULTIPOLYGON") %>% st_cast("POLYGON") %>% 
-     dplyr::mutate(area = drop_units(st_area(geometry))) %>% ungroup %>% ungroup %>% ungroup
+    dplyr::summarise() %>%
+    ungroup %>%
+    st_cast("MULTIPOLYGON") %>%
+    st_cast("POLYGON") %>%
+    dplyr::mutate(area = drop_units(st_area(geometry))) %>%
+    ungroup %>%
+    ungroup %>%
+    ungroup
   return(clustered)
 }

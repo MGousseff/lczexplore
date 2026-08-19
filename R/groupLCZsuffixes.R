@@ -9,50 +9,50 @@
 #' it will regroup.
 #' @return a list containing vectors and groups for a chord diagram
 #' @export
-groupLCZsuffix<-function(multiMatConfLongIn, ...) {
+groupLCZsuffix <- function(multiMatConfLongIn, ...) {
   #require(forcats)
   origPref <- sub("(.*)(_)(.*)", "\\1\\2", multiMatConfLongIn$orig)
   destPref <- sub("(.*)(_)(.*)", "\\1\\2", multiMatConfLongIn$dest)
-  origSuff<-gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$orig)
-  destSuff<-gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$dest)
-  
+  origSuff <- gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$orig)
+  destSuff <- gsub("(.*)(_)(.*)", "\\3", multiMatConfLongIn$dest)
+
   # ensure all the LCZ levels are present in the imported column
-  uniqueSuff<-unique(c(origSuff, destSuff)) %>% as.character # Attention unique outputs a list of length 1
+  uniqueSuff <- unique(c(origSuff, destSuff)) %>% as.character # Attention unique outputs a list of length 1
 
   # get the grouping levels as passed by ..., but without keeping arguments about colours
-  args<-list(...)[names(list(...))!="groupColors"]
-  indSep<-names(args)
-  indCol<-grep(x=indSep, pattern="groupColors")
+  args <- list(...)[names(list(...)) != "groupColors"]
+  indSep <- names(args)
+  indCol <- grep(x = indSep, pattern = "groupColors")
   print(names(args))
 
-  args<-append(list(origSuff),args)
+  args <- append(list(origSuff), args)
   # temp<-do.call(fct_collapse,args)
-  origSuffOut<-
-    tryCatch(expr=do.call(fct_collapse,args),
-             warning=function(w){
+  origSuffOut <-
+    tryCatch(expr = do.call(fct_collapse, args),
+             warning = function(w) {
                message("One of the specified levels to group doesn't exist in the data, if it is a mispelled level of the data,
-             this level will be kept as ungrouped",w)
+             this level will be kept as ungrouped", w)
                return(
-                 do.call(fct_collapse,args)
+                 do.call(fct_collapse, args)
                )
              })
 
-multiMatConfLongIn$orig<-paste0(origPref, origSuffOut)
+  multiMatConfLongIn$orig <- paste0(origPref, origSuffOut)
 
-  args<-append(list(destSuff),args)
+  args <- append(list(destSuff), args)
   # temp<-do.call(fct_collapse,args)
-  destSuffOut<-
-    tryCatch(expr=do.call(fct_collapse,args),
-             warning=function(w){
+  destSuffOut <-
+    tryCatch(expr = do.call(fct_collapse, args),
+             warning = function(w) {
                message("One of the specified levels to group doesn't exist in the data, if it is a mispelled level of the data,
-             this level will be kept as ungrouped",w)
+             this level will be kept as ungrouped", w)
                return(
-                 do.call(fct_collapse,args)
+                 do.call(fct_collapse, args)
                )
              })
 
 
-  multiMatConfLongIn$dest<-paste0(destPref, destSuffOut)
+  multiMatConfLongIn$dest <- paste0(destPref, destSuffOut)
 
   return(multiMatConfLongIn)
 }

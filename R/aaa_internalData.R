@@ -1,4 +1,3 @@
-
 .onLoad <- function(libname, pkgname) {
   utils::globalVariables(c("fill", "wf", "lcz_primary", "area", "V1", "V2", "LCZ_value",
                            "LCZ_alter", "agreeArea", "disagreeArea", "percAgree", "colorMap", "sectors"))

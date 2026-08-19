@@ -100,21 +100,21 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   # In order not to "carry" the whole file, keep only the column of interest (LCZ)
 
   # If LCZ name is the same in both input sf files we rename column2
-  if (column1 == column2 & nchar(column1)!= 0) {
+  if (column1 == column2 & nchar(column1) != 0) {
     column2 <- paste0(column1, ".1")
     sf2[[column2]] <- sf2[[column1]]
     sf2[[column1]] <- NULL
   }
   # If geomID name is the same in both input sf files we rename column2
 
-  if (geomID1 == geomID2 & nchar(geomID1)!= 0) {
+  if (geomID1 == geomID2 & nchar(geomID1) != 0) {
     geomID2 <- paste0(geomID1, ".1")
     sf2[[geomID2]] <- sf2[[geomID1]]
     sf2[[geomID1]] <- NULL
   }
   # If confid name is the same in both input sf files we rename column2
 
-  if (confid1 == confid2 & nchar(confid1)!= 0) {
+  if (confid1 == confid2 & nchar(confid1) != 0) {
     confid2 <- paste0(confid1, ".1")
     sf2[[confid2]] <- sf2[[confid1]]
     sf2[[confid1]] <- NULL
@@ -132,7 +132,6 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   nom1 <- nom1[sapply(nom1, nchar) != 0]
   nom2 <- c(geomID2, column2, confid2)
   nom2 <- nom2[sapply(nom2, nchar) != 0]
-
 
 
   sf1 <- select(sf1, all_of(nom1)) %>% drop_na(column1)
@@ -171,8 +170,8 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     # Classification must be encoded as factors
     sf1[[column1]] <- factor(sf1[[column1]], levels = .lczenv$typeLevelsDefault)
     sf2[[column2]] <- factor(sf2[[column2]], levels = .lczenv$typeLevelsDefault)
-    
- 
+
+
   }
 
 
@@ -315,7 +314,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   row.names(matConfLarge) <- matConfLarge[, 1] %>% as.character
   matConfLarge <- matConfLarge[, -1]
   matConfLarge <- as.matrix(matConfLarge)
-  matConfOut$matConfLarge<-matConfLarge
+  matConfOut$matConfLarge <- matConfLarge
 
 
   # Add pseudo Kappa Statistic to output to   
@@ -373,13 +372,13 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     nbgeomInter <- nrow(intersec_sf)
 
     # Plot the first classification
-    l1Plot <- 
+    l1Plot <-
       # ggplot2::ggplot(boundary) + 
       showLCZ(sf = sf1, column = column1, wf = wf1, plotNow = FALSE, repr = repr,
-              useStandCol = TRUE, , noPercAlter = FALSE, 
-                tryGroup = tryGroup, labelType = "long",
-             ...) +
-      ggtitle(titre1, subtitle = paste0("Number of RSU : ",nbgeom1))
+              useStandCol = TRUE, , noPercAlter = FALSE,
+              tryGroup = tryGroup, labelType = "long",
+              ...) +
+        ggtitle(titre1, subtitle = paste0("Number of RSU : ", nbgeom1))
     #
 
     # Plot the second classification
@@ -388,10 +387,10 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
       showLCZ(sf = sf2, column = column2, wf = wf2, labelType = "very short",
               plotNow = FALSE, repr = repr,
               useStandCol = TRUE,
-              tryGroup =tryGroup, 
+              tryGroup = tryGroup,
               ...) +
-        ggtitle(titre2, subtitle = paste0("Number of RSU : ",nbgeom2))
-    
+        ggtitle(titre2, subtitle = paste0("Number of RSU : ", nbgeom2))
+
     # Plot areas where classifications agree
     agreePlot <- ggplot(boundary) +
       geom_sf(data = boundary, fill = NA, lty = 'blank') +
@@ -419,19 +418,19 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     #   geom_tile(datatemp, mapping = aes(x = coordRef, y = a, fill = percArea2, height = 0.8, width = 0.8)) +
     #   ggtitle(titre4, subtitle = "Percentage inferior to 0.5 are rounded to 0")
     matConfPlot <- matConfOut$matConfPlot
-    
+
     if (saveG != "") {
       plotName <- paste0(saveG, ".png")
       png(filename = plotName, width = 1200, height = 900)
-      outPlot<-(l1Plot + l2Plot)/ (agreePlot+matConfPlot)
+      outPlot <- (l1Plot + l2Plot) / (agreePlot + matConfPlot)
       print(outPlot)
       dev.off()
     } else {
-      outPlot<-(l1Plot + l2Plot)/ (agreePlot+matConfPlot)
+      outPlot <- (l1Plot + l2Plot) / (agreePlot + matConfPlot)
       print(outPlot)
+    }
   }
-  }
-    else { message("Plot set to FALSE, no plots created") }
+  else { message("Plot set to FALSE, no plots created") }
 
   matConfOut <- matConfOut
 }
