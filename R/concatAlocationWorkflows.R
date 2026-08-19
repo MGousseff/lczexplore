@@ -20,21 +20,21 @@
 #' )
 #' ArvilleAllWfs <-  concatAlocationWorkflows(
 #' sfList = sfList, location = "Arville")
-concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
+concatAlocationWorkflows <- function(sfList, location = NA, refCrs = 1) {
 
-  if (is.na(location) | is.null(location)){
-    location<- tryCatch(
-    {st_drop_geometry(sfList[[1]][[1]][1,"location"]) %>% as.character},
-    error=function(...){
+  if (is.na(location) | is.null(location)) {
+    location <- tryCatch(
+    { st_drop_geometry(sfList[[1]][[1]][1, "location"]) %>% as.character },
+    error = function(...) {
       message("No location column or location column that contains not character")
     })
   }
 
-  refCrs<-st_crs(sfList[[refCrs]]$geometry)
-  sfList<-lapply(sfList, st_transform, crs = refCrs)
+  refCrs <- st_crs(sfList[[refCrs]]$geometry)
+  sfList <- lapply(sfList, st_transform, crs = refCrs)
   #lapply(sfList, function(x){print(st_crs(x))})
-  concatSf<-do.call(rbind, sfList)
-  concatSf$location<-location
+  concatSf <- do.call(rbind, sfList)
+  concatSf$location <- location
   return(concatSf)
 }
 
@@ -64,20 +64,20 @@ concatAlocationWorkflows<-function(sfList, location=NA, refCrs = 1){
 #' workflowNames = c("osm", "bdt", "wudapt"))
 #' multicompare_test<-compareMultipleLCZ(intersected,
 #' LCZcolumns = c("osm","bdt","wudapt"),trimPerc = 0.5)
-loadListFromSession<-function(sfList, workflowNames, columns, location, refCRS=1){
+loadListFromSession <- function(sfList, workflowNames, columns, location, refCRS = 1) {
   refCRS <- st_crs(sfList[[refCRS]])
-  sfList<-lapply(sfList, st_transform, crs = refCRS)
-  locations<-rep(location, length(workflowNames))
+  sfList <- lapply(sfList, st_transform, crs = refCRS)
+  locations <- rep(location, length(workflowNames))
 
-  addLocWf<-function(sfIn, wf, location, column){
-    sfIn$wf<-wf
-    sfIn$location<-location
-    sfIn$lcz_primary<-sfIn[[column]]
-    sfIn<-sfIn[, c("lcz_primary", "wf", "location", "geometry")]
+  addLocWf <- function(sfIn, wf, location, column) {
+    sfIn$wf <- wf
+    sfIn$location <- location
+    sfIn$lcz_primary <- sfIn[[column]]
+    sfIn <- sfIn[, c("lcz_primary", "wf", "location", "geometry")]
     print(names(sfIn))
     return(sfIn)
   }
 
-  sfListAugmented<-mapply(addLocWf, sfList, wf=workflowNames, location = locations, column = columns, SIMPLIFY = FALSE)
+  sfListAugmented <- mapply(addLocWf, sfList, wf = workflowNames, location = locations, column = columns, SIMPLIFY = FALSE)
   return(sfListAugmented)
 }

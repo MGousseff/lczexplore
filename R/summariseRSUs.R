@@ -33,27 +33,27 @@
 #'
 #' plotSummarisedRSUs(summarisedSfIn = summarisedASUs, workflowNames = c("wud" = "wudapt", "osm", "bdt"))
 #'
-summariseRSUs<-function(sfIn, aggregatingColumns = "lcz_primary", trimValue = 0 ){
-  if (!"sf"%in%class(sfIn)){sfIn<-st_as_sf(sfIn)}
-  if(!("area"%in%names(sfIn))){sfIn$area<-drop_units(st_area(sfIn))}
+summariseRSUs <- function(sfIn, aggregatingColumns = "lcz_primary", trimValue = 0) {
+  if (!"sf" %in% class(sfIn)) { sfIn <- st_as_sf(sfIn) }
+  if (!("area" %in% names(sfIn))) { sfIn$area <- drop_units(st_area(sfIn)) }
 
-  DTin<-sfIn
+  DTin <- sfIn
   data.table::setDT(DTin)
-  sfOut<-DTin[,
+  sfOut <- DTin[,
     as.list(
       c(
         number = .N,
         meanArea = round(mean(area / 10000, trim = trimValue), digits = 2),
         sdArea = round(sd(area / 10000), digits = 2),
-        totalArea=round(sum(area/10000), digits = 2),
+        totalArea = round(sum(area / 10000), digits = 2),
         meanLogArea = round(mean(log(area / 10000), trim = trimValue), digits = 2),
         sdLogArea = round(sd(log(area / 10000)), digits = 2),
         medianArea = round(median(area / 10000, trim = trimValue), digits = 2),
         medianLogArea = round(median(log(area / 10000), trim = trimValue), digits = 2)
       )
     ), by = aggregatingColumns]
-  
- return(sfOut)
+
+  return(sfOut)
 }
 
 

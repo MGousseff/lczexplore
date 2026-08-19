@@ -24,68 +24,69 @@
 #' dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 #' refWf = NULL, refLCZ = NA, residualLCZvalue = "Unclassified",
 #' inLocation = "Arville", plotSave = "/tmp", plotNow = TRUE)
-barplotLCZaLocation<-function(dirPath, inLocation, workflowNames = c("osm", "bdt", "wudapt"),
-                              refWf = NULL, refLCZ = NA, residualLCZvalue=NA, missingGeom = "osm",
-                              plotNow = FALSE, plotSave = "\tmp"){
-  colorMap<-rev(c("#8b0101","#cc0200","#fc0001","#be4c03","#ff6602","#ff9856",
-                  "#fbed08","#bcbcba","#ffcca7","#57555a","#006700","#05aa05",
-                  "#648423","#bbdb7a","#010101","#fdf6ae","#6d67fd", "ghostwhite"))
-  names(colorMap)<-rev(c(1:10,101:107, "Unclassified"))
-  etiquettes<-rev(c("LCZ 1: Compact high-rise","LCZ 2: Compact mid-rise","LCZ 3: Compact low-rise",
-                    "LCZ 4: Open high-rise","LCZ 5: Open mid-rise","LCZ 6: Open low-rise",
-                    "LCZ 7: Lightweight low-rise","LCZ 8: Large low-rise",
-                    "LCZ 9: Sparsely built","LCZ 10: Heavy industry",
-                    "LCZ A: Dense trees", "LCZ B: Scattered trees",
-                    "LCZ C: Bush,scrub","LCZ D: Low plants",
-                    "LCZ E: Bare rock or paved","LCZ F: Bare soil or sand",
-                    "LCZ G: Water", "Unclassified"))
+barplotLCZaLocation <- function(dirPath, inLocation, workflowNames = c("osm", "bdt", "wudapt"),
+                                refWf = NULL, refLCZ = NA, residualLCZvalue = NA, missingGeom = "osm",
+                                plotNow = FALSE, plotSave = "\tmp") {
+  colorMap <- rev(c("#8b0101", "#cc0200", "#fc0001", "#be4c03", "#ff6602", "#ff9856",
+                    "#fbed08", "#bcbcba", "#ffcca7", "#57555a", "#006700", "#05aa05",
+                    "#648423", "#bbdb7a", "#010101", "#fdf6ae", "#6d67fd", "ghostwhite"))
+  names(colorMap) <- rev(c(1:10, 101:107, "Unclassified"))
+  etiquettes <- rev(c("LCZ 1: Compact high-rise", "LCZ 2: Compact mid-rise", "LCZ 3: Compact low-rise",
+                      "LCZ 4: Open high-rise", "LCZ 5: Open mid-rise", "LCZ 6: Open low-rise",
+                      "LCZ 7: Lightweight low-rise", "LCZ 8: Large low-rise",
+                      "LCZ 9: Sparsely built", "LCZ 10: Heavy industry",
+                      "LCZ A: Dense trees", "LCZ B: Scattered trees",
+                      "LCZ C: Bush,scrub", "LCZ D: Low plants",
+                      "LCZ E: Bare rock or paved", "LCZ F: Bare soil or sand",
+                      "LCZ G: Water", "Unclassified"))
 
-  sfList<-loadMultipleSfs(dirPath = dirPath,
-                          workflowNames = workflowNames , inLocation = inLocation )
-  if(substr(dirPath, nchar(dirPath), nchar(dirPath))!="/"){dirPath<-paste0(dirPath, "/")}
-  zoneSfPath<-paste0(dirPath,"zone.fgb")
-  zoneSf<-read_sf(zoneSfPath)
-  sfList<-addMissingRSUs(sfList, missingGeomsWf=missingGeom, zoneSf = zoneSf, refWf = refWf,
-                                    refLCZ = refLCZ,
-                         residualLCZvalue = residualLCZvalue, column = "lcz_primary")
-  concatSf<-concatAlocationWorkflows(sfList = sfList,
-                                     location = inLocation, refCrs = 1)
+  sfList <- loadMultipleSfs(dirPath = dirPath,
+                            workflowNames = workflowNames, inLocation = inLocation)
+  if (substr(dirPath, nchar(dirPath), nchar(dirPath)) != "/") { dirPath <- paste0(dirPath, "/") }
+  zoneSfPath <- paste0(dirPath, "zone.fgb")
+  zoneSf <- read_sf(zoneSfPath)
+  sfList <- addMissingRSUs(sfList, missingGeomsWf = missingGeom, zoneSf = zoneSf, refWf = refWf,
+                           refLCZ = refLCZ,
+                           residualLCZvalue = residualLCZvalue, column = "lcz_primary")
+  concatSf <- concatAlocationWorkflows(sfList = sfList,
+                                       location = inLocation, refCrs = 1)
 
-  if (!("area"%in%names(concatSf))){
-    concatSf$area<-st_area(concatSf)
+  if (!("area" %in% names(concatSf))) {
+    concatSf$area <- st_area(concatSf)
   }
 
-  surfaces<-concatSf %>%
-    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt"= "wud"))) %>%
+  surfaces <- concatSf %>%
+    dplyr::mutate(wf = factor(wf, levels = c("bdt", "osm", "wudapt" = "wud"))) %>%
     dplyr::mutate(lcz_primary = factor(lcz_primary, levels = names(colorMap))) %>%
     dplyr::mutate(lcz_primary = tidyr::replace_na(lcz_primary, "Unclassified")) %>%
-    dplyr::group_by(wf, lcz_primary) %>% dplyr::summarise(area=drop_units(sum(area)), location=unique(inLocation))
+    dplyr::group_by(wf, lcz_primary) %>%
+    dplyr::summarise(area = drop_units(sum(area)), location = unique(inLocation))
 
-  inLocation<-unique(surfaces$location)
+  inLocation <- unique(surfaces$location)
 
   #utils::globalVariables(c("fill")) # Trick to avoid R CMD check to raise a note a bout no binding for glob var fill
 
-  outPlot<-ggplot(surfaces) +
-    geom_col(aes(fill=.data$lcz_primary, y=.data$area, x=.data$wf, color = after_scale(fill))) +
+  outPlot <- ggplot(surfaces) +
+    geom_col(aes(fill = .data$lcz_primary, y = .data$area, x = .data$wf, color = after_scale(fill))) +
     # scale_fill_viridis(discrete = T) +
     scale_fill_manual(
-      values=colorMap,
+      values = colorMap,
       breaks = names(colorMap),
       labels = etiquettes, na.value = "ghostwhite") +
     ggtitle(paste0("LCZ repartition by workflow for ", inLocation))
 
-  
-  if(is.logical(plotSave) && plotSave){
-    plotName<-paste0(dirPath, "LCZbyWfBarplot.png")
-    ggsave(plotName, outPlot)}
-  
-  if (is.character(plotSave)){
-    if(substring( plotSave, first = nchar(plotSave), last = nchar(plotSave)) !="/"){
-      plotSave<-paste0(plotSave, "/") }
-    plotName<-paste0(plotSave, inLocation, "_LCZbyWfBarplot.png")
+
+  if (is.logical(plotSave) && plotSave) {
+    plotName <- paste0(dirPath, "LCZbyWfBarplot.png")
+    ggsave(plotName, outPlot) }
+
+  if (is.character(plotSave)) {
+    if (substring(plotSave, first = nchar(plotSave), last = nchar(plotSave)) != "/") {
+      plotSave <- paste0(plotSave, "/") }
+    plotName <- paste0(plotSave, inLocation, "_LCZbyWfBarplot.png")
     ggsave(plotName, outPlot)
   }
-  if (plotNow){print(outPlot)}
+  if (plotNow) { print(outPlot) }
 
   return(outPlot)
 }

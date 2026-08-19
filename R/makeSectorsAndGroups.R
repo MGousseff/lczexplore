@@ -7,7 +7,7 @@
 #' @return a list containing vectors and groups for a chord diagram
 #' @importFrom dplyr case_when
 #' @export
-makeSectorsAndGroups<-function(multMatConfLongIn) {
+makeSectorsAndGroups <- function(multMatConfLongIn) {
 
   sectors <- sort(unique(c(multMatConfLongIn$orig, multMatConfLongIn$dest)))
 
@@ -24,7 +24,7 @@ makeSectorsAndGroups<-function(multMatConfLongIn) {
 
   df.groups <- structure(
     df_groups_val,
-    names = sectors) 
-  output<-list(sectors = sectors, df.groups = df.groups)
+    names = sectors)
+  output <- list(sectors = sectors, df.groups = df.groups)
   return(output)
 }

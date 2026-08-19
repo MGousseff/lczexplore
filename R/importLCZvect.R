@@ -39,27 +39,27 @@ importLCZvectFromFile <- function(
   if (extension != ".fgb") { # Some metadata for fgb files do not specify table/layer names
     query <- paste0("select * from ", nom, " limit 0") # So this query wouldn't work with such fgb files
     sourceCol <- st_read(dsn = fileName, query = query, quiet = !verbose) %>% names
-    colonnes<-checkColnameCase(colonnes, sourceCol)
-      inCol<-colonnes%in%sourceCol
-      badCol<-colonnes[!inCol]
-      colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+    colonnes <- checkColnameCase(colonnes, sourceCol)
+    inCol <- colonnes %in% sourceCol
+    badCol <- colonnes[!inCol]
+    colErr <- c("It seems that some of the columns you try to import do not exist in the source file,
               are you sure you meant ",
-              paste(badCol),"?")
-      if (prod(inCol)==0){ stop(colErr) }
-      sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
-      if (drop){sfFile<-sfFile[, colonnes] }
-    
-  } else { 
-      if (extension == ".fgb") {
-        sfFile<-sf::st_read(dsn=fileName,quiet=!verbose)[,]
-        sourceCol<-names(sfFile)
-        inCol<-colonnes%in%sourceCol
-        badCol<-colonnes[!inCol]
-        colErr<-c("It seems that some of the columns you try to import do not exist in the source file,
+                paste(badCol), "?")
+    if (prod(inCol) == 0) { stop(colErr) }
+    sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)
+    if (drop) { sfFile <- sfFile[, colonnes] }
+
+  } else {
+    if (extension == ".fgb") {
+      sfFile <- sf::st_read(dsn = fileName, quiet = !verbose)[,]
+      sourceCol <- names(sfFile)
+      inCol <- colonnes %in% sourceCol
+      badCol <- colonnes[!inCol]
+      colErr <- c("It seems that some of the columns you try to import do not exist in the source file,
               are you sure you meant ",
-                  paste(badCol),"?")
-        if (prod(inCol)==0){ stop(colErr) }
-      }
+                  paste(badCol), "?")
+      if (prod(inCol) == 0) { stop(colErr) }
+    }
   }
 
   return(sfFile)
@@ -91,9 +91,9 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
   colonnes <- c(geomID, column, confid)
   colonnes <- colonnes[sapply(colonnes, nchar) != 0]
   sourceCol <- names(sfIn)
-  colonnes<-checkColnameCase(userColNames = colonnes, dataColNames =sourceCol)
-  sfFile<-sfIn[,colonnes]  
-  
+  colonnes <- checkColnameCase(userColNames = colonnes, dataColNames = sourceCol)
+  sfFile <- sfIn[, colonnes]
+
   return(sfFile)
 }
 
@@ -131,10 +131,10 @@ importLCZvectFromSf <- function(sfIn, column, geomID = "", confid = "") {
 #' geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 #' showLCZ(redonBDTex)
 importLCZvect <- function(dirPath, file = "bdt_lcz.fgb", output = "sfFile", column = "LCZ_PRIMARY",
-                    geomID = "", confid = "",
-                    typeLevels =  .lczenv$typeLevelsDefault,
-                    drop = T, verbose = FALSE, sfIn = NULL, naAsUnclassified = TRUE) {
-  
+                          geomID = "", confid = "",
+                          typeLevels = .lczenv$typeLevelsDefault,
+                          drop = T, verbose = FALSE, sfIn = NULL, naAsUnclassified = TRUE) {
+
   if (is.null(sfIn)) {
     sfFile <- importLCZvectFromFile(
       dirPath = dirPath, file = file, column = column, geomID = geomID, confid = confid,
@@ -179,10 +179,10 @@ importLCZvect <- function(dirPath, file = "bdt_lcz.fgb", output = "sfFile", colu
     sfFile <-
       sfFile %>%
         dplyr::mutate(!!column :=
-          factor(sfFile[[column]], levels = typeLevels))  #%>%
-        # 
-    if (naAsUnclassified){ sfFile[[column]]<- forcats::fct_na_value_to_level(sfFile[[column]], "Unclassified") }
-    else { sfFile <- drop_na(sfFile, column)}
+                        factor(sfFile[[column]], levels = typeLevels))  #%>%
+    #
+    if (naAsUnclassified) { sfFile[[column]] <- forcats::fct_na_value_to_level(sfFile[[column]], "Unclassified") }
+    else { sfFile <- drop_na(sfFile, column) }
   }
   else { stop("You must specify the column containing the LCZ") }
 

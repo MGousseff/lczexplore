@@ -91,7 +91,7 @@ confidSensib <- function(inputDf = "", filePath = "", nPoints = 5,
     nbDrop <- NULL
 
     for (i in confSeq) {
-         
+
       echIntKeep <- subset(echIntConf, confidMin >= i)
       if (nrow(echIntKeep) > 0) { #print(nrow(echIntKeep))
         percAgrKeep <- c(percAgrKeep,

@@ -26,8 +26,8 @@
 #'  )
 #' summarisedRSUs<-summariseRSUs(allLocAllWfs, aggregatingColumns = c("wf", "lcz_primary"))
 #' plotSummarisedRSUs(summarisedSfIn = summarisedRSUs, workflowNames = c("wudapt"= "wud", "osm", "bdt"))
-plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "osm", "bdt"),
-                             plotNow = TRUE, graphPath = "") {
+plotSummarisedRSUs <- function(summarisedSfIn, workflowNames = c("wudapt", "osm", "bdt"),
+                               plotNow = TRUE, graphPath = "") {
 
   colorMap <- .lczenv$colorMapDefault
   etiquettes <- .lczenv$etiquettesDefault
@@ -35,13 +35,13 @@ plotSummarisedRSUs<-function(summarisedSfIn, workflowNames = c("wudapt", "osm", 
   initalAlphas <- rep(0.1, length(workflowNames))
   names(initalAlphas) <- workflowNames
   allPlotNames <- NULL
-   wfShapeNumber <- if (length(workflowNames)<5){c(5, 1, 2, 0)} else { c(c(5, 1, 2, 0), 6:(6+length(workflowNames)-4))}
+  wfShapeNumber <- if (length(workflowNames) < 5) { c(5, 1, 2, 0) } else { c(c(5, 1, 2, 0), 6:(6 + length(workflowNames) - 4)) }
   # if (prod(workflowNames == c("wudapt"= "wud", "osm", "bdt"))==0){
   #   wfNamedVector <- c(bdt = "GC/BDT", osm = "GC/OSM", wudapt = "WUDAPT")
   # } else {wfNamedVector<-workflowNames}
 
-wfNamedVector<-workflowNames
-wfNamedVector[nchar(names(workflowNames))>1]<-names(workflowNames)[nchar(names(workflowNames))>1]
+  wfNamedVector <- workflowNames
+  wfNamedVector[nchar(names(workflowNames)) > 1] <- names(workflowNames)[nchar(names(workflowNames)) > 1]
   print(wfNamedVector)
   for (wf in workflowNames) {
     wfAlphas <- initalAlphas
@@ -64,7 +64,7 @@ wfNamedVector[nchar(names(workflowNames))>1]<-names(workflowNames)[nchar(names(w
         scale_size_continuous(name = "Total area for \n a workflow and a LCZ type") +
         labs(x = "Number of Aggregated Spatial units", y = "Mean of log areas of ASU") +
         guides(alpha = "none") +
-        labs(subtitle = wfNamedVector[workflowNames==wf]) +
+        labs(subtitle = wfNamedVector[workflowNames == wf]) +
         theme(legend.position = "right",
               axis.text = element_text(size = rel(1)),
               axis.title = element_text(size = rel(1.2), face = "bold"),
@@ -80,8 +80,8 @@ wfNamedVector[nchar(names(workflowNames))>1]<-names(workflowNames)[nchar(names(w
     plot_annotation(title = "Overview of aggregating behavior",
                     subtitle = "Average log area x Average number of spatial units per LCZ types and workflow",
                     caption = "Along the y axis : coarser map, along the x axis, patchworky map ",
-                    theme =theme(plot.title = element_text(size = rel(1.7), face = "bold"),
-                                 plot.subtitle = element_text(size = rel(1.3), face = "bold") ) )
+                    theme = theme(plot.title = element_text(size = rel(1.7), face = "bold"),
+                                  plot.subtitle = element_text(size = rel(1.3), face = "bold")))
   if (plotNow) {
     print(outPlot)
   }

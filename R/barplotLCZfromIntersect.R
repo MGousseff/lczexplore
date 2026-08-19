@@ -30,91 +30,94 @@
 #' example<-barplotLCZfromIntersect(sfIn = twoLocsIntersect,
 #'                               columns = c("osm", "bdt", "wudapt"),
 #'                             workflowNames = c("osm", "bdt", "wudapt"))
-barplotLCZfromIntersect<-function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc",  plotNow = TRUE, plotSave = "",
-                                  labelType = "short"){
-  checkedWfCol<-checkColumnWorkflowNames(columns=columns, workflowNames = workflowNames)
-  columns<-checkedWfCol$columns
-  workflowNames<-checkedWfCol$workflowNames
+barplotLCZfromIntersect <- function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc", plotNow = TRUE, plotSave = "",
+                                    labelType = "short") {
+  checkedWfCol <- checkColumnWorkflowNames(columns = columns, workflowNames = workflowNames)
+  columns <- checkedWfCol$columns
+  workflowNames <- checkedWfCol$workflowNames
 
 
-  if (!("area"%in%names(sfIn))){
-    concatSf$area<-st_area(sfIn)
+  if (!("area" %in% names(sfIn))) {
+    concatSf$area <- st_area(sfIn)
   }
-  df<-st_drop_geometry(sfIn)
+  df <- st_drop_geometry(sfIn)
 
-if (stat == "perc"){
-  percSurf <- lapply(seq_along(columns), function(g){
-                groupCol<-columns[g]
-                     tmp <- df %>%  fgroup_by(groupCol) %>% fsummarise(area = fsum(area)) %>%
-                        fmutate(pct = area / sum(area) * 100) %>%
-                        fselect(groupCol, "pct") %>%
-                        frename(lcz_primary = groupCol, .nse=FALSE) %>%
-                        fmutate(wf = workflowNames[g])
-                     return(tmp)
-                    })
-  percSurf<-do.call(rbind, percSurf)
-
- outPlot<-ggplot(data = percSurf) +
-   geom_col(aes(x = wf, y = pct, fill = lcz_primary)) +
-   scale_fill_manual(
-     values=.lczenv$colorMapDefault,
-     breaks = names(.lczenv$colorMapDefault),
-     labels = .lczenv$shortEtiquettesDefault,
-     na.value = "ghostwhite")+
-   labs(x = "Workflow", y ="Percentage of Area")
-if (plotNow) print(outPlot)
-   return(percSurf)} else if (stat == "sum"){
-    sumSurf <- lapply(seq_along(columns), function(g){
-      groupCol<-columns[g]
-      tmp <- df %>%  fgroup_by(groupCol) %>% fsummarise(sumArea = fsum(area)) %>%
-        fselect(groupCol, "sumArea") %>%
-        frename(lcz_primary = groupCol, .nse=FALSE) %>%
+  if (stat == "perc") {
+    percSurf <- lapply(seq_along(columns), function(g) {
+      groupCol <- columns[g]
+      tmp <- df %>%
+        fgroup_by(groupCol) %>%
+        fsummarise(area = fsum(area)) %>%
+        fmutate(pct = area / sum(area) * 100) %>%
+        fselect(groupCol, "pct") %>%
+        frename(lcz_primary = groupCol, .nse = FALSE) %>%
         fmutate(wf = workflowNames[g])
-      })
+      return(tmp)
+    })
+    percSurf <- do.call(rbind, percSurf)
 
-  sumSurf<-do.call(rbind, sumSurf)
+    outPlot <- ggplot(data = percSurf) +
+      geom_col(aes(x = wf, y = pct, fill = lcz_primary)) +
+      scale_fill_manual(
+        values = .lczenv$colorMapDefault,
+        breaks = names(.lczenv$colorMapDefault),
+        labels = .lczenv$shortEtiquettesDefault,
+        na.value = "ghostwhite") +
+      labs(x = "Workflow", y = "Percentage of Area")
+    if (plotNow) print(outPlot)
+    return(percSurf) } else if (stat == "sum") {
+    sumSurf <- lapply(seq_along(columns), function(g) {
+      groupCol <- columns[g]
+      tmp <- df %>%
+        fgroup_by(groupCol) %>%
+        fsummarise(sumArea = fsum(area)) %>%
+        fselect(groupCol, "sumArea") %>%
+        frename(lcz_primary = groupCol, .nse = FALSE) %>%
+        fmutate(wf = workflowNames[g])
+    })
 
-  outPlot<-ggplot(data = sumSurf) +
-    geom_col(aes(x = wf, y = sumArea, fill = lcz_primary)) +
-    scale_fill_manual(
-      values=.lczenv$colorMapDefault,
-      breaks = names(.lczenv$colorMapDefault),
-      labels = .lczenv$shortEtiquettesDefault,
-      na.value = "ghostwhite")+
-    labs(x = "Workflow", y ="Summed Area")
-  if (plotNow) print(outPlot)
+    sumSurf <- do.call(rbind, sumSurf)
+
+    outPlot <- ggplot(data = sumSurf) +
+      geom_col(aes(x = wf, y = sumArea, fill = lcz_primary)) +
+      scale_fill_manual(
+        values = .lczenv$colorMapDefault,
+        breaks = names(.lczenv$colorMapDefault),
+        labels = .lczenv$shortEtiquettesDefault,
+        na.value = "ghostwhite") +
+      labs(x = "Workflow", y = "Summed Area")
+    if (plotNow) print(outPlot)
     return(sumSurf)
- }
+  }
 
 }
 
 
-
-
-
-checkColumnWorkflowNames<-function(columns, workflowNames){
+checkColumnWorkflowNames <- function(columns, workflowNames) {
   if (
-    (is.null(columns) | prod(!is.na(columns))==0) &
-      ( !is.null(workflowNames)) & prod(!is.na(workflowNames))==1 & length(workflowNames)>1){
+    (is.null(columns) | prod(!is.na(columns)) == 0) &
+      (!is.null(workflowNames)) &
+      prod(!is.na(workflowNames)) == 1 &
+      length(workflowNames) > 1) {
     message(paste0("The names of the columns of the lcz types for each workflow are missing, ",
                    "an attempt will be made with workflowNames instead "))
     columns <- workflowNames
   }
 
-  if (  (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &
-    (!is.null(columns) | prod(!is.na(columns))== 1)  ) {
+  if ((is.null(workflowNames) | prod(!is.na(workflowNames)) == 0) &
+    (!is.null(columns) | prod(!is.na(columns)) == 1)) {
     message(paste0("The names of the workflows are missing, ",
                    "an attempt will be made with column names instead "))
     workflowNames <- columns
   }
 
   if (
-    (is.null(workflowNames) | prod(!is.na(workflowNames))==0) &&
-      (is.null(columns) | prod(!is.na(columns)==0))){
+    (is.null(workflowNames) | prod(!is.na(workflowNames)) == 0) &&
+      (is.null(columns) | prod(!is.na(columns) == 0))) {
     message(paste0("The names of the workflows and of the columns are missing.",
                    "Will try to replace them with names of columns other than location, area and geometry,",
                    "but this is hazardous."))
-    workflowNames<-columns<-names(sfIn)[!names(sfIn)%in%c("location", "area", "geometry")]
+    workflowNames <- columns <- names(sfIn)[!names(sfIn) %in% c("location", "area", "geometry")]
   }
   output <- list(columns = columns, workflowNames = workflowNames)
   return(output)
