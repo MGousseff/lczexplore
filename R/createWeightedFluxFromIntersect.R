@@ -9,7 +9,7 @@
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
 #' @export
-createMultipleMatConf <- function(sfIn, wfNamesIn, columns = NULL, typeLevelsDefaultIn = .lczenv$typeLevelsDefault) {
+createWeightedFluxFromIntersect <- function(sfIn, wfNamesIn, columns = NULL, typeLevelsDefaultIn = .lczenv$typeLevelsDefault) {
   if (nrow(allWfsIn) > 100) { message("This function computes all the pairwise confusion matrices and can take some time") }
   for (i in 1:(length(wfNamesIn) - 1)) {
     for (j in (i + 1):length(wfNamesIn)) {

@@ -19,10 +19,10 @@ It allows to account for numeric precision errors and to speed up computations a
 }
 \value{
 returns graphics of comparison and an object called matConfOut which contains :
-matConfLong, a confusion matrix in a longer form,
+matConfLong, a confusion matrix in a long form (each line has the percentage of LCZ type i from workflow j
+which is classified in LCZ type i' by workflow j'),
 matConfPlot is a ggplot2 object showing the confusion matrix.
 percAgg is the general agreement between the two sets of LCZ, expressed as a percentage of the total area of the study zone
-pseudoK is a heuristic estimate of a Cohen's kappa coefficient of agreement between classifications
 If saveG is not an empty string, graphics are saved under "saveG.png"
 }
 \description{

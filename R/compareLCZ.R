@@ -66,7 +66,8 @@
 compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = "bdtopo_2_2",
                        sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = "osm", ref = 1,
                        repr = "standard", saveG = "", exwrite = FALSE, outDir = getwd(),
-                       location = "Your Place", plotNow = TRUE, tryGroup = FALSE, ...) {
+                       location = "Your Place", plotNow = TRUE, tryGroup = FALSE, minZeroArea = 0.0001,
+                       ...) {
 
 
   # store the column names in a way that can be injected in functions A SUPPRIMER ?
@@ -91,6 +92,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
       sf1 <- sf1 %>% st_transform(crs = st_crs(sf2)) }
     else {
       warning("the ref argument is unclear (should be either 1 or 2), so the files will be coerced to the crs of", namesf1, " file")
+      ref <- 1
       sf2 <- sf2 %>% st_transform(crs = st_crs(sf1))
     }
     # }
@@ -243,16 +245,13 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   # # Intersect geometries of both files
   ######################################################
   #intersection of geometries
-  intersec_sf <- st_intersection(x = sf1[, nom1], y = sf2[, nom2]) %>%
-    st_buffer(0) %>%
-    dplyr::mutate(area = drop_units(st_area(geometry)))
-  nbNoSurf <- nrow(subset(intersec_sf, area == 0))
-  if (nbNoSurf > 0) {
-    message(paste0(
-      "The intersection of the two data set geometries return ",
-      nbNoSurf, " geometries with an null area. They will be discarded."))
-    intersec_sf <- subset(intersec_sf, area != 0)
-  }
+  sfList<-list(sf1,sf2)
+  columnVect<-c(column1, column2)
+  refCrs<-st_crs(sfList[[ref]])
+  workflowNames <- c(wf1, wf2)
+  intersec_sf <- createIntersect(sfList = sfList, columns = columnVect, refCrs = refCrs, workflowNames = workflowNames,
+                                 minZeroArea = minZeroArea)
+
 
 
   # checks if the two LCZ classifications agree

@@ -1,4 +1,4 @@
-#' Intersect multiple sf files in which Local Climate Zones are set for polygon geometries 
+#' Intersects multiple sf files in which Local Climate Zones are set for polygon geometries
 #' @param sfList a list which contains the classifications to compare, as sf objects
 #' @param columns a vector which contains, for each sf of sfList,
 #' the name of the columns of the classification to compare
@@ -81,6 +81,9 @@ createIntersect <- function(sfList, columns, refCrs = NULL, workflowNames = NULL
 
     sfInt <- dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                            .before = geometry)
+    nbDiscardedUnits<-nrow(sfInt[sfInt$area > minZeroArea,])
+    if (nbDiscardedUnits >0){message(paste0(nbDiscardedUnits, " spatial units had an area inferior to the
+    specified minimum area (", minZeroArea,") and were discarded"))}
     sfInt <- sfInt[sfInt$area > minZeroArea,]
     sfInt <- dplyr::mutate(sfInt, location = locationRef, .before = geometry)
   }

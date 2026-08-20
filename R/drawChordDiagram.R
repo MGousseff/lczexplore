@@ -1,6 +1,6 @@
 #' Draws how LCZ types from several workflows break up into LCZ types of one another
 #'
-#' @param multiMatConfLongIn is typically the output of the function createMultipleMatConf,
+#' @param multiMatConfLongIn is typically the output of the function createWeightedFlux,
 #' and is expected to contain the following columns orig, dest and weightedFlux,
 #' whose names are quite self explanatory : orig is the origin LCZ type, dest is the destination LCZ type
 #' and weightedFlux is the percentage of area transfered from orig to dest
