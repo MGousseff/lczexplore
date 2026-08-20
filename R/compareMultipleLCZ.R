@@ -9,10 +9,10 @@
 #' @importFrom tidyr pivot_longer
 #' @import sf forcats units RColorBrewer utils grDevices
 #' @return returns graphics of comparison and an object called matConfOut which contains :
-#' matConfLong, a confusion matrix in a longer form, 
+#' matConfLong, a confusion matrix in a long form (each line has the percentage of LCZ type i from workflow j
+#' which is classified in LCZ type i' by workflow j'),
 #' matConfPlot is a ggplot2 object showing the confusion matrix.
 #' percAgg is the general agreement between the two sets of LCZ, expressed as a percentage of the total area of the study zone
-#' pseudoK is a heuristic estimate of a Cohen's kappa coefficient of agreement between classifications
 #' If saveG is not an empty string, graphics are saved under "saveG.png"
 #' @export
 #' @examples
@@ -34,34 +34,36 @@ compareMultipleLCZ <- function(sfInt, LCZcolumns, workflowNames = NULL, trimPerc
   # if input intersected file comes from a concatenation, it will have a location column that is not needed
   if ("location" %in% names(sfInt)) { sfInt <- sfInt[, !names(sfInt) == "location"] }
 
-  sfIntnogeom <- st_drop_geometry(sfInt)
+  sfIntNoGeom <- st_drop_geometry(sfInt)
 
   if (is.null(workflowNames) | length(workflowNames) != length(LCZcolumns)) { workflowNames <- LCZcolumns }
 
-  allLevels <- sfIntnogeom[, LCZcolumns] %>%
+  allLevels <- sfIntNoGeom[, LCZcolumns] %>%
     lapply(levels) %>%
     unlist %>%
     unique()
-  sfIntnogeom[, LCZcolumns] <- sfIntnogeom[, LCZcolumns] %>% lapply(function(x) factor(x, levels = allLevels))
+  sfIntNoGeom[, LCZcolumns] <- sfIntNoGeom[, LCZcolumns] %>% lapply(function(x) factor(x, levels = allLevels))
+
+  # Compute and sums pairwise agreeing surfaces
 
   for (i in 1:(length(LCZcolumns) - 1)) {
     for (j in (i + 1):length(LCZcolumns)) {
       compName <- paste0(workflowNames[i], "_", workflowNames[j])
       print(compName)
-      sfIntnogeom[, compName] <- sfIntnogeom[, LCZcolumns[i]] == sfIntnogeom[, LCZcolumns[j]]
+      sfIntNoGeom[, compName] <- sfIntNoGeom[, LCZcolumns[i]] == sfIntNoGeom[, LCZcolumns[j]]
     }
   }
-  rangeCol <- (length(LCZcolumns) + 2):ncol(sfIntnogeom)
+  rangeCol <- (length(LCZcolumns) + 2):ncol(sfIntNoGeom)
   print(rangeCol)
   # print(names(sfIntnogeom[,rangeCol]))
-  sfIntnogeom$nbAgree <- apply(
-    X = sfIntnogeom[, rangeCol], MARGIN = 1, sum)
-  sfIntnogeom$maxAgree <- apply(
-    X = sfIntnogeom[, seq_along(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE))
-  print(head(sfIntnogeom))
+  sfIntNoGeom$nbAgree <- apply(
+    X = sfIntNoGeom[, rangeCol], MARGIN = 1, sum)
+  sfIntNoGeom$maxAgree <- apply(
+    X = sfIntNoGeom[, seq_along(LCZcolumns)], MARGIN = 1, function(x) max(table(x), na.rm = TRUE))
+  print(head(sfIntNoGeom))
 
   # long format
-  sfIntLong <- tidyr::pivot_longer(sfIntnogeom, cols = names(sfIntnogeom)[rangeCol], names_to = "whichWfs", values_to = "agree")
+  sfIntLong <- tidyr::pivot_longer(sfIntNoGeom, cols = names(sfIntNoGeom)[rangeCol], names_to = "whichWfs", values_to = "agree")
 
   # Get the reference LCZ column on which 2 wf agree
 
@@ -71,8 +73,7 @@ compareMultipleLCZ <- function(sfInt, LCZcolumns, workflowNames = NULL, trimPerc
 
   sfIntLong$LCZvalue <- apply(z, 1, function(x) unlist(st_drop_geometry(sfIntLong)[x[1], x[2]]))
 
-  sfInt <- cbind(sfIntnogeom, sfInt$geometry) %>% st_as_sf()
-
+  sfInt <- cbind(sfIntNoGeom, sfInt$geometry) %>% st_as_sf()
 
   output <- list(sfInt = sfInt, sfIntLong = sfIntLong)
 }

@@ -1,4 +1,5 @@
-#' for several workflows, create all pairwise confusion matrices and conatenate them in long form
+#' Takes an sf object with several workflow values,
+#' and creates all pairwise confusion matrices, then conatenates them in long form,
 #' usable to plot chord diagrams
 #'
 #' @param allWfsIn is an sf object, containing the different lcz classification in a long format
@@ -8,8 +9,10 @@
 #' @importFrom dplyr mutate select filter
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
+#' @examples
+#'
 #' @export
-createMultipleMatConf <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault, columns = NULL) {
+createWeightedFlux <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault, columns = NULL) {
   if (nrow(allWfsIn) > 100) { message("This function computes all the pairwise confusion matrices and can take some time") }
   for (i in 1:(length(wfNamesIn) - 1)) {
     for (j in (i + 1):length(wfNamesIn)) {

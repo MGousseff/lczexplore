@@ -23,6 +23,7 @@ compareLCZ(
   location = "Your Place",
   plotNow = TRUE,
   tryGroup = FALSE,
+  minZeroArea = 1e-04,
   ...
 )
 }

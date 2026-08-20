@@ -2,7 +2,7 @@
 % Please edit documentation in R/createIntersect.R
 \name{createIntersect}
 \alias{createIntersect}
-\title{Intersect multiple sf files in which Local Climate Zones are set for polygon geometries}
+\title{Intersects multiple sf files in which Local Climate Zones are set for polygon geometries}
 \usage{
 createIntersect(
   sfList,
@@ -31,7 +31,7 @@ a single sf file with values of LCZ from all the input
 are assigned to geometries resulting from intersection of all input geometries
 }
 \description{
-Intersect multiple sf files in which Local Climate Zones are set for polygon geometries
+Intersects multiple sf files in which Local Climate Zones are set for polygon geometries
 }
 \details{
 The input SfList can contain two levels, the first level being the locations,

@@ -1,6 +1,6 @@
 #' Creates sectors and groups for the drawChordDiagram function
 #'
-#' @param multMatConfLongIn is typically the output of the function createMultipleMatConf,
+#' @param multMatConfLongIn is typically the output of the function createWeightedFlux,
 #' and is expected to contain the following columns orig, dest and weightedFlux,
 #' whose names are quite self explanatory : orig is the origin LCZ type, dest is the destination LCZ type
 #' and weightedFlux is the percentage of area transfered from orig to dest

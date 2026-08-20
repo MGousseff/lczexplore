@@ -11,6 +11,11 @@ expect_message(compareRedonBDTOSM<-
                             repr="standard", saveG="", exwrite=FALSE, location="Redon", plot=TRUE),
           "Both sf datasets need to live in the same crs projection \\(srid / epsg\\),")
 
+expect_message(compareRedonBDTOSM<-
+                 compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU", confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
+                            sf2=redonOSM, column2="LCZ_PRIMARY", geomID2 = "ID_RSU", confid2="LCZ_UNIQUENESS_VALUE", wf2="osm",
+                            repr="standard", saveG="", exwrite=FALSE, location="Redon", plot=TRUE, minZeroArea = 0.001),
+               "Both sf datasets need to live in the same crs projection \\(srid / epsg\\),")
 
 expect_message(compareRedonBDTOSM<-
                  compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU", confid1="LCZ_UNIQUENESS_VALUE", wf1="bdtopo_2_2",
