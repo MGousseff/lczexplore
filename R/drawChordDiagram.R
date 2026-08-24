@@ -22,14 +22,16 @@
 #' @importFrom collapse unlist2d fselect
 #' @importFrom graphics par
 #' @export
-drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = colorMap, labelMatch = NULL, inFacing = "clockwise", ...) {
+drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise", ...) {
+  if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
+
   if (is.null(labelMatch)) {
     uniqueOrig <- unique(multiMatConfLongIn$orig)
     uniqueDest <- unique(multiMatConfLongIn$dest)
-    uniqueOrDest <- unique(uniqueOrig, uniqueDest)
-    levelsSuff <- gsub("(.*)(_)(.*)", "\\3", uniqueOrDest)
-    standardSuff <- c(paste0("00", 1:9), "010", 101:107, "Unclassified")
-    if (prod(levelsSuff %in% standardSuff) == 1)
+    uniqueOrigDest <- unique(uniqueOrig, uniqueDest)
+    levelsSuffix <- gsub("(.*)(_)(.*)", "\\3", uniqueOrigDest)
+    standardSuffix <- c(paste0("00", 1:9), "010", 101:107, "Unclassified")
+    if (prod(levelsSuffix %in% standardSuffix) == 1)
     {
       print("standardLabelMatch")
       labelMatch <- c(
@@ -37,7 +39,7 @@ drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = colorMap, labelMat
         "010" = "10", "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F", "107" = "G",
         "Unclassified" = "Unclass."
       ) } else {
-      labelMatch <- uniqueOrDest
+      labelMatch <- uniqueOrigDest
     }
   }
 
@@ -53,7 +55,7 @@ drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = colorMap, labelMat
   print(colorMapIn)
 
   sectors <- makeSectorsAndGroups(multiMatConfLongIn)$sectors
-  print(sectors)
+  print("sectors") ;   print(sectors)
   df.groups <- makeSectorsAndGroups(multiMatConfLongIn)$df.groups
   sector_ids <- strsplit(sectors, "_") %>%
     unlist2d() %>%
@@ -61,7 +63,7 @@ drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = colorMap, labelMat
     as.vector %>%
     unlist %>%
     unique
-
+ print(sector_ids)
   names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
 
   # something to adapt when we will hightlight bigger flux
@@ -122,7 +124,9 @@ drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = colorMap, labelMat
                },
                bg.border = NA) # here set bg.border to NA is important
   par(cex = 1.5)
-  lapply(sector_ids, drawSectors, sectorsIn = unique(c(diagramme$rn, diagramme$cn)),
+  sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
+  print(sectorsIn)
+  lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
          colorMapIn = colorMapIn, textMatch = labelMatch, facing = inFacing)
 }
 
