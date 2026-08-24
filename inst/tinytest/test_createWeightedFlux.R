@@ -7,4 +7,8 @@ twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm"
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
                                         refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
 
-twoLocsMatConfLong<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
+twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
+
+test <- makeSectorsAndGroups(twoLocsWeightedFlux)
+
+drawChordDiagram(twoLocsWeightedFlux, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")

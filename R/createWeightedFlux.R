@@ -2,7 +2,8 @@
 #' and creates all pairwise confusion matrices, then conatenates them in long form,
 #' usable to plot chord diagrams
 #'
-#' @param allWfsIn is an sf object, containing the different lcz classification in a long format
+#' @param intersectSfWide is an sf object, containing the different lcz classification on
+#' already intersected geometries in wide format
 #' with a column wf for the workflow names, a column lcz_primary for the LCZ types.
 #' @param wfNamesIn the name of trhe columùn containing the workflows names
 #' @param typeLevelsDefaultIn is a named vector of strings containing the LCZ levels. By default inherited from lczexplore
@@ -10,15 +11,39 @@
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
 #' @examples
+#' twoLocsDir<-paste0(
+#'  system.file("extdata", package = "lczexplore"),"/multipleWfs")
+#' twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","wudapt"),
+#'                                   inLocation = c("Arville", "Redon"))
+#'
+#' twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
+#'                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
+#'
+#' twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 #'
 #' @export
-createWeightedFlux <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczenv$typeLevelsDefault, columns = NULL) {
-  if (nrow(allWfsIn) > 100) { message("This function computes all the pairwise confusion matrices and can take some time") }
-  for (i in 1:(length(wfNamesIn) - 1)) {
-    for (j in (i + 1):length(wfNamesIn)) {
-      if (is.null(columns)) { columns <- rep("lcz_primary", length(wfNamesIn)) }
-      sf1 <- importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[i]), column = columns[i])
-      sf2 <- importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[j]), column = columns[j])
+createWeightedFlux <- function(intersectSfWide, columns = NULL, wfNamesIn = NULL,
+                               typeLevelsDefaultIn = .lczenv$typeLevelsDefault) {
+  if (nrow(intersectSfWide) > 100) { message("This function computes how any LCZ type from any workflow
+  breaks into the LCZ types of all other workflows: it can take a while") }
+print(columns)
+  print(wfNamesIn)
+      if (
+        (is.null(wfNamesIn) | prod(!is.na(wfNamesIn))) &
+          (!is.null(columns) & prod(!is.na(columns)))
+      ) {wfNamesIn<-columns}
+
+      if (
+        (is.null(columns) | prod(!is.na(columns))) &
+          (!is.null(wfNamesIn) & !prod(is.na(wfNamesIn)))
+      ) {columns <- wfNamesIn}
+
+  print(columns)
+
+  for (i in 1:(length(columns) - 1)) {
+    for (j in (i + 1):length(columns)) {
+      sf1 <- intersectSfWide[,i]
+      sf2 <- intersectSfWide[,j]
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
@@ -38,13 +63,14 @@ createWeightedFlux <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczen
       assign(compareNameToBind,
              get(compareName)$matConf %>%
                dplyr::mutate(wf_pair = paste0(
-                 wfNamesIn[i], "_", lcz_primary, "_",
-                 wfNamesIn[j], "_", lcz_primary.1)) %>%
+                 wfNamesIn[i], "_", .data[[columns[i]]], "_",
+                 wfNamesIn[j], "_", .data[[columns[j]]])) %>%
                dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
                mutate(percArea = rep(
                  get(compareName)$areas$percArea1,
                  each = length(get(compareName)$areas$percArea2)))
       )
+      print(get(compareNameToBind)$wf_pair)
     }
   }
 
@@ -54,20 +80,17 @@ createWeightedFlux <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczen
   ##
   ############################################
 
-  for (i in (length(wfNamesIn):2)) {
+  for (i in (length(columns):2)) {
     for (j in 1:(i - 1)) {
-      # for (i in 1 : 2) {
-      #   for (j in i + 1 : 3){
-      sf1 <- importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[i]), column = "lcz_primary")
-      sf2 <- importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[j]), column = "lcz_primary")
+      sf1 <- intersectSfWide[,i]
+      sf2 <- intersectSfWide[,j]
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
-               sf1 = sf1, column1 = "lcz_primary",
-               sf2 = sf2, column2 = "lcz_primary",
+               sf1 = sf1, column1 = columns[i],
+               sf2 = sf2, column2 = columns[j],
                typeLevels = unique(names(typeLevelsDefaultIn)),
-               plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
-      )
+               plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j]))
     }
   }
 
@@ -77,7 +100,8 @@ createWeightedFlux <- function(allWfsIn, wfNamesIn, typeLevelsDefaultIn = .lczen
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareNameToBind,
              get(compareName)$matConf %>%
-               dplyr::mutate(wf_pair = paste0(wfNamesIn[i], "_", lcz_primary, "_", wfNamesIn[j], "_", lcz_primary.1)) %>%
+               dplyr::mutate(wf_pair = paste0(
+                 wfNamesIn[i], "_", .data[[columns[i]]], "_", wfNamesIn[j], "_", .data[[columns[j]]])) %>%
                dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
                mutate(percArea = rep(get(compareName)$areas$percArea1, each = length(get(compareName)$areas$percArea2)))
       )

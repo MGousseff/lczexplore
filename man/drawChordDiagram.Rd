@@ -6,7 +6,7 @@
 \usage{
 drawChordDiagram(
   multiMatConfLongIn,
-  colorMapIn = colorMap,
+  colorMapIn = NULL,
   labelMatch = NULL,
   inFacing = "clockwise",
   ...

@@ -57,7 +57,9 @@ createIntersect <- function(sfList, columns, refCrs = NULL, workflowNames = NULL
     for (i in seq_along(intersectedList)) {
       intersectedList[[i]]$location <- names(sfList)[i]
     }
+
     sfInt <- do.call(rbind, intersectedList)
+
     return(sfInt)
   } else {
     if (is.null(refCrs)) { refCrs <- st_crs(sfList[[1]]) } else { refCrs <- st_crs(sfList[[refCrs]]) }
