@@ -46,7 +46,7 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
   datasetName <- deparse(substitute(sf))
 
-  if (wf != "") { nomLegende <- paste0("LCZ from ", wf, " workflow") } else { nomLegende <- "Levels" }
+  if (wf != "") { nomLegende <- paste0("Levels from ", wf, " workflow") } else { nomLegende <- "Levels" }
 
   # For standard levels of LCZ after import with importLCZ* functions
 
@@ -123,7 +123,7 @@ showAlterLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
   datasetName <- deparse(substitute(sf))
   print(datasetName)
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
-  if (wf != "") { nomLegende <- paste0("LCZ from ", wf, " workflow") } else { nomLegende <- "Levels" }
+  if (wf != "") { nomLegende <- paste0("Levels from ", wf, " workflow") } else { nomLegende <- "Levels" }
 
   if (naAsUnclassified) { sf[[column]] <- forcats::fct_na_value_to_level(sf[[column]], "Unclassified") }
   else { sf <- drop_na(sf, column) }
@@ -170,7 +170,7 @@ showAlterLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 
   if (title == "") {
     if (wf != "") { wtitre <- paste("Grouped LCZ for ", wf, "workflow, applied to ", datasetName, "dataset") } else {
-      wtitre <- paste("Grouped LCZ from", datasetName, " dataset")
+      wtitre <- paste("Grouped levels from", datasetName, " dataset")
     }
   } else {
     wtitre <- title
@@ -249,7 +249,7 @@ showStandardLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
 
-  if (wf != "") { nomLegende <- paste0("LCZ from ", wf, " workflow") } else { nomLegende <- "Levels" }
+  if (wf != "") { nomLegende <- paste0("Levels from ", wf, " workflow") } else { nomLegende <- "Levels" }
 
   if (repr == 'standard') {
     typeLevels <- .lczenv$typeLevelsConvert
@@ -271,13 +271,13 @@ showStandardLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
     )
 
 
-    if (wf != "") { nomLegende <- paste0("LCZ from ", wf, " workflow") } else { nomLegende <- "LCZ" }
+    if (wf != "") { nomLegende <- paste0("Levels from ", wf, " workflow") } else { nomLegende <- "LCZ" }
 
     ###### Shows the geoms with the original values of LCZ as described by Stewardt & Oke, and produced for instance by the GeoClimate workflow
 
     if (title == "") {
-      if (wf != "") { wtitre <- paste("LCZ from", wf, "workflow, for ", datasetName, "dataset") } else {
-        wtitre <- paste("LCZ from", datasetName, "dataset")
+      if (wf != "") { wtitre <- paste("Levels from", wf, "workflow, for ", datasetName, "dataset") } else {
+        wtitre <- paste("Levels from", datasetName, "dataset")
       }
     }else {
       wtitre <- title

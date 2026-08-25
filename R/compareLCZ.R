@@ -251,8 +251,10 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   sfList<-list(sf1,sf2)
   columnVect<-c(column1, column2)
   allCols<-c(nom1,nom2)
-
+  wf1<-checkWorkflowName(wf1)
+  wf2<-checkWorkflowName(wf2)
   workflowNames <- c(wf1, wf2)
+  print(workflowNames)
   intersec_sf <- createIntersect(sfList = sfList, columns = columnVect, refCrs = ref, workflowNames = workflowNames,
                                  minZeroArea = minZeroArea)
 
@@ -337,20 +339,10 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   if (plotNow == TRUE) {
     if (repr == 'standard') { titrou <- "LCZ" } else { titrou <- "Levels" }
 
-    if (wf1 == "bdtopo_2_2") { adtitre1 <- " BDTOPO V2.2" } else
-      if (wf1 == "osm") { adtitre1 <- " OSM " } else
-        if (wf1 == "wudapt") { adtitre1 <- " WUDAPT" }else { adtitre1 <- wf1 }
-
-
-    if (wf2 == "bdtopo_2_2") { adtitre2 <- " BDTOPO V2.2" } else
-      if (wf2 == "osm") { adtitre2 <- " OSM " } else
-        if (wf2 == "wudapt") { adtitre2 <- " WUDAPT" }else { adtitre2 <- wf2 }
-
-
-    titre1 <- paste(titrou, "from ", adtitre1)
-    titre2 <- paste(titrou, "from", adtitre2)
+    titre1 <- paste(titrou, "from ", wf1)
+    titre2 <- paste(titrou, "from", wf2)
     titre3 <- "Agreement between classifications"
-    titre4 <- paste(" Distribution of", adtitre1, " levels \n into levels of", adtitre2)
+    titre4 <- paste(" Distribution of", wf1, " levels \n into levels of", wf2)
 
 
     # ypos<-if (repr=="standard"){ypos=5} else {ypos=2}
