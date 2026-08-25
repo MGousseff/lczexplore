@@ -9,7 +9,8 @@ createIntersect(
   columns,
   refCrs = NULL,
   workflowNames = NULL,
-  minZeroArea = 1e-04
+  minZeroArea = 1e-04,
+  keepAllColumns = TRUE
 )
 }
 \arguments{
