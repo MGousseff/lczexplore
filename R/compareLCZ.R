@@ -139,6 +139,8 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   sf1 <- select(sf1, all_of(nom1)) %>% drop_na(column1)
   sf2 <- select(sf2, all_of(nom2)) %>% drop_na(column2)
   # Prepare the levels of the expected LCZ
+  print("nom1") ; print(nom1)
+  print("names(sf1)") ; print(names(sf1))
 
   if (repr == "standard") {
 
@@ -233,6 +235,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     sf1 <- select(sf1, nom1) %>% drop_na(column1)
     sf2 <- select(sf2, nom2) %>% drop_na(column2)
 
+
     # this illustrates how silly it was to store levels and colors in the same vector as names and values.
     # Classification must be encoded as factors
 
@@ -247,15 +250,17 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   #intersection of geometries
   sfList<-list(sf1,sf2)
   columnVect<-c(column1, column2)
-  refCrs<-st_crs(sfList[[ref]])
+  allCols<-c(nom1,nom2)
+
   workflowNames <- c(wf1, wf2)
-  intersec_sf <- createIntersect(sfList = sfList, columns = columnVect, refCrs = refCrs, workflowNames = workflowNames,
+  intersec_sf <- createIntersect(sfList = sfList, columns = columnVect, refCrs = ref, workflowNames = workflowNames,
                                  minZeroArea = minZeroArea)
 
 
-
+  refCrs<-st_crs(sfList[[ref]])
   # checks if the two LCZ classifications agree
-  intersec_sf$agree <- subset(intersec_sf, select = column1, drop = T) == subset(intersec_sf, select = column2, drop = T)
+  print(names(intersec_sf))
+  intersec_sf$agree <- intersec_sf[[wf1]] == intersec_sf[[wf2]]
 
 
   ######################################################
@@ -303,12 +308,12 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   # Confusion Matrix
   ###################################################
 
-  matConfOut <- matConfLCZ(sf1 = sf1, column1 = column1, sf2 = sf2, column2 = column2,
+  matConfOut <- matConfLCZ(sfInt = intersec_sf,  column1 = wf1, column2 = wf2, wf1 = wf1, wf2 = wf2,
                            repr = repr, typeLevels = LCZlevels, plotNow = FALSE)
   matConfOut$data <- intersec_sfExpo
   matConfLong <- as.data.frame(matConfOut$matConf)
 
-  matConfLarge <- tidyr::pivot_wider(matConfLong, names_from = column2, values_from = .data$agreePercArea)
+  matConfLarge <- tidyr::pivot_wider(matConfLong, names_from = wf2, values_from = .data$agreePercArea)
   matConfLarge <- matConfLarge %>% as.data.frame()
   row.names(matConfLarge) <- matConfLarge[, 1] %>% as.character
   matConfLarge <- matConfLarge[, -1]
