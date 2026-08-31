@@ -10,6 +10,7 @@ checkWorkflowName <- function(wfName){
   if (grepl("_", x =wfName) | grepl("\\s", x = wfName)){
     message("For Technical reason, worfklow names can't contain spaces or underscores, they were replaced by points")
   wfName<- gsub("_|\\s", ".", wfName)
+  }
 
   if (nchar(wfName) > 10){
     message("Workflow names are used in produced graphics and as column names, long names are not suitable,
@@ -19,6 +20,6 @@ checkWorkflowName <- function(wfName){
       "...",
     substring(wfName, nchar(wfName)-3, nchar(wfName)))
     }
-  }
+
   return(wfName)
 }

@@ -11,21 +11,20 @@ vignette: >
     %\VignetteEncoding{UTF-8}
     \usepackage[UTF-8]{inputenc}
 ---
-
 ```{r, settings, include = FALSE}
 knitr::opts_chunk$set(
-        collapse = TRUE,
-        comment = "#>",
-        out.width="100%"
+  collapse = TRUE,
+  comment = "#>",
+  out.width="100%"
 )
 if (!require("png")) {
   install.packages("png",repos = "http://cran.us.r-project.org")
   library("png")
 }
-
 ```
 
-This vignette focuses on loading, intersecting and comparing multiple (3 to 5) workflows on the same set of areas.
+This vignette focuses on loading, intersecting and comparing multiple (3 to 5) LCZ maps on the same area
+or set of areas.
 The first part of the vignette describes the recommended pipeline, which should cover most of the cases.
 
 Some specific functions are described later on for more specific cases.
@@ -36,18 +35,21 @@ them, for instance to FlatGeobuf (.fgb)
 # Context and vocabulary
 ## Local Climate Zones
 Climate change is a growing concern for city planners with a special focus on Urban Heat Island phenomenons.
-Stewardt and Oke have proposed a classification of Local Climate Zones (LCZ) that describe rural and urban areas, with 10 built types and 7 land cover types. Several workflows allow to produce LCZ maps, and non can be considered as
-an absolut reference. This vignette shows how to compare 3 to 5 workflows (i.e. their resulting maps) at a time.
+Stewardt and Oke have proposed a classification of Local Climate Zones (LCZ)
+that describe rural and urban areas, with 10 built types and 7 land cover types.
+Several workflows allow to produce LCZ maps, and none can be considered as
+an absolute reference. Therefore, there is a need for comparison of maps produced by different workflows.
+
+This vignette shows how to compare 3 workflows (i.e. their resulting maps) at a time and the process can be extended
+to more maps, but graphical outputs may become hard to read for more than 4 or 5 workflows.
 
 ## Spatial Units
 To create an LCZ map, one need to partition the study territory into spatial units, and then assign an LCZ type
 to each spatial unit.
 
-
 # Data preparation for multiple workflows and multiple study areas
 The most generic case study is when several maps are available for several locations.
 A simple folder tree allows an easy analysis.
-
 
 ## Input data structure
 This section illustrates the case where several LCZ maps were produced for several places, and stored
@@ -56,13 +58,21 @@ into local files.
 To keep the workflow simple, the data needs to be organized in the following way.
 
 --main_data_directory
-    |
-    |--location1
-        |--wf1_lcz.fgb
-        |--wf2_lcz.fgb
-    |--location2
-        |--wf1_lcz.fgb
-        |--wf2_lcz.fgb
+
+|
+
+|--location1
+
+|--wf1_lcz.fgb
+
+|--wf2_lcz.fgb
+
+|--location2
+
+|--wf1_lcz.fgb
+
+|--wf2_lcz.fgb
+
 
 The main data directory must contain only the data subdirectories,
 as the loading functions will span the subdirectories searching for data.
@@ -75,14 +85,23 @@ Other spatial extensions may work, but `.fgb` files are recommended and were the
 ## General steps to compare several LCZ maps
 
 *Import.* First, all the data is loaded in a list.
+
 This list contains a sublist for each location, and each location sublist contains one sf object for each LCZ map.
-*Intersection.* Second, the spatial units of all maps (i.e. the geometries bearing the LCZ type) are intersected.
+
+*Intersection.*
+Second, the spatial units of all maps (i.e. the geometries bearing the LCZ type) are intersected.
 On any resulting geometry, a pair of workflow either totally agree or totally disagree. Intersection is done within lists,
 which allows to try to intersect only geometries of the same location. The result is concatenated in a single sf objects
 which contains a column for each lcz map, a column with the location name, a column with the area and a column with the
 geometry for each intersected spatial unit.
-*Visualisation* Simple descriptive barplots allow to have a general idea of the behavior of the different workflows.
-*Comparison* Pairwise agreement between workflow and consensus value for each LCZ type quantify comparison.
+
+*Visualisation*
+
+Simple descriptive barplots allow to have a general idea of the behavior of the different workflows.
+
+*Comparison*
+
+Pairwise agreement between workflow and consensus value for each LCZ type quantify comparison.
 
 ![pipeline](../inst/extdata/pipeline4vignette.svg)
 
@@ -106,7 +125,7 @@ require(lczexplore)
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm","bdt","wudapt"),
-                               inLocation = c("Arville", "Redon"))
+                                   inLocation = c("Arville", "Redon"))
 ```
 
 The function `loadMultipleLocsSfs` loads all the input .fgb files in a list.
@@ -149,7 +168,7 @@ One can also compare two maps from the same location using the function `compare
 ```{r, compareLCZ, fig.width=16, fig.height=10}
 redonOSM <- twoLocsSfList$Redon$osm
 redonBDT <- twoLocsSfList$Redon$bdt
-compareLCZ(sf1 = redonOSM, sf2 = redonBDT, column1 = "lcz_primary", column2 = "lcz_primary")
+compareLCZ(sf1 = redonOSM, sf2 = redonBDT, column1 = "lcz_primary", column2 = "lcz_primary", wf1 = "osm", wf2 = "bdt_V_2")
 ```
 
 ## Area per LCZ type and workflow for more than 2 workflows
@@ -214,7 +233,7 @@ In this case, one can choose another workflow as a reference (through `refWf`) a
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 
-allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "wudapt"),
-                                       missingGeomsWf= "osm", refWf = NULL, refLCZ = NA,
-                                       residualLCZvalue = NA, column = "lcz_primary")
+# allWfsAllLocs<-loadConcatAllLocsAllWfs(twoLocsDir, locations = NA, workflowNames = c("osm", "bdt", "wudapt"),
+#                                        missingGeomsWf= "osm", refWf = NULL, refLCZ = NA,
+#                                        residualLCZvalue = NA, column = "lcz_primary")
 ```

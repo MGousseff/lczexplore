@@ -5,8 +5,9 @@
 #' where workflow is on of the values in workflowNames vector
 #' @param columns is the vector of names of the columns containing the LCZ types. If not specified, the function
 #' will try to use the workflowNames instead
+#' @param stat can take the value "perc" to plot percentage of area for each LCZ type or "sum" for total
+#' area for each LCZ type
 #' @param plotNow If TRUE, the boxplot of the repartition will be printed
-#' @param plotSave If a proper directory Path, the plot will be saved there
 #' @importFrom ggplot2 geom_sf guides ggtitle aes
 #' @importFrom collapse fmutate fselect frename fgroup_by fsummarise fsum
 #' @importFrom caret dummyVars
@@ -30,8 +31,7 @@
 #' example<-barplotLCZfromIntersect(sfIn = twoLocsIntersect,
 #'                               columns = c("osm", "bdt", "wudapt"),
 #'                             workflowNames = c("osm", "bdt", "wudapt"))
-barplotLCZfromIntersect <- function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc", plotNow = TRUE, plotSave = "",
-                                    labelType = "short") {
+barplotLCZfromIntersect <- function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc", plotNow = TRUE) {
   checkedWfCol <- checkColumnWorkflowNames(columns = columns, workflowNames = workflowNames)
   columns <- checkedWfCol$columns
   workflowNames <- checkedWfCol$workflowNames

@@ -10,9 +10,7 @@ barplotLCZfromIntersect(
   workflowNames = NULL,
   columns = NULL,
   stat = "perc",
-  plotNow = TRUE,
-  plotSave = "",
-  labelType = "short"
+  plotNow = TRUE
 )
 }
 \arguments{
@@ -25,6 +23,9 @@ where workflow is on of the values in workflowNames vector}
 will try to use the workflowNames instead}
 
 \item{plotNow}{If TRUE, the boxplot of the repartition will be printed}
+
+\item{stats}{can take the value "perc" to plot percentage of area for each LCZ type or "sum" for total
+area for each LCZ type}
 
 \item{plotSave}{If a proper directory Path, the plot will be saved there}
 }

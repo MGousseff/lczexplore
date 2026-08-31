@@ -79,6 +79,14 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
                 "is the reference against which the ", column2,
                 " column of the dataset ", namesf2, "will be compared."))
 
+  nom1 <- c(geomID1, column1, confid1)
+  nom1 <- nom1[sapply(nom1, nchar) != 0]
+  nom2 <- c(geomID2, column2, confid2)
+  nom2 <- nom2[sapply(nom2, nchar) != 0]
+
+  column1<- checkColnameCase(column1, names(sf1))
+  column2<- checkColnameCase(column2, names(sf2))
+
   # handling of different crs for the two datasets
   if (st_crs(sf1) != st_crs(sf2)) {
     # if (ref!=""){crsOpt=ref} else {
