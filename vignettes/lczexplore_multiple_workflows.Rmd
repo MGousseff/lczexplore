@@ -34,28 +34,32 @@ them, for instance to FlatGeobuf (.fgb)
 
 # Context and vocabulary
 ## Local Climate Zones
-Climate change is a growing concern for city planners with a special focus on Urban Heat Island phenomenons.
-Stewardt and Oke have proposed a classification of Local Climate Zones (LCZ)
-that describe rural and urban areas, with 10 built types and 7 land cover types.
+Climate change is a growing concern for city planners.
+Stewardt and Oke have proposed a classification into Local Climate Zones (LCZ)
+that describes rural and urban areas, with 10 built types and 7 land cover types.
 Several workflows allow to produce LCZ maps, and none can be considered as
-an absolute reference. Therefore, there is a need for comparison of maps produced by different workflows.
+an absolute reference.
+Therefore, there is a need for comparison of maps produced by different workflows on the same area.
 
-This vignette shows how to compare 3 workflows (i.e. their resulting maps) at a time and the process can be extended
+This vignette shows how to compare 3 workflows (i.e. their resulting maps) at a time. The process can be extended
 to more maps, but graphical outputs may become hard to read for more than 4 or 5 workflows.
 
+This package does not produce LCZ maps, but imports, shows and compare maps from standard GIS format, with a prefered input format in flatGeoBuffer (.fgb).
+
 ## Spatial Units
-To create an LCZ map, one need to partition the study territory into spatial units, and then assign an LCZ type
-to each spatial unit.
+Each LCZ map partitions the territory into spatial units, for instance regular grid when based on raster image,
+or topographic spatial units.
+Each spatial unit is assigned a LCZ type. When comparing different maps,
+one needs to intersect all spatial units to obtain units common to all maps.
+On each intersected unit, it is then possible to look if two workflows agree or disagree.
 
 # Data preparation for multiple workflows and multiple study areas
 The most generic case study is when several maps are available for several locations.
 A simple folder tree allows an easy analysis.
 
 ## Input data structure
-This section illustrates the case where several LCZ maps were produced for several places, and stored
-into local files.
-
-To keep the workflow simple, the data needs to be organized in the following way.
+When several LCZ maps are available for several places and stored
+into local files, the following data structure allows an easier analysis.
 
 --main_data_directory
 
@@ -63,15 +67,19 @@ To keep the workflow simple, the data needs to be organized in the following way
 
 |--location1
 
-|--wf1_lcz.fgb
+    |--wf1_lcz.fgb
 
-|--wf2_lcz.fgb
+    |--wf2_lcz.fgb
+
+    |--wfp_lcz.fgb
 
 |--location2
 
-|--wf1_lcz.fgb
+    |--wf1_lcz.fgb
 
-|--wf2_lcz.fgb
+    |--wf2_lcz.fgb
+
+    |--wfp_lcz.fgb
 
 
 The main data directory must contain only the data subdirectories,
@@ -92,16 +100,21 @@ This list contains a sublist for each location, and each location sublist contai
 Second, the spatial units of all maps (i.e. the geometries bearing the LCZ type) are intersected.
 On any resulting geometry, a pair of workflow either totally agree or totally disagree. Intersection is done within lists,
 which allows to try to intersect only geometries of the same location. The result is concatenated in a single sf objects
-which contains a column for each lcz map, a column with the location name, a column with the area and a column with the
+which contains a column for each lcz map, named after the workflow it comes from,
+a column with the location name, a column with the area and a column with the
 geometry for each intersected spatial unit.
 
 *Visualisation*
 
-Simple descriptive barplots allow to have a general idea of the behavior of the different workflows.
+Simple descriptive barplots give a general idea of the behavior of the different workflows.
 
-*Comparison*
+Pairwise comparison allow a visual correspondence between 2 workflows.
 
-Pairwise agreement between workflow and consensus value for each LCZ type quantify comparison.
+Circular Chord Diagram allow a simultaneous visualization of correspondences between all workflows.
+
+*Numerical Comparison*
+
+Pairwise agreement between workflow and consensus value for each LCZ type quantify this comparison.
 
 ![pipeline](../inst/extdata/pipeline4vignette.svg)
 
@@ -113,6 +126,7 @@ data in a list.
 
 In the data structure from above section, the function would be applied
 to the `main_directory` folder.
+
 The small data files for this vignette are in the `inst/extdata/multipleWfs` folder, which contains the locations
 Arville and Redon, for which three LCZ maps are available, produced by the following workflows :
 - GeoClimate based on OpenStreetMap input data
@@ -165,6 +179,8 @@ showLCZ(sf = twoLocsSfList$Redon$osm, column = "lcz_primary", repr = "standard")
 ## Reminder: comparing two simple maps
 One can also compare two maps from the same location using the function `compareLCZ()`
 
+Note : for only 2 maps, the user feeds compareLCZ the sf files, the function does the intersection.
+
 ```{r, compareLCZ, fig.width=16, fig.height=10}
 redonOSM <- twoLocsSfList$Redon$osm
 redonBDT <- twoLocsSfList$Redon$bdt
@@ -180,8 +196,8 @@ areaPerLCZtype<-barplotLCZfromIntersect(sfIn = twoLocsSfIntersected, workflowNam
 ```
 
 # Compare multiple workflows
-the function `compareMultipleLCZ` outputs a list containing two objects.
-The first one is an sf objects, named sfInt. It the LCZ type for each workflow,
+The function `compareMultipleLCZ` outputs a list containing two objects.
+The first one is an sf object, named sfInt. It contains the LCZ type for each workflow,
 the pairwise agreements, and the number of workflows who agree for each geometry (ie, intersected spatial units).
 
 ```{r, multiple comparison}
@@ -203,14 +219,14 @@ workflowAgreement<-workflowAgreeAreas(twoLocsCompared$sfIntLong)
 To explore this agreement further, we compute all the repartition from an LCZ type from a workflow to the LCZ types of another workflow, using the function `createWeightedFlux`
 
 ```{r, multiple confusion matrix}
-twoLocsMatConfLong<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
+twoLocsFlow<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 ```
 
 To avoid exploring all the pairwise possible matrices, we can explore these correspondences through
 a circular chord diagram, using the function `drawChordDiagram`.
 
 ```{r, chord diagram, fig.width=8, fig.height=5}
-drawChordDiagram(multiMatConfLongIn = twoLocsMatConfLong)
+drawChordDiagram(multiMatConfLongIn = twoLocsFlow)
 ```
 
 

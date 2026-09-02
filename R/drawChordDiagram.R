@@ -1,10 +1,10 @@
 #' Draws how LCZ types from several workflows break up into LCZ types of one another
 #'
-#' @param multiMatConfLongIn is typically the output of the function createWeightedFlux,
+#' @param weightedFluxIn is typically the output of the function createWeightedFlux,
 #' and is expected to contain the following columns orig, dest and weightedFlux,
 #' whose names are quite self explanatory : orig is the origin LCZ type, dest is the destination LCZ type
 #' and weightedFlux is the percentage of area transfered from orig to dest
-#' @param colorMapIn is a named vector whose names are the unique values of orig and dest columns of multiMatConfLongIn
+#' @param colorMapIn is a named vector whose names are the unique values of orig and dest columns of weightedFluxIn
 #' and values are the associated colors. In cas of grouping, these values are overwritten by the groupCols argument,
 #' see the ... parameters
 #' @param labelMatch a dirty trick is needed to plot the orig and dest in the desired order :
@@ -29,50 +29,73 @@
 #' twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
 #' refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
 #' twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
-#'
-drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise", ...) {
-  if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
-
-  if (is.null(labelMatch)) {
-    uniqueOrig <- unique(multiMatConfLongIn$orig)
-    uniqueDest <- unique(multiMatConfLongIn$dest)
-    uniqueOrigDest <- unique(uniqueOrig, uniqueDest)
-    levelsSuffix <- gsub("(.*)(_)(.*)", "\\3", uniqueOrigDest)
-    standardSuffix <- c(paste0("00", 1:9), "010", 101:107, "Unclassified")
-    if (prod(levelsSuffix %in% standardSuffix) == 1)
-    {
-      print("standardLabelMatch")
-      labelMatch <- c(
-        "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6", "007" = "7", "008" = "8", "009" = "9",
-        "010" = "10", "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F", "107" = "G",
-        "Unclassified" = "Unclass."
-      ) } else {
-      labelMatch <- uniqueOrigDest
-    }
-  }
-
+#' # Subsetting and grouping allow further exploration. Playing on grouping names and alphabetical order allows
+#' to choose the order of the sectors
+#' aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings",
+#'     "dunclass" = "Unclassified")
+#' drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
+#'     acompact = c("001", "002", "003"),
+#'     blessCompact = c("004", "005", "006", "007", "008", "010"),
+#'     cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
+#'     dunclass = "Unclassified",
+#'     groupColors = c(
+#'       "acompact" = "#8b0101",
+#'       "blessCompact" = "#ff9856",
+#'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
+drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise", ...) {
   args <- list(...)
   print(length(args))
 
+
   # Case when grouping is specified
   if (length(args) > 0) {
-    multiMatConfLongIn <- groupLCZsuffix(multiMatConfLongIn = multiMatConfLongIn, ...)
+    weightedFluxIn <- groupLCZsuffix(weightedFluxIn = weightedFluxIn, ...)
     colorMapIn <- unlist(args[names(args) == "groupColors"]$groupColors)
+    if (is.null(labelMatch)){
+      labelMatch <- names(colorMapIn)
+    names(labelMatch) <- names(colorMapIn)}
   }
+else{
+      if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
+
+      if (is.null(labelMatch)) {
+        uniqueOrig <- unique(weightedFluxIn$orig)
+        uniqueDest <- unique(weightedFluxIn$dest)
+        uniqueOrigDest <- unique(uniqueOrig, uniqueDest)
+        levelsSuffix <- gsub("(.*)(_)(.*)", "\\3", uniqueOrigDest)
+        standardSuffix <- c(paste0("00", 1:9), "010", 101:107, "Unclassified")
+        if (prod(levelsSuffix %in% standardSuffix) == 1)
+        {
+          print("standard LabelMatch")
+          labelMatch <- c(
+            "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6", "007" = "7", "008" = "8", "009" = "9",
+            "010" = "10", "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F", "107" = "G",
+            "Unclassified" = "Unclass."
+            ) } else {
+          print("non standard LabelMatch")
+          labelMatch <- uniqueOrigDest
+      }
+    }
+  }
+
+
 
   print(colorMapIn)
 
-  sectors <- makeSectorsAndGroups(multiMatConfLongIn)$sectors
+  sectors <- makeSectorsAndGroups(weightedFluxIn)$sectors
   print("sectors") ;   print(sectors)
-  df.groups <- makeSectorsAndGroups(multiMatConfLongIn)$df.groups
+  df.groups <- makeSectorsAndGroups(weightedFluxIn)$df.groups
   sector_ids <- strsplit(sectors, "_") %>%
     unlist2d() %>%
     fselect("V2") %>%
     as.vector %>%
     unlist %>%
     unique
- print(sector_ids)
+  print("sector_ids") ;  print(sector_ids)
+
+  if (length(args)==0){
   names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
+  }
 
   # something to adapt when we will hightlight bigger flux
   # if(!is.null(drawpBigger)){
@@ -96,7 +119,7 @@ drawChordDiagram <- function(multiMatConfLongIn, colorMapIn = NULL, labelMatch =
   # print(colorsCircle)
   circos.clear()
   diagramme <- chordDiagram(
-    multiMatConfLongIn, grid.col = colorsCircle,
+    weightedFluxIn, grid.col = colorsCircle,
     # col =col.mat,
     big.gap = 5, small.gap = 2,
     order = sectors, group = df.groups,

@@ -22,12 +22,10 @@ where workflow is on of the values in workflowNames vector}
 \item{columns}{is the vector of names of the columns containing the LCZ types. If not specified, the function
 will try to use the workflowNames instead}
 
-\item{plotNow}{If TRUE, the boxplot of the repartition will be printed}
-
-\item{stats}{can take the value "perc" to plot percentage of area for each LCZ type or "sum" for total
+\item{stat}{can take the value "perc" to plot percentage of area for each LCZ type or "sum" for total
 area for each LCZ type}
 
-\item{plotSave}{If a proper directory Path, the plot will be saved there}
+\item{plotNow}{If TRUE, the boxplot of the repartition will be printed}
 }
 \value{
 A barplot of LCZ area percentage by LCZ type and workflow
