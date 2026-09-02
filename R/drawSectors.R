@@ -15,11 +15,11 @@
 drawSectors <- function(sector_id, sectorsIn = sectors,
                         colorMapIn = colorMap, textMatch,
                         facing = "clockwise") {
-  print(paste0("textMatch ", textMatch))
+  print("textMatch ") ; print(textMatch)
   print("sectorsIn") ;   print(sectorsIn)
   print("sector_id")  ; print(sector_id)
   sectorsToHighlight <- grep(x = sectorsIn, pattern = sector_id, value = T) %>% unique
-  print(paste0("sectorsToHighlight :", sectorsToHighlight))
+  print(paste0("sectorsTo Highlight : ", sectorsToHighlight))
 
   textOut <- textMatch[sector_id]
   print(textOut)

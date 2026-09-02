@@ -5,7 +5,7 @@
 \title{Draws how LCZ types from several workflows break up into LCZ types of one another}
 \usage{
 drawChordDiagram(
-  multiMatConfLongIn,
+  weightedFluxIn,
   colorMapIn = NULL,
   labelMatch = NULL,
   inFacing = "clockwise",
@@ -13,12 +13,12 @@ drawChordDiagram(
 )
 }
 \arguments{
-\item{multiMatConfLongIn}{is typically the output of the function createWeightedFlux,
+\item{weightedFluxIn}{is typically the output of the function createWeightedFlux,
 and is expected to contain the following columns orig, dest and weightedFlux,
 whose names are quite self explanatory : orig is the origin LCZ type, dest is the destination LCZ type
 and weightedFlux is the percentage of area transfered from orig to dest}
 
-\item{colorMapIn}{is a named vector whose names are the unique values of orig and dest columns of multiMatConfLongIn
+\item{colorMapIn}{is a named vector whose names are the unique values of orig and dest columns of weightedFluxIn
 and values are the associated colors. In cas of grouping, these values are overwritten by the groupCols argument,
 see the ... parameters}
 
@@ -48,5 +48,17 @@ inLocation = c("Arville", "Redon"))
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
 refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
 twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
-
+# Subsetting and grouping allow further exploration. Playing on grouping names and alphabetical order allows
+to choose the order of the sectors
+aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings",
+    "dunclass" = "Unclassified")
+drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
+    acompact = c("001", "002", "003"),
+    blessCompact = c("004", "005", "006", "007", "008", "010"),
+    cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
+    dunclass = "Unclassified",
+    groupColors = c(
+      "acompact" = "#8b0101",
+      "blessCompact" = "#ff9856",
+       "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
 }

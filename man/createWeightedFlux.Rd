@@ -18,7 +18,9 @@ createWeightedFlux(
 already intersected geometries in wide format
 with a column wf for the workflow names, a column lcz_primary for the LCZ types.}
 
-\item{wfNamesIn}{the name of trhe columùn containing the workflows names}
+\item{columns}{a vector containing the names of the LCZ type columns}
+
+\item{wfNamesIn}{the name of the input compared workflows. They will be the output columns for the LCZ types}
 
 \item{typeLevelsDefaultIn}{is a named vector of strings containing the LCZ levels. By default inherited from lczexplore}
 }

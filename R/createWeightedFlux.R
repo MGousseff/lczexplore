@@ -5,7 +5,8 @@
 #' @param intersectSfWide is an sf object, containing the different lcz classification on
 #' already intersected geometries in wide format
 #' with a column wf for the workflow names, a column lcz_primary for the LCZ types.
-#' @param wfNamesIn the name of trhe columùn containing the workflows names
+#' @param columns a vector containing the names of the LCZ type columns
+#' @param wfNamesIn the name of the input compared workflows. They will be the output columns for the LCZ types
 #' @param typeLevelsDefaultIn is a named vector of strings containing the LCZ levels. By default inherited from lczexplore
 #' @importFrom dplyr mutate select filter
 #' @return a dataframe with columns orig, dest and weightedFlux, weighted flux the percentage of area from a given

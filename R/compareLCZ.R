@@ -23,6 +23,8 @@
 #' @param repr "standard" means that standard values of LCZ are expected,
 #'  "alter" means other values are expected, like grouped values of LCZ or other qualitative variable.
 #'  In the latter case, the ... arguments can contain the expected levels and a color vector.
+#' @param minZeroArea allows you to specify a minimal area under which intersected spatial units will be discarded.
+#' It avoids numerical error and can save computing time.
 #' @param plotNow : when FALSE none of the graphics are plotted or saved
 #' @param saveG : when an empty character string, "", the plots are not saved. Else, the saveG string is used to produce the name of the saved png file.
 #' @param location : the name of the study area, as chosen as the name of the directory on the GeoClimate team cloud.
@@ -66,7 +68,7 @@
 compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = "bdtopo_2_2",
                        sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = "osm", ref = 1,
                        repr = "standard", saveG = "", exwrite = FALSE, outDir = getwd(),
-                       location = "Your Place", plotNow = TRUE, tryGroup = FALSE, minZeroArea = 0.0001,
+                       location = "Your Place", plotNow = TRUE, tryGroup = FALSE, minZeroArea = 0,
                        ...) {
 
 
