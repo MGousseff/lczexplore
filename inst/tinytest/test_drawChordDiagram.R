@@ -33,6 +33,21 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFaci
                  )
 )
 
+# Sans labelMatch c'est bien l'ordre alphabétique qui induit l'ordre de représentation
+drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
+                 acompact = c("001", "002", "003"),
+                 blessCompact = c("004", "005", "006", "007", "008", "010"),
+                 cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
+                 dunclass = "Unclassified",
+                 groupColors = c(
+                   "acompact" = "#8b0101",
+                   "blessCompact" = "#ff9856",
+                   "cfewToNoBuild" = "#bbdb7a",
+                   "dunclass" = "grey"
+                 )
+)
+
+
 drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
                  compact = c("001", "002", "003"),
                  lessCompact = c("004", "005", "006", "007", "008", "010"),
@@ -45,4 +60,7 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
                    "unclass" = "grey"
                  )
 )
+
+aggregMatch2<-c("compact"="Compact", "lessCompact" = "Less Compact", "fewToNoBuild" = "Few to No Buildings",
+               "unclass" = "Unclassified")
 
