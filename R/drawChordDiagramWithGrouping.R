@@ -42,69 +42,41 @@
 #'       "acompact" = "#8b0101",
 #'       "blessCompact" = "#ff9856",
 #'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
-drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise", ...) {
+
+#
+drawChordDiagramWithGrouping<-function(weightedFluxIn,
+                                       colorMapIn = NULL,
+                                       labelMatch = NULL,
+                                       inFacing = "clockwise", ...){
   args <- list(...)
-  print(length(args))
+  # print(length(args))
 
-   if (length(args)>0){
-     drawChordDiagramWithGrouping(
-       weightedFluxIn = weightedFluxIn, colorMapIn = colorMapIn,
-       labelMatch = labelMatch,
-       inFacing = inFacing, ...)
-   } else {
+  # Case when grouping is specified
+  if (length(args) > 0) {
+    weightedFluxIn <- groupLCZsuffix(weightedFluxIn = weightedFluxIn, ...)
+    colorMapIn <- unlist(args[names(args) == "groupColors"]$groupColors)
+  }
 
-  # Color Map management.
-   # Regular Case
-  if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
+  if (length(args) > 0 & is.null(labelMatch)){
+    labelMatch<-names(args[names(args) != "groupColors"])
+    names(labelMatch)<-names(args[names(args) != "groupColors"])
+  }
 
-  print(colorMapIn)
+  # Extract group order from arguments
+  groupOrder <- names(args[names(args) != "groupColors"])
 
-  # Labels, sectors and groups management
-  sectors <- makeSectorsAndGroups(weightedFluxIn)$sectors
-
+  # print("labelMatch") ;     print(labelMatch)
+  sectorsAndGroups <- makeSectorsAndGroups(weightedFluxIn, groupOrder)
+  sectors<-sectorsAndGroups$sectors
   sector_ids <- strsplit(sectors, "_") %>%
     unlist2d() %>%
     fselect("V2") %>%
     as.vector %>%
     unlist %>%
     unique
-  print("sector_ids") ;  print(sector_ids)
+  # print("sector_ids") ;  print(sector_ids)
 
-  df.groups <- makeSectorsAndGroups(weightedFluxIn)$df.groups
-
-  print("sectors") ;   print(sectors)
-
-  if (is.null(labelMatch)) {
-        labelMatch<-sector_ids}
-
-standardSuffix <- c(paste0("00", 1:9), "010", 101:107, "Unclassified")
-if (prod(labelMatch %in% standardSuffix) == 1) {
-          print("standard LabelMatch")
-          labelMatch <- c(
-            "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6", "007" = "7", "008" = "8", "009" = "9",
-            "010" = "10", "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F", "107" = "G",
-            "Unclassified" = "Unclass."
-            ) } else {
-          print("non standard LabelMatch")
-      }
-
-
-
-
-  if (length(args)==0){
-  names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
-  }
-
-  # something to adapt when we will hightlight bigger flux
-  # if(!is.null(drawpBigger)){
-  #   colorMatrix<-colorMapIn[multMatConfLongIn$orig]
-  #  multMatConfLongIn<-arrange(multMatConfLongIn, weightedFlux)
-  #   threshold<-multMatConfLongIn[drawpBigger, weightedFlux]
-  #   transparencyVec<-rep(0.3, nrow(multMatConfLongIn))
-  #   transparencyVec[multMatConfLongIn$weightedFlux<threshold]<-0.001
-  #   col.mat <- colorRamp2(breaks=colorMatrix[multMatConfLongIn$orig], colors = colorMatrix, transparency = transparencyVec, space = "LAB",
-  #              hcl_palette = NULL, reverse = FALSE)
-  # }
+  df.groups <- sectorsAndGroups$df.groups
 
   colorsCircle <- colorMapIn[
     gsub(
@@ -134,7 +106,7 @@ if (prod(labelMatch %in% standardSuffix) == 1) {
     link.largest.ontop = TRUE)
   par(font = 2, cex = 1.2)
 
-  circos.track(track.index = 1,
+  circos.track(track.index = 2,
                panel.fun = function(x, y) {
                  sector.name <- get.cell.meta.data("sector.index")
                  xlim <- get.cell.meta.data("xlim")
@@ -154,8 +126,8 @@ if (prod(labelMatch %in% standardSuffix) == 1) {
                bg.border = NA) # here set bg.border to NA is important
   par(cex = 1.5)
   sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
-  print(sectorsIn)
+  # print(sectorsIn)
   lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
          colorMapIn = colorMapIn, textMatch = labelMatch, facing = inFacing)
-  }
 }
+
