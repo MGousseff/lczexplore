@@ -1,4 +1,5 @@
-#' Draws how LCZ types from several workflows break up into LCZ types of one another
+#' Draws how LCZ types from several workflows break up into LCZ types of one another when some grouping is precised in the arguments
+#'
 #'
 #' @param weightedFluxIn is typically the output of the function createWeightedFlux,
 #' and is expected to contain the following columns orig, dest and weightedFlux,
@@ -42,8 +43,6 @@
 #'       "acompact" = "#8b0101",
 #'       "blessCompact" = "#ff9856",
 #'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
-
-#
 drawChordDiagramWithGrouping<-function(weightedFluxIn,
                                        colorMapIn = NULL,
                                        labelMatch = NULL,
@@ -52,21 +51,26 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
   # print(length(args))
 
   # Case when grouping is specified
-  if (length(args) > 0) {
-    weightedFluxIn <- groupLCZsuffix(weightedFluxIn = weightedFluxIn, ...)
-    colorMapIn <- unlist(args[names(args) == "groupColors"]$groupColors)
-  }
+  colorMapIn <- unlist(args[names(args) == "groupColors"]$groupColors)
+  groupArgs<-args[names(args) != "groupColors"]
+  groupNames<-paste0(
+      letters[seq_along(names(groupArgs))],
+      names(groupArgs), sep ="")
 
-  if (length(args) > 0 & is.null(labelMatch)){
-    labelMatch<-names(args[names(args) != "groupColors"])
-    names(labelMatch)<-names(args[names(args) != "groupColors"])
-  }
+    if (is.null(labelMatch)){
+      labelMatch<-names(groupArgs)
+      names(labelMatch)<-groupNames
+    } else {names(labelMatch)<-groupNames}
 
-  # Extract group order from arguments
-  groupOrder <- names(args[names(args) != "groupColors"])
+  names(groupArgs)<-groupNames
+  names(colorMapIn)<-groupNames
+  print(groupArgs)
+    weightedFluxIn <- do.call(
+      groupLCZsuffix,
+      c(list(weightedFluxIn = weightedFluxIn), groupArgs)
+    )
 
-  # print("labelMatch") ;     print(labelMatch)
-  sectorsAndGroups <- makeSectorsAndGroups(weightedFluxIn, groupOrder)
+  sectorsAndGroups <- makeSectorsAndGroups(weightedFluxIn, labelMatch)
   sectors<-sectorsAndGroups$sectors
   sector_ids <- strsplit(sectors, "_") %>%
     unlist2d() %>%
@@ -74,7 +78,6 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
     as.vector %>%
     unlist %>%
     unique
-  # print("sector_ids") ;  print(sector_ids)
 
   df.groups <- sectorsAndGroups$df.groups
 
@@ -86,7 +89,6 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
   ]
   names(colorsCircle) <- sectors
 
-  # print(colorsCircle)
   circos.clear()
   diagramme <- chordDiagram(
     weightedFluxIn, grid.col = colorsCircle,
@@ -126,7 +128,6 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
                bg.border = NA) # here set bg.border to NA is important
   par(cex = 1.5)
   sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
-  # print(sectorsIn)
   lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
          colorMapIn = colorMapIn, textMatch = labelMatch, facing = inFacing)
 }

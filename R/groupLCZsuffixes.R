@@ -16,14 +16,12 @@ groupLCZsuffix <- function(weightedFluxIn, ...) {
   origSuff <- gsub("(.*)(_)(.*)", "\\3", weightedFluxIn$orig)
   destSuff <- gsub("(.*)(_)(.*)", "\\3", weightedFluxIn$dest)
 
-  # ensure all the LCZ levels are present in the imported column
-  uniqueSuff <- unique(c(origSuff, destSuff)) %>% as.character # Attention unique outputs a list of length 1
 
   # get the grouping levels as passed by ..., but without keeping arguments about colours
-  args <- list(...)[names(list(...)) != "groupColors"]
+  args <- list(...) #[names(list(...)) != "groupColors"]
+  print(args)
   indSep <- names(args)
-  indCol <- grep(x = indSep, pattern = "groupColors")
-  print(names(args))
+  # print(names(args))
 
   args <- append(list(origSuff), args)
   # temp<-do.call(fct_collapse,args)
