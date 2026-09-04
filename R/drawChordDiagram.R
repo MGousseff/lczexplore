@@ -134,7 +134,7 @@ if (prod(labelMatch %in% standardSuffix) == 1) {
     link.largest.ontop = TRUE)
   par(font = 2, cex = 1.2)
 
-  circos.track(track.index = 1,
+  circos.track(track.index = 2,
                panel.fun = function(x, y) {
                  sector.name <- get.cell.meta.data("sector.index")
                  xlim <- get.cell.meta.data("xlim")
@@ -145,7 +145,7 @@ if (prod(labelMatch %in% standardSuffix) == 1) {
                  circos.text(
                    mean(xlim), ylim[1], substr(sector.name, 1, 3),
                    facing = "clockwise",
-                   niceFacing = TRUE, adj = c(0.01, 0.005))
+                   niceFacing = TRUE, adj = c(0.01, 0.01))
                  # } else {
                  #   circos.text(mean(xlim), ylim[1], substr(sector.name,1,3), facing = "inside",
                  #               niceFacing = TRUE, adj = c(0.5, 0))

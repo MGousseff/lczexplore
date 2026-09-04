@@ -18,7 +18,7 @@ twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
                                !grepl("104", twoLocsWeightedFlux$orig) &
                                !grepl("101", twoLocsWeightedFlux$dest) &
                                !grepl("104", twoLocsWeightedFlux$dest))
-aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings",
+aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings at all",
                "dunclass" = "Unclassified")
 drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
                  acompact = c("001", "002", "003"),
