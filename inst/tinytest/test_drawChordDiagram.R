@@ -9,7 +9,7 @@ twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("l
 
 twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 
-test <- makeSectorsAndGroups(twoLocsWeightedFlux)
+# test <- makeSectorsAndGroups(twoLocsWeightedFlux)
 
 drawChordDiagram(twoLocsWeightedFlux, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")
 
@@ -21,8 +21,8 @@ twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
 aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings at all",
                "dunclass" = "Unclassified")
 drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
-                 acompact = c("001", "002", "003"),
-                 blessCompact = c("004", "005", "006", "007", "008", "010"),
+                 acompact = c("1", "2", "3"),
+                 blessCompact = c("4", "5", "6", "7", "8", "10"),
                  cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
                  dunclass = "Unclassified",
                  groupColors = c(
@@ -35,8 +35,8 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFaci
 
 # Sans labelMatch c'est bien l'ordre alphabétique qui induit l'ordre de représentation
 drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
-                 acompact = c("001", "002", "003"),
-                 blessCompact = c("004", "005", "006", "007", "008", "010"),
+                 acompact = c("1", "2", "3"),
+                 blessCompact = c("4", "5", "6", "7", "8", "10"),
                  cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
                  dunclass = "Unclassified",
                  groupColors = c(
@@ -52,8 +52,8 @@ aggregMatch2<-c("compact"="Compact", "lessCompact" = "Less Compact", "fewToNoBui
 
 drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
                  labelMatch = aggregMatch2,
-                 compact = c("001", "002", "003"),
-                 lessCompact = c("004", "005", "006", "007", "008", "010"),
+                 compact = c("1", "2", "3"),
+                 lessCompact = c("4", "5", "6", "7", "8", "10"),
                  fewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
                  unclass = "Unclassified",
                  groupColors = c(

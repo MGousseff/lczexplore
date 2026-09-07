@@ -41,6 +41,13 @@ print(columns)
 
   print(columns)
 
+  if (is.null(typeLevelsDefaultIn)){
+    typeLevelsDefaultIn <- unique(
+      unlist(st_drop_geometry(intersectSfWide)[columns])
+    )
+    names(typeLevelsDefaultIn) <- typeLevelsDefaultIn
+  }
+
   for (i in 1:(length(columns) - 1)) {
     for (j in (i + 1):length(columns)) {
       sf1 <- intersectSfWide[,i]
@@ -48,8 +55,9 @@ print(columns)
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
-               sf1 = sf1, column1 = columns[i],
-               sf2 = sf2, column2 = columns[j],
+               sfInt = intersectSfWide[, c(columns[i], columns[j])],
+                column1 = columns[i],
+                column2 = columns[j],
                typeLevels = unique(names(typeLevelsDefaultIn)),
                plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j])
       )
@@ -88,8 +96,9 @@ print(columns)
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
-               sf1 = sf1, column1 = columns[i],
-               sf2 = sf2, column2 = columns[j],
+               sfInt = intersectSfWide[, c(columns[i], columns[j])],
+               column1 = columns[i],
+               column2 = columns[j],
                typeLevels = unique(names(typeLevelsDefaultIn)),
                plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j]))
     }
@@ -147,9 +156,6 @@ print(columns)
   # gsub(x = (allMatConfLong$wf_pair %>% unique),
   #      pattern = "(.*)(_)(.*)(_)(.*)(_)(.*)",
   #      replacement = "\\1_\\5") %>% unique
-
-  allMatConfLong$dest <- LCZlevelToOrderedString(allMatConfLong$dest)
-  allMatConfLong$orig <- LCZlevelToOrderedString(allMatConfLong$orig)
 
   allMatConfLong <- allMatConfLong[, c("orig", "dest", "weightedFlux")]
 
