@@ -27,7 +27,9 @@ createWeightedFlux <- function(intersectSfWide, columns = NULL, wfNamesIn = NULL
                                typeLevelsDefaultIn = .lczenv$typeLevelsDefault) {
   if (nrow(intersectSfWide) > 100) { message("This function computes how any LCZ type from any workflow
   breaks into the LCZ types of all other workflows: it can take a while") }
-print(columns)
+
+  # allowing wfNamesIn or columns to be NULL
+  print(columns)
   print(wfNamesIn)
       if (
         (is.null(wfNamesIn) | prod(!is.na(wfNamesIn))) &
@@ -67,19 +69,17 @@ print(columns)
 
   for (i in 1:(length(wfNamesIn) - 1)) {
     for (j in (i + 1):length(wfNamesIn)) {
-      compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       compareNameToBind <- paste0(wfNamesIn[i], "_", wfNamesIn[j], "_to_bind")
-      assign(compareNameToBind,
-             get(compareName)$matConf %>%
-               dplyr::mutate(wf_pair = paste0(
-                 wfNamesIn[i], "_", .data[[columns[i]]], "_",
-                 wfNamesIn[j], "_", .data[[columns[j]]])) %>%
-               dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
-               mutate(percArea = rep(
-                 get(compareName)$areas$percArea1,
-                 each = length(get(compareName)$areas$percArea2)))
-      )
-      print(get(compareNameToBind)$wf_pair)
+      compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
+      #ugly trick to add perc area
+      temp1<-get(compareName)
+      temp1$matConf$colTemp1<-temp1$matConf[[1]]
+      temp2<-temp1$matConf
+      temp2$wf_pair <-paste0(
+        wfNamesIn[i], "_", temp2[[columns[i]]], "_", wfNamesIn[j], "_", temp2[[columns[j]]])
+      temp2<- base::merge(temp2, temp1$areas, by.x = "colTemp1", by.y =  "marginLevels")
+      temp2<-temp2[, c("wf_pair","agreePercArea", "percArea1") ]
+      assign(compareNameToBind, temp2)
     }
   }
 
@@ -101,6 +101,7 @@ print(columns)
                column2 = columns[j],
                typeLevels = unique(names(typeLevelsDefaultIn)),
                plotNow = FALSE, wf1 = wfNamesIn[i], wf2 = wfNamesIn[j]))
+
     }
   }
 
@@ -108,13 +109,15 @@ print(columns)
     for (j in 1:(i - 1)) {
       compareNameToBind <- paste0(wfNamesIn[i], "_", wfNamesIn[j], "_to_bind")
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
-      assign(compareNameToBind,
-             get(compareName)$matConf %>%
-               dplyr::mutate(wf_pair = paste0(
-                 wfNamesIn[i], "_", .data[[columns[i]]], "_", wfNamesIn[j], "_", .data[[columns[j]]])) %>%
-               dplyr::select(.data$wf_pair, .data$agreePercArea) %>%
-               mutate(percArea = rep(get(compareName)$areas$percArea1, each = length(get(compareName)$areas$percArea2)))
-      )
+      #ugly trick to add perc area
+      temp1<-get(compareName)
+      temp1$matConf$colTemp1<-temp1$matConf[[1]]
+      temp2<-temp1$matConf
+      temp2$wf_pair <-paste0(
+        wfNamesIn[i], "_", temp2[[columns[i]]], "_", wfNamesIn[j], "_", temp2[[columns[j]]])
+      temp2<- base::merge(temp2, temp1$areas, by.x = "colTemp1", by.y =  "marginLevels")
+      temp2<-temp2[, c("wf_pair","agreePercArea", "percArea1") ]
+      assign(compareNameToBind, temp2)
     }
   }
 
@@ -150,7 +153,7 @@ print(columns)
   )
 
 
-  allMatConfLong$weightedFlux <- allMatConfLong$agreePercArea * allMatConfLong$percArea / 10000
+  allMatConfLong$weightedFlux <- allMatConfLong$agreePercArea * allMatConfLong$percArea1 / 10000
 
 
   # gsub(x = (allMatConfLong$wf_pair %>% unique),

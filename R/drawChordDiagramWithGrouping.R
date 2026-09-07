@@ -78,6 +78,7 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
     as.vector %>%
     unlist %>%
     unique
+  print("sector_ids") ;   print(sector_ids)
 
   df.groups <- sectorsAndGroups$df.groups
 
@@ -98,7 +99,7 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
     annotationTrack = NULL,
     preAllocateTracks = list(
       list(track.height = 0.06),
-      list(track.height = 0.08)
+      list(track.height = 0.06)
     ),
     transparency = 0.25,
     symmetric = TRUE,
@@ -119,7 +120,7 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
                  circos.text(
                    mean(xlim), ylim[1], substr(sector.name, 1, 3),
                    facing = "clockwise",
-                   niceFacing = TRUE, adj = c(0.01, 0.005))
+                   niceFacing = TRUE, adj = c(0.01, 0.5))
                  # } else {
                  #   circos.text(mean(xlim), ylim[1], substr(sector.name,1,3), facing = "inside",
                  #               niceFacing = TRUE, adj = c(0.5, 0))
@@ -128,7 +129,10 @@ drawChordDiagramWithGrouping<-function(weightedFluxIn,
                bg.border = NA) # here set bg.border to NA is important
   par(cex = 1.5)
   sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
+
+  if( max(nchar(sector_ids))> 3){sectorFacing <- "bending"} else
+  {sectorFacing <- "clockwise"}
   lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
-         colorMapIn = colorMapIn, textMatch = labelMatch, facing = inFacing)
+         colorMapIn = colorMapIn, textMatch = labelMatch, facing = sectorFacing)
 }
 

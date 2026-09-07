@@ -83,7 +83,27 @@ expect_equal(diagHetero,diagHeteroRef)
 expect_equal(names(matConfRedonBDTOSM),c("matConf","matConfPlot","areas","percAgg"))
 
 
+oneLocDir<-paste0(
+  system.file("extdata", package = "lczexplore"),"/multipleWfs/Redon")
+oneLocSfList<-loadMultipleSfs(dirPath = oneLocDir, workflowNames = c("osm","bdt","wudapt"),
+                              inLocation = "Redon")
+oneLocSfIntersected <- createIntersect(sfList = oneLocSfList, columns = rep("lcz_primary", 4),
+                                       refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
+redon_bdt<-oneLocSfList$bdt
+redo_osm<-oneLocSfList$osm
 
+showLCZ(redon_bdt, column = "lcz_primary")
+showLCZ(redon_osm, column = "lcz_primary")
+
+testComp<-compareLCZ(sf1 = redon_bdt, column1 = "lcz_primary",
+           sf2 = redon_osm, column2 = "lcz_primary" )
+testComp$matConfLarge
+# MatConfLarge semble OK
+testComp$areas
+
+
+redon_osm<-oneLocSfList$osm
+redon_wud<-oneLocSfList$wud
 
 
 

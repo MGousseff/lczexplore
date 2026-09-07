@@ -44,6 +44,7 @@
 #'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
 drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
                              labelMatch = NULL, inFacing = "clockwise", ...) {
+  weightedFluxIn$percArea1<-NULL
   args <- list(...)
   print(length(args))
 
@@ -135,7 +136,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
     annotationTrack = NULL,
     preAllocateTracks = list(
       list(track.height = 0.06),
-      list(track.height = 0.08)
+      list(track.height = 0.06)
     ),
     transparency = 0.25,
     symmetric = TRUE,
@@ -145,6 +146,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
     link.largest.ontop = TRUE)
   par(font = 2, cex = 1.2)
 
+     # Prepare workflow inner circle
   circos.track(track.index = 2,
                panel.fun = function(x, y) {
                  sector.name <- get.cell.meta.data("sector.index")
@@ -156,17 +158,34 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
                  circos.text(
                    mean(xlim), ylim[1], substr(sector.name, 1, 3),
                    facing = "clockwise",
-                   niceFacing = TRUE, adj = c(0.01, 0.01))
+                   niceFacing = TRUE, adj = c(0.1, 0.01))
                  # } else {
                  #   circos.text(mean(xlim), ylim[1], substr(sector.name,1,3), facing = "inside",
                  #               niceFacing = TRUE, adj = c(0.5, 0))
                  # }
                },
-               bg.border = NA) # here set bg.border to NA is important
+               bg.border = NA)
+ # Prepare outer circle of LCZ types
+     circos.track(track.index = 2,
+                  panel.fun = function(x, y) {
+                    sector.name <- get.cell.meta.data("sector.index")
+                    xlim <- get.cell.meta.data("xlim")
+                    xplot <- get.cell.meta.data("xplot")
+                    ylim <- get.cell.meta.data("ylim")
+
+                    # if(abs(xplot[2] - xplot[1]) < 4) {
+
+                  },
+                  bg.border = NA)
+
+
+     # here set bg.border to NA is important
   par(cex = 1.5)
   sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
   print(sectorsIn)
+  if( max(nchar(sector_ids))> 5){sectorFacing <- "bending"} else
+  {sectorFacing <- "clockwise"}
   lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
-         colorMapIn = colorMapIn, textMatch = labelMatch, facing = inFacing)
+         colorMapIn = colorMapIn, textMatch = labelMatch, facing = sectorFacing)
   }
 }
