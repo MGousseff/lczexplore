@@ -47,6 +47,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL, labelMatch = NUL
   print(length(args))
 
    if (length(args)>0){
+     print("grouping")
      drawChordDiagramWithGrouping(
        weightedFluxIn = weightedFluxIn, colorMapIn = colorMapIn,
        labelMatch = labelMatch,
