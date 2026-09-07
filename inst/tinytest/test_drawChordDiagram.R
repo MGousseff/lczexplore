@@ -47,8 +47,11 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
                  )
 )
 
+aggregMatch2<-c("compact"="Compact", "lessCompact" = "Less Compact", "fewToNoBuild" = "Few to No Buildings",
+                "unclass" = "Unclassified")
 
 drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
+                 labelMatch = aggregMatch2,
                  compact = c("001", "002", "003"),
                  lessCompact = c("004", "005", "006", "007", "008", "010"),
                  fewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
@@ -61,6 +64,5 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
                  )
 )
 
-aggregMatch2<-c("compact"="Compact", "lessCompact" = "Less Compact", "fewToNoBuild" = "Few to No Buildings",
-               "unclass" = "Unclassified")
+
 

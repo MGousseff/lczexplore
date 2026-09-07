@@ -17,7 +17,7 @@ drawSectors <- function(sector_id, sectorsIn = sectors,
                         facing = "clockwise") {
 
   sectorsToHighlight <- grep(x = sectorsIn, pattern = sector_id, value = T) %>% unique
-
+  textOut <- textMatch[sector_id]
   if (length(sectorsToHighlight)>0){
   highlight.sector(sectorsToHighlight,
                    track.index = 1, col = colorMapIn[sector_id],

@@ -2,7 +2,7 @@
 % Please edit documentation in R/drawChordDiagramWithGrouping.R
 \name{drawChordDiagramWithGrouping}
 \alias{drawChordDiagramWithGrouping}
-\title{Draws how LCZ types from several workflows break up into LCZ types of one another}
+\title{Draws how LCZ types from several workflows break up into LCZ types of one another when some grouping is precised in the arguments}
 \usage{
 drawChordDiagramWithGrouping(
   weightedFluxIn,
@@ -39,7 +39,7 @@ it will regroup.}
 a vector of booleans indicting if the elements of x define a color in R (TRUE) or don't (FALSE)
 }
 \description{
-Draws how LCZ types from several workflows break up into LCZ types of one another
+Draws how LCZ types from several workflows break up into LCZ types of one another when some grouping is precised in the arguments
 }
 \examples{
 twoLocsDir<-paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs")
