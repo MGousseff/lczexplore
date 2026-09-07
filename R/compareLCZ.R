@@ -65,8 +65,8 @@
  #' # or in a long form :
  #' comparisonBDT_OSM$matConf
  #'  # Examples for non LCZ variables are available in the importQualVar function examples.
-compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = "bdtopo_2_2",
-                       sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = "osm", ref = 1,
+compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "", wf1 = NULL,
+                       sf2, column2 = "LCZ_PRIMARY", geomID2 = "", confid2 = "", wf2 = NULL, ref = 1,
                        repr = "standard", saveG = "", exwrite = FALSE, outDir = getwd(),
                        location = "Your Place", plotNow = TRUE, tryGroup = FALSE, minZeroArea = 0,
                        ...) {
@@ -261,6 +261,9 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   sfList<-list(sf1,sf2)
   columnVect<-c(column1, column2)
   allCols<-c(nom1,nom2)
+  if (is.null(wf1)){ wf1 <- namesf1}
+  if (is.null(wf2)){ wf2 <- namesf2}
+
   wf1<-checkWorkflowName(wf1)
   wf2<-checkWorkflowName(wf2)
   workflowNames <- c(wf1, wf2)

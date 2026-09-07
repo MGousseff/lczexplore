@@ -45,8 +45,11 @@ showLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
   datasetName <- deparse(substitute(sf))
+  if (is.null(wf) | wf == ""){wf<-datasetName}
+
 
   if (wf != "") { nomLegende <- paste0("Levels from ", wf, " workflow") } else { nomLegende <- "Levels" }
+
 
   # For standard levels of LCZ after import with importLCZ* functions
 
@@ -244,7 +247,7 @@ showStandardLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
                             repr = "standard", drop = FALSE,
                             naAsUnclassified = TRUE, addBorders = FALSE, labelType = "long", ...) {
 
-  datasetName <- deparse(substitute(sf))
+  # datasetName <- deparse(substitute(sf))
 
 
   try(class(sf)[1] == "sf", stop("Input data must be sf object"))
@@ -275,13 +278,7 @@ showStandardLCZ <- function(sf, title = "", wf = "", column = "LCZ_PRIMARY",
 
     ###### Shows the geoms with the original values of LCZ as described by Stewardt & Oke, and produced for instance by the GeoClimate workflow
 
-    if (title == "") {
-      if (wf != "") { wtitre <- paste("Levels from", wf, "workflow, for ", datasetName, "dataset") } else {
-        wtitre <- paste("Levels from", datasetName, "dataset")
-      }
-    }else {
-      wtitre <- title
-    }
+     wtitre <- paste("Levels from", wf, "workflow")
 
     if (drop) {
       presentLevels <- levels(droplevels(sf[[column]]))
