@@ -36,7 +36,8 @@
 #' TwoLocsIntersect <- createIntersect(
 #'  sfList = sfList2, columns = rep("lcz_primary", 3),
 #'  workflowNames = c("osm","bdt","wudapt"))
-createIntersect <- function(sfList, columns, refCrs = NULL, workflowNames = NULL, minZeroArea = 0.0001,
+createIntersect <- function(sfList, columns, refCrs = NULL,
+                            workflowNames = NULL, minZeroArea = 0.0001,
                                 keepAllColumns = TRUE) {
 
   if (is.null(columns) | prod(!is.na(columns) == 0)) {
@@ -45,7 +46,8 @@ createIntersect <- function(sfList, columns, refCrs = NULL, workflowNames = NULL
   }
 
   if (length(columns) == 1) {
-    message("You only specified one column name, it is considered as being the same for all sf of the input sf list.")
+    message("You only specified one column name,
+    it is considered as being the same for all sf of the input sf list.")
     columns <- rep(columns, length(workflowNames)) }
 
   # Igoominous recursive trick in case there are more than one location

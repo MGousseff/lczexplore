@@ -38,6 +38,7 @@ matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLeve
 
   if (is.null(sfInt)) {
     # coerce the crs of sf2 to the crs of sf1
+    if (!is.null(typeLevels)){
     allLevels <- unique(
       c(
         levels(sf1[[column1]]),
@@ -45,9 +46,10 @@ matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLeve
       )
     )
     allCheck <- allLevels %in% typeLevels
-    levelsUnMAtch <- prod(allCheck) == 0
-    if (levelsUnMAtch) { typeLevels <- unique(c(levels(sf1[[column1]]), levels(sf2[[column2]]))) }
-
+    levelsUnMatch <- prod(allCheck) == 0
+    if (levelsUnMatch) {
+      typeLevels <- unique(c(levels(sf1[[column1]]), levels(sf2[[column2]]))) }
+    } else {typeLevels <- unique(c(levels(sf1[[column1]]), levels(sf2[[column2]])))}
 
     if (st_crs(sf1) != st_crs(sf2)) { sf2 <- sf2 %>% st_transform(crs = st_crs(sf1)) }
 
@@ -57,6 +59,8 @@ matConfLCZ <- function(sf1, column1, sf2, column2, typeLevels = .lczenv$typeLeve
       sf2[[column1]] <- NULL
     }
 
+    print(typeLevels)
+    print(summary(sf1[[column1]]))
     sf1[[column1]] <- ordered(sf1[[column1]], levels = typeLevels)
     sf1[[column1]][is.na(sf1[[column1]])] <- "Unclassified"
     sf2[[column2]] <- ordered(sf2[[column2]], levels = typeLevels)
