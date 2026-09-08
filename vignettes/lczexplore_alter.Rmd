@@ -47,7 +47,7 @@ the expected levels and colors to use.
 ## From original data... 
 
 First, let's load the example data of Redon City.
-```{r, import LCZ files, echo = TRUE, eval = TRUE}
+```{r, import-LCZ-files, echo = TRUE, eval = TRUE}
 library(lczexplore)
 
 
@@ -108,7 +108,7 @@ As for standard LCZ, we use the `compareLCZ` function.
 We specify the names of the `sf1` and `sf2` objects containing the data, 
 and the names of the `column1` and `column2` containing the newly grouped categories. 
 
-```{r, common grouping case, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
+```{r, common-grouping-case, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
 
 redonBDTgrouped <- groupLCZ(redonBDT, column = "LCZ_PRIMARY",
                             urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
@@ -145,7 +145,7 @@ Here are some examples.
 When levels don't have a particular meaning, using random colors may be enough. 
 One can specify a single vector of levels and no vector of colors. 
 
-```{r, no color specified, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
+```{r, no-color-specified, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
 levCol(sf=redonOSMgrouped,column="grouped",
        levels=c("urban","industry","vegetation","impervious","pervious","water"))
 
@@ -165,16 +165,16 @@ In this example, we use the `importQualVar` function to explore a classification
 namely the urban territory by random forest (UTRF) classification produced by the GeoClimate workflow. 
 
 
-```{r, colors but no levels, fig.dim = c(8, 6), eval = TRUE, echo = TRUE}
-utrfRedonBDT<-importQualVar(dirPath=paste0(
+```{r, colors-but-no-levels, fig.dim = c(8, 6), eval = TRUE, echo = TRUE}
+utrfRedonBDT <- importQualVar(dirPath = paste0(
   system.file("extdata", package = "lczexplore"), "/utrfFiles"),
-                            file="bdt_utrf_area.fgb", column="TYPO_MAJ")
+                              file = "bdt_utrf_area.fgb", column = "TYPO_MAJ")
 summary(utrfRedonBDT)
 summary(utrfRedonBDT$TYPO_MAJ)
 
-map3<-showLCZ(sf=utrfRedonBDT, column="TYPO_MAJ",repr="alter",
-        title = " UTRF classification of the French city of Redon",
-        colors=c("red","black","green","grey","burlywood","blue","orange","lightgreen","brown"))
+map3 <- showLCZ(sf = utrfRedonBDT, column = "TYPO_MAJ", repr = "alter",
+                title = " UTRF classification of the French city of Redon",
+                colors = c("red", "black", "green", "grey", "burlywood", "blue", "orange", "lightgreen", "brown"))
 ```
 
 ## Case when some of the specified colors are not actually colors
@@ -182,12 +182,12 @@ map3<-showLCZ(sf=utrfRedonBDT, column="TYPO_MAJ",repr="alter",
 One may specify a color wrong, or use a name which is known in a certain environment but not known in R. 
 The `levCol` function will replace it with a color chosen from a standard palette. 
 
-```{r, these are not colors, echo = TRUE, eval = TRUE}
-levCol(sf=utrfRedonBDT, column="TYPO_MAJ",
-        colors=c("red","black","green","grey","burlywood","blue","orange","lightgreen","brown"))
+```{r, these-are-not-colors, echo = TRUE, eval = TRUE}
+levCol(sf = utrfRedonBDT, column = "TYPO_MAJ",
+       colors = c("red", "black", "green", "grey", "burlywood", "blue", "orange", "lightgreen", "brown"))
 
-levCol(sf=utrfRedonBDT, column="TYPO_MAJ",
-       colors=c("red","black","green","grey","burlywood","blue","orange","lightgreen","NOT_COLOR"))
+levCol(sf = utrfRedonBDT, column = "TYPO_MAJ",
+       colors = c("red", "black", "green", "grey", "burlywood", "blue", "orange", "lightgreen", "NOT_COLOR"))
 ```
 
 ## Case when provided vectors of levels and colors don't cover the levels of the data
@@ -199,28 +199,28 @@ For instance, if the user forgets to specify the level "water" of the `redonOSMg
 The levels are then deduced from the data and a random color is added. 
 
 
-```{r, some data uncovered, echo = TRUE, eval = TRUE}
-levCol(sf=redonOSMgrouped,column="grouped",
-       levels=c("urban","industry","vegetation","impervious","pervious"),
-       colors=c("red","black","green","grey","burlywood")
+```{r, some-data-uncovered, echo = TRUE, eval = TRUE}
+levCol(sf = redonOSMgrouped, column = "grouped",
+       levels = c("urban", "industry", "vegetation", "impervious", "pervious"),
+       colors = c("red", "black", "green", "grey", "burlywood")
 )
 
 ```
 Sometimes, the vector of levels covers the levels of the data, but the vector of colors doesn't. 
 A random color is then assigned to the last level of vector. 
 
-```{r, not enough colors, echo = TRUE, eval = TRUE}
-levCol(sf=redonOSMgrouped,column="grouped",
-       levels=c("urban","industry","vegetation","impervious","pervious","water"),
-       colors=c("red","black","green","grey","burlywood")
+```{r, not-enough-colors, echo = TRUE, eval = TRUE}
+levCol(sf = redonOSMgrouped, column = "grouped",
+       levels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+       colors = c("red", "black", "green", "grey", "burlywood")
 )
 
 ```
 
-```{r, another case, echo = TRUE, eval = TRUE}
-levCol(sf=redonOSMgrouped,column="grouped",
-           levels=c("urban","industry","vegetation","impervious","pervious"),
-           colors=c("red","black","green","grey","burlywood","blue")
+```{r, another-case, echo = TRUE, eval = TRUE}
+levCol(sf = redonOSMgrouped, column = "grouped",
+       levels = c("urban", "industry", "vegetation", "impervious", "pervious"),
+       colors = c("red", "black", "green", "grey", "burlywood", "blue")
 )
 ```
 All the cases are not listed in this vignette as the messages are hopefully explicit enough. 
@@ -232,24 +232,24 @@ In this case, one can do the grouping and the plotting or comparing in one step.
 the grouping vectors and set the argument`tryGroup=TRUE`.
 If the values of the grouping vectors cover the original values of the datasets, the function will perform grouping before comparing. 
 
-```{r, group and compare on the fly, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
+```{r, group-and-compare-on the fly, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
 
-map4<-showLCZ(sf=redonBDT, column="LCZ_PRIMARY", repr="alter",
-        urban=c("1","2","3","4","5","6","7","8","9"),
-        industry="10",
-        vegetation=c("101","102","103","104"),
-        impervious="105",pervious="106",water="107",
-        colors=c("red","black","green","grey","burlywood","blue"),tryGroup = TRUE)
+map4 <- showLCZ(sf = redonBDT, column = "LCZ_PRIMARY", repr = "alter",
+                urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
+                industry = "10",
+                vegetation = c("101", "102", "103", "104"),
+                impervious = "105", pervious = "106", water = "107",
+                colors = c("red", "black", "green", "grey", "burlywood", "blue"), tryGroup = TRUE)
 
 
-compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", 
-    sf2=redonOSM, column2="LCZ_PRIMARY",
-    repr="alter", ref=2, saveG="", exwrite=FALSE, location="Redon", plot=TRUE,
-    urban=c("1","2","3","4","5","6","7","8","9"),
-    industry="10",
-    vegetation=c("101","102","103","104"),
-    impervious="105",pervious="106",water="107",
-    colors=c("red","black","green","grey","burlywood","blue"),tryGroup = TRUE)
+compareLCZ(sf1 = redonBDT, column1 = "LCZ_PRIMARY",
+           sf2 = redonOSM, column2 = "LCZ_PRIMARY",
+           repr = "alter", ref = 2, saveG = "", exwrite = FALSE, location = "Redon", plot = TRUE,
+           urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
+           industry = "10",
+           vegetation = c("101", "102", "103", "104"),
+           impervious = "105", pervious = "106", water = "107",
+           colors = c("red", "black", "green", "grey", "burlywood", "blue"), tryGroup = TRUE)
 ```
 This is meant as an exploratory tool, as the resulting grouped columns are not actually kept after the analysis. 
 
