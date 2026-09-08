@@ -11,6 +11,9 @@ makeSectorsAndGroups(weightedFluxIn, groupOrder = NULL)
 and is expected to contain the following columns orig, dest and weightedFlux,
 whose names are quite self explanatory : orig is the origin LCZ type, dest is the destination LCZ type
 and weightedFlux is the percentage of area transfered from orig to dest}
+
+\item{groupOrder}{allows to specify in which order groups are visualized, usually
+the ones specified in labelMAtch argument of drawChordDiagram function}
 }
 \value{
 a list containing vectors and groups for a chord diagram

@@ -4,13 +4,7 @@
 \alias{drawChordDiagram}
 \title{Draws how LCZ types from several workflows break up into LCZ types of one another}
 \usage{
-drawChordDiagram(
-  weightedFluxIn,
-  colorMapIn = NULL,
-  labelMatch = NULL,
-  inFacing = "clockwise",
-  ...
-)
+drawChordDiagram(weightedFluxIn, colorMapIn = NULL, labelMatch = NULL, ...)
 }
 \arguments{
 \item{weightedFluxIn}{is typically the output of the function createWeightedFlux,
@@ -22,14 +16,11 @@ and weightedFlux is the percentage of area transfered from orig to dest}
 and values are the associated colors. In cas of grouping, these values are overwritten by the groupCols argument,
 see the ... parameters}
 
-\item{labelMatch}{a dirty trick is needed to plot the orig and dest in the desired order :
-orig and dest value are sorted by alphabetical order, so may be prefixed by a letter. To avoid those ugly levels
-to be used on the graphic, labelMatch is an ordered vector whose names are the actual values in dest and orig and
-whose values are the labels to appear in the chord Diagram}
-
-\item{inFacing}{defines the orientation of labels in the sectors (LCZ types), default is "closkwise",
-possible values are "inside", "outside", "reverse.clockwise", "clockwise",
-"downward", "bending", "bending.inside" and "bending.outside"}
+\item{labelMatch}{allox to match a level of dest or orig from weightedFluxIn and a label.
+It also allows to change the order in which they are visualized (default is alphabetical order).
+It is then possible to prefixe values of Levels by a letter to force this order and use LabelMatch to
+use original names.
+When using grouping vectors, they are visualized in the order they are specified.}
 
 \item{...}{allows the user to do on-the-fly grouping. These must be passed as groupName = groupValues
 where groupName is the name of a resulting group and groupValues a vector of the initial values
@@ -49,16 +40,21 @@ twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("l
 refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
 twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 # Subsetting and grouping allow further exploration. Playing on grouping names and alphabetical order allows
-to choose the order of the sectors
+# to choose the order of the sectors
+twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
+     !grepl("101", twoLocsWeightedFlux$orig) &
+     !grepl("104", twoLocsWeightedFlux$orig) &
+     !grepl("101", twoLocsWeightedFlux$dest) &
+     !grepl("104", twoLocsWeightedFlux$dest))
 aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings",
     "dunclass" = "Unclassified")
-drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
-    acompact = c("001", "002", "003"),
-    blessCompact = c("004", "005", "006", "007", "008", "010"),
-    cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
+drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch,
+    acompact = c("1", "2", "3"),
+    blessCompact = c("4", "5", "6", "7", "8", "10"),
+    cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "9"),
     dunclass = "Unclassified",
     groupColors = c(
       "acompact" = "#8b0101",
       "blessCompact" = "#ff9856",
-       "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
+       "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey"))
 }
