@@ -7,7 +7,7 @@ resource_files:
   - vignettes/Redon.png
 vignette: >
     %\VignetteIndexEntry{Raster_vector_comparison}
-    %\VignetteEngine{knitr::knitr}
+    %VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
     \usepackage[UTF-8]{inputenc}
 ---
