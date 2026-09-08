@@ -176,7 +176,7 @@ the function `compareMultipleLCZ` outputs a list containing two objects.
 The first one is an sf objects, named sfInt. It the LCZ type for each workflow,
 the pairwise agreements, and the number of workflows who agree for each geometry (ie, intersected spatial units).
 
-```{r, multiple comparison}
+```{r, multiple-comparison}
 twoLocsCompared <- compareMultipleLCZ(
   sfInt = twoLocsSfIntersected,
   LCZcolumns = c("osm","bdt","wudapt"),
@@ -186,7 +186,7 @@ twoLocsCompared <- compareMultipleLCZ(
 From this sfInt object, the function `workflowAgreeAreas` compute pairwise agreement between workflows,
 defined as the sum (or percentage) of the area on which two workflows agree.
 
-```{r, multiple pairwise agreement}
+```{r, multiple-pairwise-agreement}
 workflowAgreement<-workflowAgreeAreas(twoLocsCompared$sfIntLong)
 ```
 
@@ -194,14 +194,14 @@ workflowAgreement<-workflowAgreeAreas(twoLocsCompared$sfIntLong)
 
 To explore this agreement further, we compute all the repartition from an LCZ type from a workflow to the LCZ types of another workflow, using the function `createWeightedFlux`
 
-```{r, multiple confusion matrix}
+```{r, multiple-confusion-matrix}
 # twoLocsMatConfLong<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 ```
 
 To avoid exploring all the pairwise possible matrices, we can explore these correspondences through
 a circular chord diagram, using the function `drawChordDiagram`.
 
-```{r, chord diagram, fig.width=8, fig.height=5}
+```{r, chord-diagram, fig.width=8, fig.height=5}
 # drawChordDiagram(multiMatConfLongIn = twoLocsMatConfLong)
 ```
 
@@ -221,7 +221,7 @@ the function will intersect it with the `zone.fgb` geometries.
 Sometimes, the missing geometries can be of one type, as a decision from the designers of the LCZ workflow.
 In this case, one can choose another workflow as a reference (through `refWf`) and the corresponding LCZ typ (through `refLCZ`). The remaining geometries which wouldn't intersect with the Chosen LCZ type of the chosen reference workflow will receive the value fed to `residualLCZvalue`.
 
-```{r, load concat complete}
+```{r, load-concat-complete}
 twoLocsDir<-paste0(
   system.file("extdata", package = "lczexplore"),"/multipleWfs")
 
