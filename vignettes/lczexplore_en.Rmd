@@ -283,9 +283,10 @@ redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY
 
 redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY",geomID = "ID_RSU",confid="LCZ_UNIQUENESS_VALUE")
 
-redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU",column1 ="LCZ_PRIMARY",
+redonCompare<-compareLCZ(sf1=redonBDT, wf1="bdt", geomID1 = "ID_RSU",column1 ="LCZ_PRIMARY",
                          confid1 = "LCZ_UNIQUENESS_VALUE",
-                         sf2=redonOSM,wf2="osm",geomID2 = "ID_RSU",column2="LCZ_PRIMARY",confid2 ="LCZ_UNIQUENESS_VALUE",exwrite=FALSE,plot=FALSE)
+                         sf2=redonOSM, wf2="osm", geomID2 = "ID_RSU",column2="LCZ_PRIMARY", confid2 ="LCZ_UNIQUENESS_VALUE",
+                         exwrite=FALSE, plot=FALSE)
 ```
 
 
@@ -305,8 +306,8 @@ For each of these thresholds, the function only keeps the reference spatial unit
 names(redonCompare$data)
 confidRedon<-confidSensib(inputDf=redonCompare$data,filePath="", nPoints=10,
              wf1="bdtopo_2_2", wf2="osm",
-             geomID1="ID_RSU", column1="LCZ_PRIMARY", confid1="LCZ_UNIQUENESS_VALUE",
-             geomID2="ID_RSU.1",column2="LCZ_PRIMARY.1", confid2="LCZ_UNIQUENESS_VALUE.1",
+             geomID1="ID_RSU", column1="bdt", confid1="LCZ_UNIQUENESS_VALUE",
+             geomID2="ID_RSU.1",column2="osm", confid2="LCZ_UNIQUENESS_VALUE.1",
              sep=";", repr="standard",
              plot=TRUE, saveG = ".")
 

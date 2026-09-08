@@ -279,8 +279,8 @@ redonCompare<-compareLCZ(sf1=redonBDT,wf1="bdt", geomID1 = "ID_RSU",column1 ="LC
 knitr::include_graphics("comparaison.png", error=FALSE)
 
 ```
-Il est important de noter que si les colonnes des deux fichiers ont le même nom `compareLCZ` 
-renomme les colonnes du deuxième fichier en leur concaténant '.1'
+Il est important de noter que les colonnes contenant les LCZ en entrée sont renommées à partir des
+noms de workflow en sortie, pour éviter des renommages du type lcz_primary et lcz_primary.1.
 
 La question à laquelle cette fonction permet de répondre est : 
 **est-ce que l'accord entre les deux classifications LCZ augmente si on ne conserve 
@@ -300,8 +300,8 @@ On représente aussi, en magenta, l'accord entre les géométries dont la valeur
 names(redonCompare$data)
 confidRedon<-confidSensib(inputDf=redonCompare$data,filePath="", nPoints=10,
              wf1="bdtopo_2_2", wf2="osm",
-             geomID1="ID_RSU", column1="LCZ_PRIMARY", confid1="LCZ_UNIQUENESS_VALUE",
-             geomID2="ID_RSU.1",column2="LCZ_PRIMARY.1", confid2="LCZ_UNIQUENESS_VALUE.1",
+             geomID1="ID_RSU", column1="bdt", confid1="LCZ_UNIQUENESS_VALUE",
+             geomID2="ID_RSU.1",column2="osm", confid2="LCZ_UNIQUENESS_VALUE.1",
              sep=";", repr="standard",
              plot=TRUE, saveG = ".")
 
