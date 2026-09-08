@@ -71,9 +71,9 @@ un raster, par exemple).
 
 
 ```{r, import des fichiers, eval = TRUE, echo = TRUE}
-dirPath<-system.file("extdata/multipleWfs/Redon",package="lczexplore")
-redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY", verbose=FALSE)
-redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY", verbose = FALSE)
+dirPath <- system.file("extdata/multipleWfs/Redon", package = "lczexplore")
+redonOSM <- importLCZvect(dirPath = dirPath, file = "osm_lcz.fgb", column = "LCZ_PRIMARY", verbose = FALSE)
+redonBDT <- importLCZvect(dirPath = dirPath, file = "bdt_lcz.fgb", column = "LCZ_PRIMARY", verbose = FALSE)
 ```
 ## Représenter les LCZ avec la fonction showLCZ
 

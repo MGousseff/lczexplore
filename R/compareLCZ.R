@@ -81,10 +81,6 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
                 "is the reference against which the ", column2,
                 " column of the dataset ", namesf2, "will be compared."))
 
-  nom1 <- c(geomID1, column1, confid1)
-  nom1 <- nom1[sapply(nom1, nchar) != 0]
-  nom2 <- c(geomID2, column2, confid2)
-  nom2 <- nom2[sapply(nom2, nchar) != 0]
 
   column1<- checkColnameCase(column1, names(sf1))
   column2<- checkColnameCase(column2, names(sf2))
@@ -139,7 +135,6 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   try(class(sf1)[1] == "sf", stop("Input data must be sf objects"))
   try(st_crs(sf1) == st_crs(sf2), stop("Input sf objects must have the same SRID"))
 
-
   nom1 <- c(geomID1, column1, confid1)
   nom1 <- nom1[sapply(nom1, nchar) != 0]
   nom2 <- c(geomID2, column2, confid2)
@@ -156,9 +151,7 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
 
     uniqueData1 <- sf1[[column1]] %>%
       unique() # Attention unique outputs a list of length 1
-
     uniqueData2 <- sf2[[column2]] %>% unique
-
 
     LCZlevels <- .lczenv$typeLevelsDefault
     # print("LCZlevels") ; print(LCZlevels)
@@ -185,12 +178,10 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
     sf1[[column1]] <- factor(sf1[[column1]], levels = .lczenv$typeLevelsDefault)
     sf2[[column2]] <- factor(sf2[[column2]], levels = .lczenv$typeLevelsDefault)
 
-
   }
 
 
-  if (repr == "alter")
-  {
+  if (repr == "alter") {
 
     # Call levCol to deal with levels and colors
     levCol1 <- levCol(sf1, column1, ...)
@@ -260,17 +251,20 @@ compareLCZ <- function(sf1, geomID1 = "", column1 = "LCZ_PRIMARY", confid1 = "",
   #intersection of geometries
   sfList<-list(sf1,sf2)
   columnVect<-c(column1, column2)
-  allCols<-c(nom1,nom2)
   if (is.null(wf1)){ wf1 <- namesf1}
   if (is.null(wf2)){ wf2 <- namesf2}
 
   wf1<-checkWorkflowName(wf1)
   wf2<-checkWorkflowName(wf2)
+  if (wf1==wf2){
+    wf1 <- paste0(wf1, ".1")
+    wf2 <- paste0(wf2, ".bis")}
   workflowNames <- c(wf1, wf2)
   print(workflowNames)
+  print(columnVect)
+
   intersec_sf <- createIntersect(sfList = sfList, columns = columnVect, refCrs = ref, workflowNames = workflowNames,
                                  minZeroArea = minZeroArea)
-
 
   refCrs<-st_crs(sfList[[ref]])
   # checks if the two LCZ classifications agree

@@ -19,6 +19,7 @@ checkWorkflowName <- function(wfName){
       substr(wfName, 1,3),
       "-",
     substring(wfName, nchar(wfName)-3, nchar(wfName)))
+    wfName<-gsub("-+", "-", wfName)
     }
 
   return(wfName)
