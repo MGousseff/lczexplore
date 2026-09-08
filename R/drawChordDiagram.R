@@ -7,13 +7,11 @@
 #' @param colorMapIn is a named vector whose names are the unique values of orig and dest columns of weightedFluxIn
 #' and values are the associated colors. In cas of grouping, these values are overwritten by the groupCols argument,
 #' see the ... parameters
-#' @param labelMatch a dirty trick is needed to plot the orig and dest in the desired order :
-#' orig and dest value are sorted by alphabetical order, so may be prefixed by a letter. To avoid those ugly levels
-#' to be used on the graphic, labelMatch is an ordered vector whose names are the actual values in dest and orig and
-#' whose values are the labels to appear in the chord Diagram
-#' @param inFacing defines the orientation of labels in the sectors (LCZ types), default is "closkwise",
-#' possible values are "inside", "outside", "reverse.clockwise", "clockwise",
-#' "downward", "bending", "bending.inside" and "bending.outside"
+#' @param labelMatch allox to match a level of dest or orig from weightedFluxIn and a label.
+#' It also allows to change the order in which they are visualized (default is alphabetical order).
+#' It is then possible to prefixe values of Levels by a letter to force this order and use LabelMatch to
+#' use original names.
+#' When using grouping vectors, they are visualized in the order they are specified.
 #' @param ... allows the user to do on-the-fly grouping. These must be passed as groupName = groupValues
 #' where groupName is the name of a resulting group and groupValues a vector of the initial values
 #' it will regroup.
@@ -30,30 +28,37 @@
 #' refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
 #' twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 #' # Subsetting and grouping allow further exploration. Playing on grouping names and alphabetical order allows
-#' to choose the order of the sectors
+#' # to choose the order of the sectors
+#' twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
+#'      !grepl("101", twoLocsWeightedFlux$orig) &
+#'      !grepl("104", twoLocsWeightedFlux$orig) &
+#'      !grepl("101", twoLocsWeightedFlux$dest) &
+#'      !grepl("104", twoLocsWeightedFlux$dest))
 #' aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings",
 #'     "dunclass" = "Unclassified")
-#' drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
-#'     acompact = c("001", "002", "003"),
-#'     blessCompact = c("004", "005", "006", "007", "008", "010"),
-#'     cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "009"),
+#' drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch,
+#'     acompact = c("1", "2", "3"),
+#'     blessCompact = c("4", "5", "6", "7", "8", "10"),
+#'     cfewToNoBuild = c("101", "102", "103", "104", "105", "106", "107", "9"),
 #'     dunclass = "Unclassified",
 #'     groupColors = c(
 #'       "acompact" = "#8b0101",
 #'       "blessCompact" = "#ff9856",
-#'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
+#'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey"))
 drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
-                             labelMatch = NULL, inFacing = "clockwise", ...) {
+                             labelMatch = NULL, ...) {
   if(!is.null(weightedFluxIn$percArea1)){weightedFluxIn$percArea1<-NULL}
   args <- list(...)
-  print(length(args))
 
    if (length(args)>0){
-     print("grouping")
+
+     message( " Additional arguments to weightedFluxIn, colorMapIn and labelMatch
+      were detected and will be treated as grouping arguments of type key = value with
+      a possible groupColors named vector. If this was not intended, it will lead to errors")
      drawChordDiagramWithGrouping(
        weightedFluxIn = weightedFluxIn, colorMapIn = colorMapIn,
        labelMatch = labelMatch,
-       inFacing = inFacing, ...)
+       ...)
    } else {
 
    standardSuffix <- c( 1:10, 101:107, "Unclassified")
@@ -61,7 +66,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
    uniqueOrigDest <- gsub(x = uniqueOrigDest, pattern =  "(.*)(_)(.*)", replacement = "\\3")
 
    if (prod(uniqueOrigDest %in% standardSuffix) == 1){
-             print("standard LCZ elvels detected")
+             message("Only standard LCZ levels detected, standard colors and labels used")
              labelMatch <- c(
                "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6",
                "007" = "7", "008" = "8", "009" = "9", "010" = "10",
@@ -74,11 +79,10 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
             # Regular Case
              if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
                names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
-               print(colorMapIn)
      } else {
-       print("non standard LabelMatch")
+       message("Non-standard LabelMatch")
          if (is.null(labelMatch)){
-           message(" No labels specified, levels of the data will be taken as is.")
+           message(" No labels specified, levels of the data will be taken as is")
            labelMatch <- uniqueOrigDest
            names(labelMatch) <- labelMatch
          }
@@ -87,7 +91,6 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
           message("No Color map specified, random palette will be chosen")
           colorMapIn <- randomcoloR::randomColor(count = length(uniqueOrigDest))
           names(colorMapIn)<-labelMatch
-          print("colorMapIn") ; print(colorMapIn)
         }
 
      }
@@ -101,11 +104,8 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
     as.vector %>%
     unlist %>%
     unique
-  print("sector_ids") ;  print(sector_ids)
 
   df.groups <- makeSectorsAndGroups(weightedFluxIn)$df.groups
-
-  print("sectors") ;   print(sectors)
 
   if (is.null(labelMatch)) {
       labelMatch<-sector_ids
@@ -132,7 +132,8 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
   ]
   names(colorsCircle) <- sectors
 
-  # print(colorsCircle)
+ if (max(nchar(names(colorsCircle))) > 3){ facing <- "bending"} else { facing <- "clockwise"}
+
   circos.clear()
   diagramme <- chordDiagram(
     weightedFluxIn, grid.col = colorsCircle,
@@ -163,7 +164,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
                  # if(abs(xplot[2] - xplot[1]) < 4) {
                  circos.text(
                    mean(xlim), ylim[1], substr(sector.name, 1, 3),
-                   facing = "clockwise",
+                   facing = facing,
                    niceFacing = TRUE, adj = c(0.1, 0.01))
                  # } else {
                  #   circos.text(mean(xlim), ylim[1], substr(sector.name,1,3), facing = "inside",
@@ -188,10 +189,7 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
      # here set bg.border to NA is important
   par(cex = 1.5)
   sectorsIn<-unique(c(diagramme$rn, diagramme$cn))
-  print(sectorsIn)
-  if( max(nchar(sector_ids))> 5){sectorFacing <- "bending"} else
-  {sectorFacing <- "clockwise"}
   lapply(sector_ids, drawSectors, sectorsIn = sectorsIn,
-         colorMapIn = colorMapIn, textMatch = labelMatch, facing = sectorFacing)
+         colorMapIn = colorMapIn, textMatch = labelMatch)
   }
 }

@@ -22,10 +22,7 @@ bdt_osm_compare<-compareLCZ(sf1 = redon_bdt, column1 = "lcz_primary", wf1 = "bdt
                             sf2 = redon_osm, column2 = "lcz_primary", wf2 = "osm")
 
 oneLocWeightedFlux<-createWeightedFlux(oneLocSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
-
-subset(oneLocWeightedFlux, orig == "bdt_8" & dest == "wud_8")
-
-drawChordDiagram(oneLocWeightedFlux, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")
+drawChordDiagram(oneLocWeightedFlux, colorMapIn = NULL, labelMatch = NULL)
 
 
 
@@ -46,7 +43,7 @@ twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm
 
 # test <- makeSectorsAndGroups(twoLocsWeightedFlux)
 
-drawChordDiagram(twoLocsWeightedFlux, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")
+drawChordDiagram(twoLocsWeightedFlux, colorMapIn = NULL, labelMatch = NULL)
 
 twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
                              !grepl("101", twoLocsWeightedFlux$orig) &
@@ -54,12 +51,12 @@ twoLocsWeightedFluxNo104no101<-subset(twoLocsWeightedFlux,
                                !grepl("101", twoLocsWeightedFlux$dest) &
                                !grepl("104", twoLocsWeightedFlux$dest))
 
-drawChordDiagram(twoLocsWeightedFluxNo104no101, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")
+drawChordDiagram(twoLocsWeightedFluxNo104no101, colorMapIn = NULL, labelMatch = NULL)
 
 
 aggregMatch<-c("acompact"="Compact", "blessCompact" = "Less Compact", "cfewToNoBuild" = "Few to No Buildings at all",
                "dunclass" = "Unclassified")
-drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFacing = "bending",
+drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch,
                  acompact = c("1", "2", "3"),
                  blessCompact = c("4", "5", "6", "7", "8", "10"),
                  cfewToNoBuild = c("9", "101", "102", "103", "104", "105", "106", "107"),
@@ -73,7 +70,7 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, labelMatch = aggregMatch, inFaci
 )
 
 # Sans labelMatch c'est bien l'ordre alphabétique qui induit l'ordre de représentation
-drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
+drawChordDiagram(twoLocsWeightedFluxNo104no101,
                  acompact = c("1", "2", "3"),
                  blessCompact = c("4", "5", "6", "7", "8", "10"),
                  cfewToNoBuild = c("9", "101", "102", "103", "104", "105", "106", "107"),
@@ -89,7 +86,7 @@ drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
 aggregMatch2<-c("compact"="Compact", "lessCompact" = "Less Compact", "fewToNoBuild" = "Few to No Buildings",
                 "unclass" = "Unclassified")
 
-drawChordDiagram(twoLocsWeightedFluxNo104no101, inFacing = "bending",
+drawChordDiagram(twoLocsWeightedFluxNo104no101,
                  labelMatch = aggregMatch2,
                  compact = c("1", "2", "3"),
                  lessCompact = c("4", "5", "6", "7", "8", "10"),
@@ -180,11 +177,6 @@ testWeightedFlux<-createWeightedFlux(
 drawChordDiagram(testWeightedFlux, colorMapIn = colorMapInUTRF)
 drawChordDiagram(testWeightedFlux)
 
-
-
-
-colorMapInUTRF
-
 drawChordDiagram(testWeightedFlux,
-                 colorMapIn = colorMapInUTRF, labelMatch = NULL, inFacing = "clockwise")
+                 colorMapIn = colorMapInUTRF, labelMatch = NULL)
 
