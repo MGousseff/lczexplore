@@ -49,7 +49,9 @@ the expected levels and colors to use.
 First, let's load the example data of Redon City.
 ```{r, import LCZ files, echo = TRUE, eval = TRUE}
 library(lczexplore)
-dirPath <- paste0(system.file("extdata", package = "lczexplore"), "multipleWfs/Redon")
+
+
+dirPath <- system.file("extdata/multipleWfs/Redon", package = "lczexplore")
 redonOSM <- importLCZvect(dirPath = dirPath, file = "osm_lcz.fgb", column = "LCZ_PRIMARY")
 redonBDT <- importLCZvect(dirPath = dirPath, file = "bdt_lcz.fgb", column = "LCZ_PRIMARY")
 #
@@ -147,7 +149,7 @@ One can specify a single vector of levels and no vector of colors.
 levCol(sf=redonOSMgrouped,column="grouped",
        levels=c("urban","industry","vegetation","impervious","pervious","water"))
 
-compareLCZ(sf1 = redonOSMgrouped, column1 = "grouped",
+redonGroupedCompare<-compareLCZ(sf1 = redonOSMgrouped, column1 = "grouped",
            sf2 = redonBDTgrouped, column2 = "grouped",
            repr = "alter",
            levels = c("urban", "industry", "vegetation", "impervious", "pervious", "water")
