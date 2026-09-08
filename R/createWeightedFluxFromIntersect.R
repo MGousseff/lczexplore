@@ -10,12 +10,12 @@
 #' LCZ type of a given workflow (orig) to another LCZ type of another workflow (dest).
 #' @export
 createWeightedFluxFromIntersect <- function(sfIn, wfNamesIn, columns = NULL, typeLevelsDefaultIn = .lczenv$typeLevelsDefault) {
-  if (nrow(allWfsIn) > 100) { message("This function computes all the pairwise confusion matrices and can take some time") }
+  if (nrow(sfIn) > 100) { message("This function computes all the pairwise confusion matrices and can take some time") }
   for (i in 1:(length(wfNamesIn) - 1)) {
     for (j in (i + 1):length(wfNamesIn)) {
       if (is.null(columns)) { columns <- rep("lcz_primary", length(wfNamesIn)) }
-      sf1 <- importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[i]), column = columns[i])
-      sf2 <- importLCZvect(sfIn = dplyr::filter(allWfsIn, wf == wfNamesIn[j]), column = columns[j])
+      sf1 <- importLCZvect(sfIn = dplyr::filter(sfIn, wf == wfNamesIn[i]), column = columns[i])
+      sf2 <- importLCZvect(sfIn = dplyr::filter(sfIn, wf == wfNamesIn[j]), column = columns[j])
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
@@ -55,8 +55,8 @@ createWeightedFluxFromIntersect <- function(sfIn, wfNamesIn, columns = NULL, typ
     for (j in 1:(i - 1)) {
       # for (i in 1 : 2) {
       #   for (j in i + 1 : 3){
-      sf1 <- importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[i]), column = "lcz_primary")
-      sf2 <- importLCZvect(sfIn = filter(allWfsIn, wf == wfNamesIn[j]), column = "lcz_primary")
+      sf1 <- importLCZvect(sfIn = filter(sfIn, wf == wfNamesIn[i]), column = "lcz_primary")
+      sf2 <- importLCZvect(sfIn = filter(sfIn, wf == wfNamesIn[j]), column = "lcz_primary")
       compareName <- paste0(wfNamesIn[i], "_", wfNamesIn[j])
       assign(compareName,
              matConfLCZ(
