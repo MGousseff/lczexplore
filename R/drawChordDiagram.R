@@ -44,7 +44,7 @@
 #'        "cfewToNoBuild" = "#bbdb7a","dunclass" = "grey")))
 drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
                              labelMatch = NULL, inFacing = "clockwise", ...) {
-  weightedFluxIn$percArea1<-NULL
+  if(!is.null(weightedFluxIn$percArea1)){weightedFluxIn$percArea1<-NULL}
   args <- list(...)
   print(length(args))
 
@@ -59,32 +59,36 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
    standardSuffix <- c( 1:10, 101:107, "Unclassified")
    uniqueOrigDest<-unique(unlist(weightedFluxIn[,c("orig", "dest")]))
    uniqueOrigDest <- gsub(x = uniqueOrigDest, pattern =  "(.*)(_)(.*)", replacement = "\\3")
-   if (prod(uniqueOrigDest %in% standardSuffix) == 1){
-     print("standard LCZ elvels detected")
-     labelMatch <- c(
-       "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6", "007" = "7", "008" = "8", "009" = "9",
-       "010" = "10", "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F", "107" = "G",
-       "Unclassified" = "Unclass."
-     )
-     weightedFluxIn$dest<-LCZlevelToOrderedString(weightedFluxIn$dest)
-     weightedFluxIn$orig<-LCZlevelToOrderedString(weightedFluxIn$orig)
 
-       # Color Map management.
-       # Regular Case
-     if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
-       names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
-       print(colorMapIn)
+   if (prod(uniqueOrigDest %in% standardSuffix) == 1){
+             print("standard LCZ elvels detected")
+             labelMatch <- c(
+               "001" = "1", "002" = "2", "003" = "3", "004" = "4", "005" = "5", "006" = "6",
+               "007" = "7", "008" = "8", "009" = "9", "010" = "10",
+               "101" = "A", "102" = "B", "103" = "C", "104" = "D", "105" = "E", "106" = "F",
+               "107" = "G","Unclassified" = "Unclass."
+             )
+             weightedFluxIn$dest<-LCZlevelToOrderedString(weightedFluxIn$dest)
+             weightedFluxIn$orig<-LCZlevelToOrderedString(weightedFluxIn$orig)
+            # Color Map management.
+            # Regular Case
+             if(is.null(colorMapIn)){ colorMapIn <- .lczenv$colorMapDefault }
+               names(colorMapIn) <- lczexplore::LCZlevelToOrderedString(names(colorMapIn))
+               print(colorMapIn)
      } else {
        print("non standard LabelMatch")
-     if (is.null(colorMapIn)) {
-       uniqueOrigDest<-unique(unlist(weightedFluxIn[,c("orig", "dest")]))
-       colorMapIn <- randomcoloR::randomColor(count = length(uniqueOrigDest))
-       names(colorMapIn)<-uniqueOrigDest
-     }
-     if (is.null(labelMatch)){
-       labelMatch <- uniqueOrigDest
-       names(labelMatch) <- labelMatch
-     }
+         if (is.null(labelMatch)){
+           message(" No labels specified, levels of the data will be taken as is.")
+           labelMatch <- uniqueOrigDest
+           names(labelMatch) <- labelMatch
+         }
+
+        if (is.null(colorMapIn)) {
+          message("No Color map specified, random palette will be chosen")
+          colorMapIn <- randomcoloR::randomColor(count = length(uniqueOrigDest))
+          names(colorMapIn)<-labelMatch
+          print("colorMapIn") ; print(colorMapIn)
+        }
 
      }
 
@@ -104,7 +108,9 @@ drawChordDiagram <- function(weightedFluxIn, colorMapIn = NULL,
   print("sectors") ;   print(sectors)
 
   if (is.null(labelMatch)) {
-        labelMatch<-sector_ids}
+      labelMatch<-sector_ids
+      names(labelMatch <- labelMatch)
+  }
 
 
   # something to adapt when we will hightlight bigger flux

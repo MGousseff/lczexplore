@@ -18,6 +18,8 @@ showLCZ(sf = redon_wud, column = "lcz_primary")
 bdt_wud_compare<-compareLCZ(sf1 = redon_bdt, column1 = "lcz_primary", wf1 = "bdt",
            sf2 = redon_wud, column2 = "lcz_primary", wf2 = "wudapt")
 bdt_wud_compare$matConfPlot
+bdt_osm_compare<-compareLCZ(sf1 = redon_bdt, column1 = "lcz_primary", wf1 = "bdt",
+                            sf2 = redon_osm, column2 = "lcz_primary", wf2 = "osm")
 
 oneLocWeightedFlux<-createWeightedFlux(oneLocSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 
@@ -116,34 +118,70 @@ utrfRedonRandom<-utrfRedonBDT
 compareLCZ(sf1 = utrfRedonBDT, column1 = "TYPO_MAJ",
            sf2 = utrfRedonRandom, column2 = "TYPO_MAJ", repr = "alter")
 
+## Check if all sf the same
+
+sfListTestAllBDT<-list(
+  bdt1= utrfRedonBDT,
+  bdt2 = utrfRedonBDT,
+  bdt3 = utrfRedonBDT)
+
+testIntersectAllBDT<-
+  createIntersect(
+    sfList = sfListTestAllBDT,
+    columns = rep("TYPO_MAJ", 3),
+    workflowNames=c("bdt1", "bdt2", "bdt3"),
+    minZeroArea=0)
+
+LCZtype <- "pd"
+test<-subset(testIntersectAllBDT, bdt1 == LCZtype)
+agreeArea <- subset(test, bdt3 == LCZtype) %>% st_drop_geometry() %>% select(area) %>% sum
+disagreeArea <- subset(test, bdt3 != LCZtype) %>% st_drop_geometry() %>% select(area) %>% sum
+percAgree<-agreeArea/(agreeArea + disagreeArea)
+percAgree
+
+allSameFlux<-createWeightedFlux(testIntersectAllBDT, wfNamesIn = c("bdt1","bdt2","bdt3"))
+drawChordDiagram(allSameFlux, )
+
+# not all the same, right order
 
 sfListTest<-list(
-  bdt=utrfRedonBDT,
-  osm = utrfRedonOSM,
-  rand = utrfRedonRandom)
-
+  bdt = utrfRedonBDT,
+  rand = utrfRedonBDT,
+  osm = utrfRedonOSM
+  )
 
 testIntersect<-
   createIntersect(
     sfList = sfListTest,
     columns = rep("TYPO_MAJ", 3),
-    refCrs=NULL,
-    workflowNames=c("osm", "bdt", "rand"),
-    minZeroArea=0.001)
-testIntersect$osm %>% summary
+    workflowNames=c("bdt", "rand", "osm"),
+    minZeroArea=0)
 testIntersect$bdt %>% summary
 testIntersect$rand %>% summary
+testIntersect$osm %>% summary
+
+
+LCZtype <- "pd"
+test<-subset(testIntersect, bdt == LCZtype)
+agreeArea <- subset(test, rand == LCZtype) %>% st_drop_geometry() %>% select(area) %>% sum
+disagreeArea <- subset(test, rand != LCZtype) %>% st_drop_geometry() %>% select(area) %>% sum
+percAgree<-agreeArea/(agreeArea + disagreeArea)
+percAgree
+
+levelUTRF<-  c("icio", "pd", "id", "psc", "pcio", "local", "pcif", "ba", "icif")
+colorMapInUTRF<-palette.colors(n = length(levelUTRF) )
+names(colorMapInUTRF)<-levelUTRF
+colorMapInUTRF
+
 
 testWeightedFlux<-createWeightedFlux(
   testIntersect, wfNamesIn = c("osm","bdt","rand"), typeLevelsDefaultIn = NULL)
 
-levelUTRF<-  c("icio", "pd", "id", "psc", "pcio", "local", "pcif", "ba", "icif")
-max(nchar(levelUTRF))>3
+drawChordDiagram(testWeightedFlux, colorMapIn = colorMapInUTRF)
+drawChordDiagram(testWeightedFlux)
 
 
-colorMapInUTRF<-palette.colors(n = length(levelUTRF) )
 
-names(colorMapInUTRF)<-levelUTRF
 
 colorMapInUTRF
 
