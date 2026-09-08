@@ -14,11 +14,11 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-        collapse = TRUE,
-        comment = "#>"
+  collapse = TRUE,
+  comment = "#>"
 )
 if (!require("png")) {
-  install.packages("png",repos = "http://cran.us.r-project.org")
+  install.packages("png", repos = "http://cran.us.r-project.org")
   library("png")
 }
 
@@ -49,9 +49,9 @@ the expected levels and colors to use.
 First, let's load the example data of Redon City.
 ```{r, import LCZ files, echo = TRUE, eval = TRUE}
 library(lczexplore)
-dirPath<-paste0(system.file("extdata",package="lczexplore"),"multipleWfs/Redon")
-redonOSM<-importLCZvect(dirPath=dirPath,file="osm_lcz.fgb",column = "LCZ_PRIMARY")
-redonBDT<-importLCZvect(dirPath=dirPath,file="bdt_lcz.fgb",column = "LCZ_PRIMARY")
+dirPath <- paste0(system.file("extdata", package = "lczexplore"), "multipleWfs/Redon")
+redonOSM <- importLCZvect(dirPath = dirPath, file = "osm_lcz.fgb", column = "LCZ_PRIMARY")
+redonBDT <- importLCZvect(dirPath = dirPath, file = "bdt_lcz.fgb", column = "LCZ_PRIMARY")
 #
 ```
 If we compare the LCZ classifications produced with GeoClimate and OpenStreetMAp and French BDTOPO data, 
@@ -84,19 +84,19 @@ At this point, we pass the names of the new categories present in the "grouped" 
 to an LCZlevels vector and the colors associated as a `colors` vector.
 
 ```{r, grouping, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
-redonOSMgrouped<-groupLCZ(redonOSM,column="LCZ_PRIMARY",
-                           urban=c("1","2","3","4","5","6","7","8","9"),
-                           industry="10",
-                           vegetation=c("101","102","103","104"),
-                           impervious="105",pervious="106",water="107", 
-                           colors=c("red","black","green","grey","burlywood","blue"))
+redonOSMgrouped <- groupLCZ(redonOSM, column = "LCZ_PRIMARY",
+                            urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
+                            industry = "10",
+                            vegetation = c("101", "102", "103", "104"),
+                            impervious = "105", pervious = "106", water = "107",
+                            colors = c("red", "black", "green", "grey", "burlywood", "blue"))
 
-levCol(sf=redonOSMgrouped,column="grouped",LCZlevels = c("urban","industry","vegetation","impervious","pervious","water"),
-       colors=c("red","black","green","grey","burlywood","blue"))
+levCol(sf = redonOSMgrouped, column = "grouped", LCZlevels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+       colors = c("red", "black", "green", "grey", "burlywood", "blue"))
 
-map1<-showLCZ(redonOSMgrouped, column="grouped",repr="alter",wf="OSM",
-        LCZlevels = c("urban","industry","vegetation","impervious","pervious","water"),
-        colors=c("red","black","green","grey","burlywood","blue"))
+map1 <- showLCZ(redonOSMgrouped, column = "grouped", repr = "alter", wf = "OSM",
+                LCZlevels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+                colors = c("red", "black", "green", "grey", "burlywood", "blue"))
 ```
 
 # Compare two LCZ classification with the function compareLCZ and the `alter` representation
@@ -108,18 +108,22 @@ and the names of the `column1` and `column2` containing the newly grouped catego
 
 ```{r, common grouping case, fig.dim = c(8, 6), echo = TRUE, eval = TRUE}
 
-redonBDTgrouped<-groupLCZ(redonBDT,column="LCZ_PRIMARY",
-                           urban=c("1","2","3","4","5","6","7","8","9"),
-                           industry="10",
-                           vegetation=c("101","102","103","104"),
-                           impervious="105",pervious="106",water="107",
-                           colors=c("red","black","green","grey","burlywood","blue"))
+redonBDTgrouped <- groupLCZ(redonBDT, column = "LCZ_PRIMARY",
+                            urban = c("1", "2", "3", "4", "5", "6", "7", "8", "9"),
+                            industry = "10",
+                            vegetation = c("101", "102", "103", "104"),
+                            impervious = "105", pervious = "106", water = "107",
+                            colors = c("red", "black", "green", "grey", "burlywood", "blue"))
 
-comparisonGrouped<-compareLCZ(sf1=redonOSMgrouped,column1="grouped",
-sf2=redonBDTgrouped, column2="grouped",
-repr="alter",
-levels=c("urban","industry","vegetation","impervious","pervious","water"),
-colors=c("red","black","green","grey","burlywood","blue"))
+map1.1 <- showLCZ(redonBDTgrouped, column = "grouped", repr = "alter", wf = "OSM",
+                LCZlevels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+                colors = c("red", "black", "green", "grey", "burlywood", "blue"))
+
+comparisonGrouped <- compareLCZ(sf1 = redonOSMgrouped, column1 = "grouped", wf1 = "osmGpd",
+                                sf2 = redonBDTgrouped, column2 = "grouped", wf2 = "bdtGpd",
+                                repr = "alter",
+                                levels = c("urban", "industry", "vegetation", "impervious", "pervious", "water"),
+                                colors = c("red", "black", "green", "grey", "burlywood", "blue"))
 ```
 
 There are many cases when one doesn't necessarily know the levels of the qualitative variables, 
@@ -143,10 +147,10 @@ One can specify a single vector of levels and no vector of colors.
 levCol(sf=redonOSMgrouped,column="grouped",
        levels=c("urban","industry","vegetation","impervious","pervious","water"))
 
-compareLCZ(sf1=redonOSMgrouped,column1="grouped",
-sf2=redonBDTgrouped, column2="grouped",
-repr="alter",
-levels=c("urban","industry","vegetation","impervious","pervious","water")
+compareLCZ(sf1 = redonOSMgrouped, column1 = "grouped",
+           sf2 = redonBDTgrouped, column2 = "grouped",
+           repr = "alter",
+           levels = c("urban", "industry", "vegetation", "impervious", "pervious", "water")
 )
 ```
 
