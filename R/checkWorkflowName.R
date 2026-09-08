@@ -8,8 +8,8 @@
 #' checkWorkflowName("BDT UTRF_test")
 checkWorkflowName <- function(wfName){
   if (grepl("_", x =wfName) | grepl("\\s", x = wfName)){
-    message("For Technical reason, worfklow names can't contain spaces or underscores, they were replaced by dashes")
-  wfName<- gsub("_|\\s", "-", wfName)
+    message("For Technical reason in this package, worfklow names can't contain spaces or underscores, they were replaced by dots")
+  wfName<- gsub("_|\\s", ".", wfName)
   }
 
   if (nchar(wfName) > 10){
@@ -17,9 +17,9 @@ checkWorkflowName <- function(wfName){
     the first 3 and last 3 letters were kept instead")
     wfName<-paste0(
       substr(wfName, 1,3),
-      "-",
+      ".",
     substring(wfName, nchar(wfName)-3, nchar(wfName)))
-    wfName<-gsub("-+", "-", wfName)
+    wfName<-gsub("\\.+", ".", wfName)
     }
 
   return(wfName)
