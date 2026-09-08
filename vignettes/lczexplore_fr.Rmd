@@ -7,7 +7,7 @@ resource_files:
   - vignettes/Redon.png
 vignette: >
  %\VignetteIndexEntry{lczexplore_fr}
- %\VignetteEngine{knitr::knitr}
+ %VignetteEngine{knitr::rmarkdown}
  %\VignetteEncoding{UTF-8}
 ---
 
