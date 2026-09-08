@@ -32,7 +32,7 @@
 #'                               columns = c("osm", "bdt", "wudapt"),
 #'                             workflowNames = c("osm", "bdt", "wudapt"))
 barplotLCZfromIntersect <- function(sfIn, workflowNames = NULL, columns = NULL, stat = "perc", plotNow = TRUE) {
-  checkedWfCol <- checkColumnWorkflowNames(columns = columns, workflowNames = workflowNames)
+  checkedWfCol <- checkColumnWorkflowNames(columns = columns, workflowNames = workflowNames, sfIn = sfIn)
   columns <- checkedWfCol$columns
   workflowNames <- checkedWfCol$workflowNames
 
@@ -93,7 +93,7 @@ barplotLCZfromIntersect <- function(sfIn, workflowNames = NULL, columns = NULL, 
 }
 
 
-checkColumnWorkflowNames <- function(columns, workflowNames) {
+checkColumnWorkflowNames <- function(columns, workflowNames, sfIn) {
   if (
     (is.null(columns) | prod(!is.na(columns)) == 0) &
       (!is.null(workflowNames)) &
