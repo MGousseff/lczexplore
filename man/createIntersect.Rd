@@ -9,7 +9,7 @@ createIntersect(
   columns,
   refCrs = NULL,
   workflowNames = NULL,
-  minZeroArea = 1e-04,
+  minZeroArea = 0,
   keepAllColumns = TRUE
 )
 }

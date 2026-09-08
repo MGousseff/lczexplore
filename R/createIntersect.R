@@ -37,7 +37,7 @@
 #'  sfList = sfList2, columns = rep("lcz_primary", 3),
 #'  workflowNames = c("osm","bdt","wudapt"))
 createIntersect <- function(sfList, columns, refCrs = NULL,
-                            workflowNames = NULL, minZeroArea = 0.0001,
+                            workflowNames = NULL, minZeroArea = 0.000,
                                 keepAllColumns = TRUE) {
 
   if (is.null(columns) | prod(!is.na(columns) == 0)) {
@@ -72,7 +72,7 @@ createIntersect <- function(sfList, columns, refCrs = NULL,
       locationRef <- "No specified Location" }
 
     # LCZ column name for each sf will be replaced by wf name, easier to read as output.
-    if (is.null(workflowNames) | prod(!is.na(workflowNames) == 0) | length(workflowNames)!=length(sfList)) {
+    if ( is.null(workflowNames) | prod(!is.na(workflowNames)) == 0 | length(workflowNames)!=length(sfList)) {
       message("One or all workflow names are missing")
       stop()
     } else {sfList<-lapply(seq_along(sfList), function(i){
@@ -89,8 +89,10 @@ createIntersect <- function(sfList, columns, refCrs = NULL,
 
     if (is.null(refCrs)) { refCrs <- st_crs(sfList[[1]]) } else { refCrs <- st_crs(sfList[[refCrs]]) }
     sfListCRSed <- lapply(seq_along(sfList), function(i) {
-      if(!keepAllColumns){sfObj <- sfList[[i]][, workflowNames[i], drop = FALSE]}
-      else{ sfObj<-sfList[[i]]}
+      # if(!keepAllColumns){sfObj <- sfList[[i]][, workflowNames[i], drop = FALSE]}
+      # else{
+        sfObj<-sfList[[i]]
+      # }
       if (st_crs(sfObj) != refCrs) { sfObj <- st_transform(sfObj, crs = refCrs) }
       return(sfObj)
     })
@@ -105,7 +107,7 @@ createIntersect <- function(sfList, columns, refCrs = NULL,
   # Areas management
     sfInt <- dplyr::mutate(sfInt, area = units::drop_units(st_area(sfInt$geometry)),
                            .before = geometry)
-    nbDiscardedUnits<-nrow(sfInt[sfInt$area > minZeroArea,])
+    nbDiscardedUnits<-nrow(sfInt[sfInt$area < minZeroArea,])
     if (nbDiscardedUnits >0){message(paste0(nbDiscardedUnits, " spatial units had an area inferior to the
     specified minimum area (", minZeroArea,") and were discarded"))}
     sfInt <- sfInt[sfInt$area > minZeroArea,]

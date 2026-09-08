@@ -5,9 +5,9 @@ oneLocDir<-paste0(
 oneLocSfList<-loadMultipleSfs(dirPath = oneLocDir, workflowNames = c("osm","bdt","wudapt"),
                               inLocation = "Redon")
 oneLocSfIntersected <- createIntersect(sfList = oneLocSfList, columns = rep("lcz_primary", 4),
-                                       refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
+                                       refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.00)
 redon_bdt<-oneLocSfList$bdt
-redo_osm<-oneLocSfList$osm
+redon_osm<-oneLocSfList$osm
 
 showLCZ(redon_bdt, column = "lcz_primary")
 showLCZ(redon_osm, column = "lcz_primary")
@@ -26,7 +26,7 @@ subset(oneLocWeightedFlux, orig == "bdt_8" & dest == "osm_8")
 subset(oneLocWeightedFlux, orig == "bdt_8" & dest == "osm_6")
 
 subset(testComp$areas, marginLevels==8)$percArea1 *
-  subset(testComp$matConf,redon.bdt == "8" & redon.osm == "8")$agreePercArea
+  subset(testComp$matConf,redon.bdt == "8" & redon.osm == "6")$agreePercArea
 
 drawChordDiagram(oneLocWeightedFlux, colorMapIn = NULL, labelMatch = NULL, inFacing = "clockwise")
 
@@ -37,7 +37,7 @@ twoLocsSfList<-loadMultipleLocsSfs(dirPath = twoLocsDir, workflowNames = c("osm"
                                    inLocation = c("Arville", "Redon"))
 
 twoLocsSfIntersected <- createIntersect(sfList = twoLocsSfList, columns = rep("lcz_primary", 4),
-                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.001)
+                                        refCrs=NULL, workflowNames=c("osm", "bdt", "wudapt"), minZeroArea=0.00)
 
 twoLocsWeightedFlux<-createWeightedFlux(twoLocsSfIntersected, wfNamesIn = c("osm","bdt","wudapt"))
 
