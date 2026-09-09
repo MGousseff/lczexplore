@@ -6,7 +6,7 @@
 # library(ggplot2)
 # library(forcats)
 
-sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
+sfList<-loadMultipleSfs(dirPath = paste0(system.file("extdata/multipleWfs/Arville", package = "lczexplore")),
                         workflowNames = c("osm","bdt","wudapt"), inLocation = "Arville"  )
 
 intersected<-createIntersect(sfList = sfList, columns = rep("lcz_primary", 3),
@@ -30,7 +30,7 @@ wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexpl
 
 sfList2<-list(osm = osm, bdt = bdt, wudapt = wudapt)
 
-test3<- concatAlocationWorkflowsFromSession(sfList = sfList2,
+test3<- loadmultipleSfsFromFromSession(sfList = sfList2,
                                             workflowNames = c("osm", "bdt", "wudapt"),
                                             location = "Arville",
                                             columns = c("LCZ_PRIMARY", "LCZ_PRIMARY", "lcz_primary" ))
@@ -46,25 +46,24 @@ expect_silent(testAreas<-workflowAgreeAreas(multicompare_test$sfIntLong))
 
 
 # multicompare_test
-# 
-# test<-multicompare_test$sfIntLong
-# test2<-test %>% subset(agree==TRUE) %>% group_by(LCZvalue) %>% summarize(agreementArea=sum(area)) %>% 
-#   mutate(percAgreementArea=agreementArea/sum(agreementArea))
-# 
-# testWfAgree<-test %>% subset(agree==TRUE) %>% group_by(whichWfs) %>% summarize(agreementArea=sum(area))
-# 
-# test<-multicompare_test$sfInt[,1:5] %>% st_drop_geometry()
-# prov1<-apply(X = test, MARGIN = 1, table )
-# prov2<-apply(X = test, MARGIN = 1, function(x) max(table(x)) )
-# 
-# head(prov1)
-# head(prov2)
-# 
-# plot1<-showLCZ(sf = multicompare_test$sfInt, column="BDT22", wf="BDT22")
-# plot2<-showLCZ(sf = multicompare_test$sfInt, column="BDT11", wf="BDT1111")
-# plot3<-showLCZ(sf = multicompare_test$sfInt, column="OSM22", wf="OSM22")
-# plot4<-showLCZ(sf = multicompare_test$sfInt, column="WUDAPT", wf="WUDAPT")
-# plot5<-ggplot(data=multicompare_test$sfInt) +
-#   geom_sf(aes(fill=nbAgree, color=after_scale(fill)))+
-#   scale_fill_gradient(low = "red" , high = "green", na.value = NA)
-# plot_grid(plot1, plot2, plot3, plot4, plot5)
+
+test<-multicompare_test$sfIntLong
+test2<-test %>% subset(agree==TRUE) %>% group_by(LCZvalue) %>% summarize(agreementArea=sum(area)) %>%
+  mutate(percAgreementArea=agreementArea/sum(agreementArea))
+
+testWfAgree<-test %>% subset(agree==TRUE) %>% group_by(whichWfs) %>% summarize(agreementArea=sum(area))
+
+test<-multicompare_test$sfInt[,1:5] %>% st_drop_geometry()
+prov1<-apply(X = test, MARGIN = 1, table )
+prov2<-apply(X = test, MARGIN = 1, function(x) max(table(x)) )
+
+head(prov1)
+head(prov2)
+
+plot1<-showLCZ(sf = multicompare_test$sfInt, column="bdt", wf="bdt")
+plot2<-showLCZ(sf = multicompare_test$sfInt, column="osm", wf="osm")
+plot4<-showLCZ(sf = multicompare_test$sfInt, column="wudapt", wf="wud")
+plot5<-ggplot(data=multicompare_test$sfInt) +
+  geom_sf(aes(fill=nbAgree, color=after_scale(fill)))+
+  scale_fill_gradient(low = "red" , high = "green", na.value = NA)
+cowplot::plot_grid(plot1, plot2, plot4, plot5)
