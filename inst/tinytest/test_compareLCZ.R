@@ -3,7 +3,38 @@
 #
 # library(sf)
 
+######################################
+### Test value
+#######################################
 
+redonBDT2<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Redon"),
+                         file = "bdt_lcz.fgb",
+                         column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T)
+autocompareBDT<-compareLCZ(sf1 = redonBDT, sf2 = redonBDT2)
+expect_true(unlist(autocompareBDT$percAgg)==100)
+
+redonOSM2<-importLCZvect(dirPath=paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Redon"),
+                         file = "osm_lcz.fgb",
+                         column="LCZ_PRIMARY",geomID="ID_RSU",confid="LCZ_UNIQUENESS_VALUE",verbose=T)
+autocompareOSM<-compareLCZ(sf1 = redonOSM, sf2 = redonOSM2)
+expect_true(unlist(autocompareOSM$percAgg)==100)
+
+OsmBdtCompare<-compareLCZ(sf1 = redonOSM, sf2 = redonBDT)
+test_value<-round(
+  OsmBdtCompare$matConf[
+    redonOSM == 9 & redonBDT == 9,"agreePercArea"], 0)
+expect_true(test_value==71)
+
+test_value<-round(
+  OsmBdtCompare$matConf[
+    redonOSM == 6 & redonBDT == 9,"agreePercArea"], 0)
+expect_true(test_value==46)
+
+OsmBdtCompare$percAgg
+
+######################################
+### Test some grouped LCZ files
+########################################
 
 expect_message(compareRedonBDTOSM<-
                  compareLCZ(sf1=redonBDT, column1="LCZ_PRIMARY", geomID1 = "ID_RSU", confid1="LCZ_UNIQUENESS_VALUE", wf1="bdt_2",
