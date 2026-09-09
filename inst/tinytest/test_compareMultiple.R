@@ -59,10 +59,10 @@ wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexpl
 
 sfList2<-list(osm = osm, bdt = bdt, wudapt = wudapt)
 
-test3<- loadmultipleSfsFromFromSession(sfList = sfList2,
-                                            workflowNames = c("osm", "bdt", "wudapt"),
-                                            location = "Redon",
-                                            columns = c("LCZ_PRIMARY", "LCZ_PRIMARY", "lcz_primary" ))
+test3<- loadmultipleSfsFromSession(sfList = sfList2,
+                                   workflowNames = c("osm", "bdt", "wudapt"),
+                                   location = "Redon",
+                                   columns = c("LCZ_PRIMARY", "LCZ_PRIMARY", "lcz_primary" ))
 
 intersected<-createIntersect(sfList = test3, columns = rep("lcz_primary", 3),
                              workflowNames = c("osm", "bdt", "wudapt"))

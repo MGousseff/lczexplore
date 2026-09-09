@@ -82,7 +82,7 @@ loadMultipleSfs <- function(
 #' workflowNames = c("osm", "bdt", "wudapt"))
 #' multicompare_test<-compareMultipleLCZ(intersected,
 #' LCZcolumns = c("osm","bdt","wudapt"),trimPerc = 0.5)
-loadmultipleSfsFromFromSession <- function(sfList, workflowNames, columns, location, refCRS = 1) {
+loadmultipleSfsFromSession <- function(sfList, workflowNames, columns, location, refCRS = 1) {
   refCRS <- st_crs(sfList[[refCRS]])
   sfList <- lapply(sfList, st_transform, crs = refCRS)
   locations <- rep(location, length(workflowNames))
