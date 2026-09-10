@@ -3,6 +3,8 @@
 #' @param sfList the list of LCZ sf objects
 #' @param location the name of the location at which all LCZ are created
 #' @param refCrs a number telling which sf of the sfList will be the reference in termes of Coordinate Reference System
+#' @param columns contains the names of the columns where LCZ types are stored. If it contains only one string, it
+#' will be repeated for all workflows
 #' @importFrom sf st_transform st_crs st_drop_geometry
 #' @return returns graphics of comparison and an object called matConfOut which contains :
 #' matConfLong, a confusion matrix in a longer form, 
