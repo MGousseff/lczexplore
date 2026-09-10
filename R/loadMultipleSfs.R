@@ -75,7 +75,7 @@ loadMultipleSfs <- function(
 #' wudapt<-importLCZvect(dirPath = paste0(system.file("extdata", package = "lczexplore"),"/multipleWfs/Arville"),
 #' file = "wudapt_lcz.fgb", column = "lcz_primary")
 #' sfList<-list(osm = osm, bdt = bdt, wudapt = wudapt)
-#' sfListFormatted<- loadListFromSession(sfList = sfList,
+#' sfListFormatted<- loadmultipleSfsFromSession(sfList = sfList,
 #' workflowNames = c("osm", "bdt", "wudapt"),location = "Arville",
 #' columns = c("LCZ_PRIMARY", "LCZ_PRIMARY", "lcz_primary" ))
 #' intersected<-createIntersect(sfList = sfListFormatted, columns = rep("lcz_primary", 3),
