@@ -7,9 +7,8 @@ resource_files:
   - vignettes/Redon.png
 vignette: >
     %\VignetteIndexEntry{lczexplore_alter}
-    %VignetteEngine{knitr::rmarkdown}
+    %\VignetteEngine{knitr::rmarkdown}
     %\VignetteEncoding{UTF-8}
-    \usepackage[UTF-8]{inputenc}
 ---
 
 ```{r, include = FALSE}

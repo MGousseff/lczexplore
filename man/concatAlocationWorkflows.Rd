@@ -18,6 +18,9 @@ concatAlocationWorkflows(
 \item{location}{the name of the location at which all LCZ are created}
 
 \item{refCrs}{a number telling which sf of the sfList will be the reference in termes of Coordinate Reference System}
+
+\item{columns}{contains the names of the columns where LCZ types are stored. If it contains only one string, it
+will be repeated for all workflows}
 }
 \value{
 returns graphics of comparison and an object called matConfOut which contains :
